@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --foreground: #0a0e1a;
+    --secondary: #4b5563;
+    --muted: #9ca3af;
+    --faint: #d1d5db;
+    --border: rgba(0, 0, 0, 0.08);
+    --border-subtle: rgba(0, 0, 0, 0.04);
+    --surface-base: #ffffff;
+    --surface-canvas: #fafafa;
+    --surface-elevated: #ffffff;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    color: var(--foreground);
+    background: var(--surface-base);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply max-w-6xl mx-auto px-6 sm:px-8 lg:px-12;
+  }
+
+  .card {
+    @apply bg-white rounded-xl;
+    border: 1px solid var(--border);
+  }
+
+  .card-hover {
+    @apply bg-white rounded-xl transition-all duration-200;
+    border: 1px solid var(--border);
+  }
+
+  .card-hover:hover {
+    border-color: rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-8 py-3 font-semibold rounded-full text-body-sm transition-colors;
+    background: var(--foreground);
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: #2a2a42;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-8 py-3 font-semibold rounded-full text-body-sm transition-colors;
+    color: var(--foreground);
+    border: 1px solid var(--border);
+  }
+
+  .btn-secondary:hover {
+    background: var(--surface-canvas);
+  }
+
+  .section {
+    @apply py-16 md:py-24;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
