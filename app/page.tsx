@@ -83,8 +83,9 @@ export default async function HomePage() {
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-6">
             OpenPolicy AI
           </h1>
-          <p className="text-lg lg:text-xl text-white/70 max-w-2xl mx-auto mb-10 whitespace-nowrap sm:whitespace-normal">
-            Search any politician. See their score. Understand their alignment&nbsp;with&nbsp;AI.
+          <p className="text-base sm:text-lg lg:text-xl text-white/70 max-w-2xl mx-auto mb-10">
+            Search any politician. See their score.<br className="sm:hidden" />{' '}
+            Understand their alignment with AI.
           </p>
           <Link href="/politicians" className="btn-primary">
             Explore The Scores &rarr;

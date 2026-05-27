@@ -41,6 +41,23 @@ async function fetchBillSummary(congress, billType, billNumber, apiKey) {
   }
 }
 
+const BILL_TYPE_SLUGS = {
+  S: 'senate-bill',
+  HR: 'house-bill',
+  SJRES: 'senate-joint-resolution',
+  HJRES: 'house-joint-resolution',
+  SRES: 'senate-resolution',
+  HRES: 'house-resolution',
+  SCONRES: 'senate-concurrent-resolution',
+  HCONRES: 'house-concurrent-resolution',
+};
+
+function congressGovUrl(congress, type, number) {
+  const slug = BILL_TYPE_SLUGS[(type || '').toUpperCase()];
+  if (!slug || !congress || !number) return null;
+  return `https://www.congress.gov/bill/${congress}th-congress/${slug}/${number}`;
+}
+
 function contentHash(bioguideId, billId, type) {
   return crypto
     .createHash('md5')
@@ -152,7 +169,7 @@ async function fetchSponsorships() {
                   sponsorship_type, source_text, source_url, source_date, content_hash
                 ) VALUES (
                   ${senator.id}, ${evidenceType}, ${billId}, ${title},
-                  ${sponsorshipType}, ${sourceText}, ${bill.url || null},
+                  ${sponsorshipType}, ${sourceText}, ${congressGovUrl(bill.congress, bill.type, bill.number)},
                   ${sourceDate}, ${hash}
                 )
                 ON CONFLICT (content_hash) DO NOTHING

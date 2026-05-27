@@ -11,7 +11,7 @@ export function getDB() {
     }
 
     sql = postgres(databaseUrl, {
-      max: 10, // Connection pool size
+      max: 50, // Connection pool size
       idle_timeout: 20,
       connect_timeout: 10,
       ssl: 'require',

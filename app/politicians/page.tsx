@@ -1,4 +1,4 @@
-import PoliticianCard from '@/components/politicians/PoliticianCard';
+import PoliticiansClient from '@/components/politicians/PoliticiansClient';
 import { getDB } from '@/lib/db/client';
 import { EXAMPLE_POLITICIANS } from '@/lib/utils/constants';
 import type { PoliticianWithScores } from '@/lib/utils/types';
@@ -44,17 +44,7 @@ export default async function PoliticiansPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {displayPoliticians.map((politician) => (
-          <PoliticianCard key={politician.id} politician={politician} />
-        ))}
-      </div>
-
-      {showExamples && (
-        <p className="text-center text-caption text-primary-400 mt-8">
-          Example data shown. Run the evaluation pipeline to see real scores.
-        </p>
-      )}
+      <PoliticiansClient politicians={displayPoliticians} showExamples={showExamples} />
     </main>
   );
 }

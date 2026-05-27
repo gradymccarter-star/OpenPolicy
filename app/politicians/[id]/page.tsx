@@ -7,11 +7,17 @@ import { getDB } from '@/lib/db/client';
 import { OECD_PRINCIPLES, EVIDENCE_TYPE_LABELS, EVIDENCE_WEIGHTS } from '@/lib/utils/constants';
 import Image from 'next/image';
 
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 export default async function PoliticianDetailPage({
   params,
 }: {
   params: { id: string };
 }) {
+  if (!UUID_REGEX.test(params.id)) {
+    return <div className="container-page py-12 text-primary-500">Politician not found</div>;
+  }
+
   const db = getDB();
 
   const [politician] = await db`
