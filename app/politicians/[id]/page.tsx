@@ -2,65 +2,64 @@ import Link from 'next/link';
 import ScoreGauge from '@/components/scores/ScoreGauge';
 import PrincipleScoreBar from '@/components/scores/PrincipleScoreBar';
 import RadarChart from '@/components/scores/RadarChart';
-import { PartyBadge, StateBadge } from '@/components/ui/Badge';
-import { getDB } from '@/lib/db/client';
-import { OECD_PRINCIPLES, EVIDENCE_TYPE_LABELS, EVIDENCE_WEIGHTS } from '@/lib/utils/constants';
+import { PartyBadge } from '@/components/ui/Badge';
+import { getSupabase, extractOverallScore } from '@/lib/db/client';
+import { PA_CHAMBER_PRINCIPLES, EVIDENCE_TYPE_LABELS, EVIDENCE_WEIGHTS } from '@/lib/utils/constants';
 import Image from 'next/image';
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-export default async function PoliticianDetailPage({
+export default async function CandidateDetailPage({
   params,
 }: {
-  params: { id: string };
+  readonly params: { readonly id: string };
 }) {
   if (!UUID_REGEX.test(params.id)) {
-    return <div className="container-page py-12 text-primary-500">Politician not found</div>;
+    return <div className="container-page py-12 text-primary-500">Candidate not found</div>;
   }
 
-  const db = getDB();
+  const supabase = getSupabase();
 
-  const [politician] = await db`
-    SELECT p.*, row_to_json(os.*) as overall_score_data
-    FROM politicians p
-    LEFT JOIN overall_scores os ON p.id = os.politician_id
-    WHERE p.id = ${params.id}
-  `;
+  const { data: politicianRow } = await supabase
+    .from('politicians')
+    .select('*, overall_scores(*)')
+    .eq('id', params.id)
+    .maybeSingle();
 
-  if (!politician) {
-    return <div className="container-page py-12 text-primary-500">Politician not found</div>;
+  if (!politicianRow) {
+    return <div className="container-page py-12 text-primary-500">Candidate not found</div>;
   }
 
-  const principleScores = await db`
-    SELECT *
-    FROM principle_scores
-    WHERE politician_id = ${params.id}
-    ORDER BY principle
-  `;
+  const [{ data: rawPrincipleScores }, { data: evidenceData }] = await Promise.all([
+    supabase
+      .from('principle_scores')
+      .select('*')
+      .eq('politician_id', params.id)
+      .order('principle'),
+    supabase
+      .from('evidence_items')
+      .select('*, extracted_claims(*)')
+      .eq('politician_id', params.id)
+      .eq('is_relevant', true)
+      .order('source_date', { ascending: false })
+      .limit(50),
+  ]);
 
-  const evidenceItems = await db`
-    SELECT ei.*,
-      COALESCE(
-        (SELECT json_agg(ec.*)
-         FROM extracted_claims ec
-         WHERE ec.evidence_item_id = ei.id),
-        '[]'
-      ) as claims
-    FROM evidence_items ei
-    WHERE ei.politician_id = ${params.id}
-      AND ei.is_relevant = true
-    ORDER BY ei.source_date DESC
-    LIMIT 50
-  `;
+  const politician = politicianRow;
+  const principleScores = rawPrincipleScores ?? [];
+  const evidenceItems = (evidenceData ?? []).map((item) => ({
+    ...item,
+    claims: item.extracted_claims ?? [],
+  }));
 
-  const overallData = politician.overall_score_data;
+  const overallData = extractOverallScore(politicianRow);
   const overallScore = overallData?.overall_score ?? 0;
   const overallConfidence = overallData?.overall_confidence ?? 0;
   const totalEvidence = overallData?.total_evidence_items ?? 0;
 
-  const radarScores = Object.entries(OECD_PRINCIPLES).map(([key]) => {
+  const radarScores = Object.entries(PA_CHAMBER_PRINCIPLES).map(([key]) => {
     const ps = principleScores.find((s: any) => s.principle === key);
-    return { label: key, value: ps?.score ?? (overallData?.[`${key.toLowerCase()}_score`] ?? 0) };
+    return { label: key, value: ps?.score ?? ((overallData as any)?.[`${key.toLowerCase()}_score`] ?? 0) };
   });
 
   return (
@@ -79,29 +78,40 @@ export default async function PoliticianDetailPage({
             </div>
           )}
           <div className="flex-1">
-            <h1 className="text-heading-1 mb-2">
-              {politician.full_name}
-            </h1>
-            <div className="flex items-center space-x-3 mb-4">
+            <h1 className="text-heading-1 mb-2">{politician.full_name}</h1>
+            <div className="flex items-center space-x-3 mb-2">
               <PartyBadge party={politician.party} />
-              <StateBadge state={politician.state} />
+              {politician.district && (
+                <span className="text-primary-500 text-body-sm">District {politician.district}</span>
+              )}
+              {politician.county && (
+                <span className="text-primary-400 text-caption">{politician.county} County</span>
+              )}
               <span className="text-primary-500 text-body-sm">{politician.title}</span>
             </div>
-            <p className="text-caption text-primary-400">
-              Score based on {totalEvidence} evidence item{totalEvidence !== 1 ? 's' : ''}
+            <p className="text-caption text-primary-400 mb-3">
+              Score based on {totalEvidence} evidence item{totalEvidence === 1 ? '' : 's'}
             </p>
-            <Link
-              href={`/compare?a=${params.id}`}
-              className="btn-secondary mt-3 text-caption py-2 px-4"
-            >
-              Compare with another senator &rarr;
-            </Link>
+            <div className="flex gap-3">
+              <Link
+                href={`/politicians/${params.id}/brief`}
+                className="btn-primary text-caption py-2 px-4"
+              >
+                Endorsement Brief &rarr;
+              </Link>
+              <Link
+                href={`/compare?a=${params.id}`}
+                className="btn-secondary text-caption py-2 px-4"
+              >
+                Compare
+              </Link>
+            </div>
           </div>
           <ScoreGauge
             score={overallScore}
             confidence={overallConfidence}
             size="large"
-            label="Overall Score"
+            label="Chamber Alignment"
           />
         </div>
       </div>
@@ -109,15 +119,13 @@ export default async function PoliticianDetailPage({
       {/* Radar + Principle Bars */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
         <div className="card p-8 flex items-center justify-center">
-          <RadarChart scores={radarScores} size={260} label="Principle Profile" />
+          <RadarChart scores={radarScores} size={260} label="Issue Profile" />
         </div>
         <div className="lg:col-span-2 card p-8">
-          <h2 className="text-heading-3 mb-6">
-            OECD Principle Alignment
-          </h2>
+          <h2 className="text-heading-3 mb-6">PA Chamber Priority Alignment</h2>
           <div className="space-y-6">
             {principleScores.map((ps: any) => {
-              const principleInfo = OECD_PRINCIPLES[ps.principle];
+              const principleInfo = PA_CHAMBER_PRINCIPLES[ps.principle];
               return (
                 <PrincipleScoreBar
                   key={ps.principle}
@@ -133,8 +141,8 @@ export default async function PoliticianDetailPage({
             })}
             {principleScores.length === 0 && (
               <div className="space-y-6">
-                {Object.entries(OECD_PRINCIPLES).map(([key, p]) => {
-                  const score = overallData?.[`${key.toLowerCase()}_score`] ?? 0;
+                {Object.entries(PA_CHAMBER_PRINCIPLES).map(([key, p]) => {
+                  const score = (overallData as any)?.[`${key.toLowerCase()}_score`] ?? 0;
                   return (
                     <PrincipleScoreBar
                       key={key}
@@ -152,14 +160,12 @@ export default async function PoliticianDetailPage({
 
       {/* Methodology */}
       <div className="card p-8 mb-8">
-        <h2 className="text-heading-3 mb-6">
-          How This Score Was Calculated
-        </h2>
+        <h2 className="text-heading-3 mb-6">How This Score Was Calculated</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
-            { num: '1', title: 'Evidence Collection', desc: 'We collect floor votes, bill sponsorships, co-sponsorships, committee statements, floor speeches, and press releases from public congressional records.' },
-            { num: '2', title: 'AI Classification', desc: 'Each evidence item is filtered by AI relevance keywords, then classified by Claude AI for relevance to OECD principles. Bills are classified for direction. Statements have structured claims extracted.' },
-            { num: '3', title: 'Deterministic Scoring', desc: 'Scores are computed using transparent math. Each evidence type has a weight (votes: 1.0, sponsorships: 0.9, statements: 0.4-0.6). Temporal decay reduces older evidence.' },
+            { num: '1', title: 'Evidence Collection', desc: 'We collect floor votes, committee votes, bill sponsorships, co-sponsorships, committee statements, floor speeches, press releases, and candidate questionnaire responses from PA General Assembly records and public sources.' },
+            { num: '2', title: 'AI Classification', desc: 'Each evidence item is filtered by PA business relevance keywords, then classified by Claude AI for alignment with the nine Chamber priorities. Bills are classified for direction. Statements have structured claims extracted.' },
+            { num: '3', title: 'Weighted Scoring', desc: 'Scores are computed using transparent math. Bill sponsorships carry the highest weight. Sponsorships tied to Chamber priority bills receive a 3× multiplier. Temporal decay reduces older evidence. Every claim links to its source.' },
           ].map(step => (
             <div key={step.num} className="p-5" style={{ border: '1px solid var(--border)', borderRadius: '12px' }}>
               <div className="w-8 h-8 bg-primary-950 text-white rounded-full flex items-center justify-center font-bold text-caption mb-3">{step.num}</div>
@@ -171,38 +177,24 @@ export default async function PoliticianDetailPage({
 
         <div className="mt-6 pt-6" style={{ borderTop: '1px solid var(--border)' }}>
           <h3 className="font-semibold text-primary-950 mb-3 text-body-sm">Evidence Type Weights</h3>
-          <div className="space-y-2">
-            <div className="flex flex-wrap gap-3">
-              {Object.entries(EVIDENCE_WEIGHTS).slice(0, 4).map(([type, weight]) => (
-                <div key={type} className="flex items-center space-x-2 rounded-lg px-3 py-2" style={{ background: 'var(--surface-canvas)' }}>
-                  <span className="text-caption font-medium text-primary-500">
-                    {EVIDENCE_TYPE_LABELS[type] || type}
-                  </span>
-                  <span className="text-caption font-bold text-primary-950">{weight.toFixed(1)}</span>
-                </div>
-              ))}
-            </div>
-            <div className="flex flex-wrap gap-3">
-              {Object.entries(EVIDENCE_WEIGHTS).slice(4).map(([type, weight]) => (
-                <div key={type} className="flex items-center space-x-2 rounded-lg px-3 py-2" style={{ background: 'var(--surface-canvas)' }}>
-                  <span className="text-caption font-medium text-primary-500">
-                    {EVIDENCE_TYPE_LABELS[type] || type}
-                  </span>
-                  <span className="text-caption font-bold text-primary-950">{weight.toFixed(1)}</span>
-                </div>
-              ))}
-            </div>
+          <div className="flex flex-wrap gap-3">
+            {Object.entries(EVIDENCE_WEIGHTS).map(([type, weight]) => (
+              <div key={type} className="flex items-center space-x-2 rounded-lg px-3 py-2" style={{ background: 'var(--surface-canvas)' }}>
+                <span className="text-caption font-medium text-primary-500">
+                  {EVIDENCE_TYPE_LABELS[type] || type}
+                </span>
+                <span className="text-caption font-bold text-primary-950">{weight}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
       {/* Evidence Trail */}
       <div className="card p-8">
-        <h2 className="text-heading-3 mb-6">
-          Evidence Trail
-        </h2>
+        <h2 className="text-heading-3 mb-2">Evidence Trail</h2>
         <p className="text-body-sm text-primary-400 mb-6">
-          Every score is traceable to specific evidence items below.
+          Every score is traceable to the specific evidence items below. Click any source link to verify.
         </p>
         <div className="space-y-4">
           {evidenceItems.map((item: any) => (
@@ -223,18 +215,18 @@ export default async function PoliticianDetailPage({
                 ))}
               </div>
 
-              {item.vote_position && (
-                <p className="text-body-sm text-primary-500 mb-1">
-                  <span className="font-medium">Vote:</span>{' '}
-                  <span className={
-                    item.vote_position === 'yea' ? 'text-primary-950 font-semibold' :
-                    item.vote_position === 'nay' ? 'text-primary-400' : 'text-primary-300'
-                  }>
-                    {item.vote_position.toUpperCase()}
-                  </span>
-                  {item.bill_title && ` on ${item.bill_title}`}
-                </p>
-              )}
+              {item.vote_position && (() => {
+                let voteClass = 'text-primary-300';
+                if (item.vote_position === 'yea') voteClass = 'text-primary-950 font-semibold';
+                else if (item.vote_position === 'nay') voteClass = 'text-primary-400';
+                return (
+                  <p className="text-body-sm text-primary-500 mb-1">
+                    <span className="font-medium">Vote:</span>{' '}
+                    <span className={voteClass}>{item.vote_position.toUpperCase()}</span>
+                    {item.bill_title && ` on ${item.bill_title}`}
+                  </p>
+                );
+              })()}
 
               {item.source_text && !item.vote_position && (
                 <p className="text-body-sm text-primary-500 line-clamp-3 mb-2">
@@ -244,24 +236,22 @@ export default async function PoliticianDetailPage({
 
               {item.claims && item.claims.length > 0 && (
                 <div className="mt-2 space-y-1">
-                  {item.claims.map((claim: any, idx: number) => (
-                    <div key={idx} className="flex items-start space-x-2 text-caption rounded p-2" style={{ background: 'var(--surface-canvas)' }}>
-                      <span className={`inline-flex px-1.5 py-0.5 rounded font-medium ${
-                        claim.stance === 'support' ? 'bg-primary-950 text-white' :
-                        claim.stance === 'oppose' ? 'bg-primary-200 text-primary-600' :
-                        claim.stance === 'conditional' ? 'bg-primary-100 text-primary-500' :
-                        'bg-primary-100 text-primary-600'
-                      }`}>
-                        {claim.stance}/{claim.strength}
-                      </span>
-                      <span className="text-primary-500 flex-1">
-                        &ldquo;{claim.claim_text}&rdquo;
-                      </span>
-                      <span className="text-primary-400 whitespace-nowrap">
-                        score: {claim.claim_score?.toFixed(2)}
-                      </span>
-                    </div>
-                  ))}
+                  {item.claims.map((claim: any) => {
+                    let stanceClass = 'bg-primary-100 text-primary-600';
+                    if (claim.stance === 'support') stanceClass = 'bg-primary-950 text-white';
+                    else if (claim.stance === 'oppose') stanceClass = 'bg-primary-200 text-primary-600';
+                    else if (claim.stance === 'conditional') stanceClass = 'bg-primary-100 text-primary-500';
+                    return (
+                      <div key={claim.id} className="flex items-start space-x-2 text-caption rounded p-2" style={{ background: 'var(--surface-canvas)' }}>
+                        <span className={`inline-flex px-1.5 py-0.5 rounded font-medium ${stanceClass}`}>
+                          {claim.stance}/{claim.strength}
+                        </span>
+                        <span className="text-primary-500 flex-1">
+                          &ldquo;{claim.claim_text}&rdquo;
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
               )}
 
@@ -272,7 +262,7 @@ export default async function PoliticianDetailPage({
                   rel="noopener noreferrer"
                   className="text-caption text-primary-500 hover:text-primary-950 mt-1 inline-block transition-colors underline"
                 >
-                  View source
+                  View source &rarr;
                 </a>
               )}
             </div>

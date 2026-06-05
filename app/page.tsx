@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import PoliticianCard from '@/components/politicians/PoliticianCard';
-import { getDB } from '@/lib/db/client';
+import { getSupabase, extractOverallScore } from '@/lib/db/client';
 import { cacheGet, cacheSet } from '@/lib/cache/redis';
 import { CACHE_TTL, EXAMPLE_POLITICIANS } from '@/lib/utils/constants';
 import type { PoliticianWithScores } from '@/lib/utils/types';
@@ -10,18 +10,19 @@ async function getStats() {
   const cached = await cacheGet<any>('stats');
   if (cached) return cached;
 
-  const db = getDB();
+  const supabase = getSupabase();
 
-  const [politiciansResult, evidenceResult, claimsResult] = await Promise.all([
-    db`SELECT COUNT(*) as count FROM politicians WHERE is_active = true`,
-    db`SELECT COUNT(*) as count FROM evidence_items WHERE is_relevant = true`,
-    db`SELECT COUNT(*) as count FROM extracted_claims`,
-  ]);
+  const [{ count: politiciansCount }, { count: evidenceCount }, { count: claimsCount }] =
+    await Promise.all([
+      supabase.from('politicians').select('*', { count: 'exact', head: true }).eq('is_active', true),
+      supabase.from('evidence_items').select('*', { count: 'exact', head: true }).eq('is_relevant', true),
+      supabase.from('extracted_claims').select('*', { count: 'exact', head: true }),
+    ]);
 
   const stats = {
-    politicians: parseInt(politiciansResult[0].count),
-    evidence_items: parseInt(evidenceResult[0].count),
-    claims: parseInt(claimsResult[0].count),
+    politicians: politiciansCount ?? 0,
+    evidence_items: evidenceCount ?? 0,
+    claims: claimsCount ?? 0,
   };
 
   await cacheSet('stats', stats, CACHE_TTL.STATS);
@@ -32,18 +33,19 @@ async function getTopPoliticians(limit: number = 6) {
   const cached = await cacheGet<PoliticianWithScores[]>('top-politicians');
   if (cached) return cached;
 
-  const db = getDB();
+  const supabase = getSupabase();
 
-  const politicians = await db<PoliticianWithScores[]>`
-    SELECT
-      p.*,
-      row_to_json(os.*) as overall_score
-    FROM politicians p
-    JOIN overall_scores os ON p.id = os.politician_id
-    WHERE p.is_active = true
-    ORDER BY os.overall_score DESC
-    LIMIT ${limit}
-  `;
+  const { data } = await supabase
+    .from('politicians')
+    .select('*, overall_scores(*)')
+    .eq('is_active', true)
+    .order('full_name')
+    .limit(limit * 2); // fetch extra so we can sort by score in JS
+
+  const politicians = (data ?? [])
+    .map((row) => ({ ...row, overall_score: extractOverallScore(row) }) as PoliticianWithScores)
+    .sort((a, b) => (b.overall_score?.overall_score ?? 0) - (a.overall_score?.overall_score ?? 0))
+    .slice(0, limit);
 
   await cacheSet('top-politicians', politicians, CACHE_TTL.POLITICIANS_LIST);
   return politicians;
@@ -81,14 +83,14 @@ export default async function HomePage() {
         </div>
         <div className="container-page relative z-10 text-center animate-fade-in">
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-6">
-            OpenPolicy AI
+            Endorsement Intelligence
           </h1>
           <p className="text-base sm:text-lg lg:text-xl text-white/70 max-w-2xl mx-auto mb-10">
-            Search any politician. See their score.<br className="sm:hidden" />{' '}
-            Understand their alignment with AI.
+            Evidence-based candidate scoring for the Pennsylvania Chamber of Commerce.{' '}
+            Every claim is cited. Every score is explainable.
           </p>
           <Link href="/politicians" className="btn-primary">
-            Explore The Scores &rarr;
+            View Candidates &rarr;
           </Link>
         </div>
       </section>
@@ -105,10 +107,12 @@ export default async function HomePage() {
             />
           </div>
           <div className="flex items-center">
-            <h2 className="text-heading-2 font-bold leading-snug text-primary-950">
-              AI is the most consequential technology of our generation.
-              <span className="block mt-2">The public deserves a say.</span>
-            </h2>
+            <div>
+              <h2 className="text-heading-2 font-bold leading-snug text-primary-950">
+                Smart endorsement decisions require more than a voting record.
+              </h2>
+              <p className="mt-2 text-primary-500 font-medium text-xl">We surface what&apos;s hard to find.</p>
+            </div>
           </div>
         </div>
       </section>
@@ -116,7 +120,7 @@ export default async function HomePage() {
       {/* Why This Matters */}
       <section className="py-8 lg:py-10" style={{ background: 'var(--surface-canvas)' }}>
         <div className="container-page">
-          <h2 className="text-heading-1 mb-4">Why This Matters</h2>
+          <h2 className="text-heading-1 mb-4">How It Works</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 items-start">
             <div className="relative aspect-[4/3] rounded-xl overflow-hidden">
               <Image
@@ -128,24 +132,25 @@ export default async function HomePage() {
             </div>
             <div className="space-y-3">
               <p className="text-body-sm text-primary-500 leading-relaxed">
-                Over 1,000 AI bills were introduced last year. Most voters couldn&apos;t name one.
-                That&apos;s the problem we&apos;re solving.
+                Voting records only tell part of the story. We surface bill sponsorships,
+                committee votes, public statements, press coverage, and questionnaire
+                responses — then score each candidate against the Chamber&apos;s nine business priorities.
               </p>
               <p className="text-caption text-primary-400 leading-relaxed">
-                We analyze politicians&apos; records on AI policy using transparent,
-                verifiable metrics aligned with OECD principles.
+                Every score links back to its source. Your team can verify any claim before
+                presenting an endorsement recommendation.
               </p>
               <div className="grid grid-cols-3 gap-4 pt-2">
                 <div>
-                  <p className="text-heading-3 font-bold">{stats.politicians || 100}</p>
-                  <p className="text-caption text-primary-400">Senators Tracked</p>
+                  <p className="text-heading-3 font-bold">{stats.politicians || 0}</p>
+                  <p className="text-caption text-primary-400">Candidates Tracked</p>
                 </div>
                 <div>
-                  <p className="text-heading-3 font-bold">{stats.evidence_items || 366}</p>
+                  <p className="text-heading-3 font-bold">{stats.evidence_items || 0}</p>
                   <p className="text-caption text-primary-400">Evidence Items</p>
                 </div>
                 <div>
-                  <p className="text-heading-3 font-bold">{stats.claims || 1200}</p>
+                  <p className="text-heading-3 font-bold">{stats.claims || 0}</p>
                   <p className="text-caption text-primary-400">Claims Extracted</p>
                 </div>
               </div>
@@ -159,7 +164,7 @@ export default async function HomePage() {
         <div className="container-page">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-heading-2">
-              {showExamples ? 'Example Evaluations' : 'Senators'}
+              {showExamples ? 'Example Candidates' : 'PA House Candidates'}
             </h2>
             <Link
               href="/politicians"

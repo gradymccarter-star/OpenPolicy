@@ -2,14 +2,13 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 
 const NAV_LINKS = [
   { href: '/', label: 'Home' },
-  { href: '/politicians', label: 'Politicians' },
+  { href: '/politicians', label: 'Candidates' },
   { href: '/compare', label: 'Compare' },
-  { href: '/principles', label: 'Methodology' },
+  { href: '/principles', label: 'Scoring Criteria' },
   { href: '/about', label: 'About' },
 ];
 
@@ -23,13 +22,7 @@ export default function Header() {
         <div className="flex items-center justify-between h-16 lg:h-20">
           <div className="flex-shrink-0">
             <Link href="/" className="flex items-center">
-              <Image
-                src="/openpolicy-shield.png"
-                alt="OpenPolicy AI"
-                width={36}
-                height={36}
-                className="w-8 h-8 lg:w-9 lg:h-9"
-              />
+              <span className="text-body-sm font-bold text-primary-950 tracking-tight">PA Chamber Intelligence</span>
             </Link>
           </div>
 

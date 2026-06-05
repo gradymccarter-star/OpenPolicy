@@ -1,180 +1,133 @@
 /**
  * Fetch Voting Records Job
- * Fetches Senate roll call votes from Senate.gov XML data
- * Filters for AI-relevant votes using keyword matching
+ * Fetches PA House floor votes from LegiScan API.
+ * Filters for PA business-relevant bills using keyword matching.
  */
 
 const postgres = require('postgres');
 const axios = require('axios');
 const crypto = require('crypto');
-const { isAIRelevant } = require('../shared/constants');
+const { isPABusinessRelevant } = require('../shared/constants');
 
-function contentHash(bioguideId, congress, session, voteNumber) {
-  return crypto
-    .createHash('md5')
-    .update(`${bioguideId}-${congress}-${session}-${voteNumber}`)
-    .digest('hex');
-}
+const LEGISCAN_BASE = 'https://api.legiscan.com/';
+const CURRENT_SESSION_ID = 2192;
 
-// Parse simple XML tags (avoid needing xml2js dependency)
-function extractTag(xml, tag) {
-  const regex = new RegExp(`<${tag}>([\\s\\S]*?)</${tag}>`);
-  const match = xml.match(regex);
-  return match ? match[1].trim() : '';
-}
+let lastRequestTime = 0;
 
-function extractAllTags(xml, tag) {
-  const regex = new RegExp(`<${tag}>([\\s\\S]*?)</${tag}>`, 'g');
-  const results = [];
-  let match;
-  while ((match = regex.exec(xml)) !== null) {
-    results.push(match[1].trim());
+async function rateLimit() {
+  const now = Date.now();
+  const elapsed = now - lastRequestTime;
+  if (elapsed < 500) {
+    await new Promise((r) => setTimeout(r, 500 - elapsed));
   }
-  return results;
+  lastRequestTime = Date.now();
 }
 
-async function fetchVoteList(congress, session) {
-  const url = `https://www.senate.gov/legislative/LIS/roll_call_lists/vote_menu_${congress}_${session}.xml`;
+async function legiScanFetch(op, params = {}) {
+  const apiKey = process.env.LEGISCAN_API_KEY;
+  await rateLimit();
+
+  const response = await axios.get(LEGISCAN_BASE, {
+    params: { key: apiKey, op, state: 'PA', ...params },
+    timeout: 30000,
+  });
+
+  if (response.data.status === 'ERROR') {
+    throw new Error(`LegiScan error: ${JSON.stringify(response.data)}`);
+  }
+  return response.data;
+}
+
+function contentHash(legislatorId, rollCallId) {
+  return crypto.createHash('md5').update(`${legislatorId}-${rollCallId}`).digest('hex');
+}
+
+function normalizePosition(vote) {
+  const v = (vote || '').toLowerCase();
+  if (v === 'yea' || v === 'yes') return 'yea';
+  if (v === 'nay' || v === 'no') return 'nay';
+  if (v === 'nv' || v === 'not voting' || v === 'absent') return 'not_voting';
+  return 'abstain';
+}
+
+async function insertVote(sql, memberId, legislatorId, vote) {
+  const searchText = `${vote.bill_number || ''} ${vote.description || ''}`;
+  if (!isPABusinessRelevant(searchText)) return false;
+
+  const hash = contentHash(legislatorId, vote.roll_call_id);
+  const position = normalizePosition(vote.vote_text);
+  const sourceUrl = `https://legiscan.com/PA/rollcall/id/${vote.roll_call_id}`;
+  const sourceDate = vote.date ? new Date(vote.date) : new Date();
+
   try {
-    const response = await axios.get(url, { timeout: 30000 });
-    return response.data;
-  } catch (error) {
-    console.log(`  Could not fetch vote list for ${congress}/${session}: ${error.message}`);
-    return null;
+    await sql`
+      INSERT INTO evidence_items (
+        politician_id, evidence_type, bill_id, bill_title,
+        vote_position, source_url, source_date, content_hash
+      ) VALUES (
+        ${memberId}, 'floor_vote',
+        ${vote.bill_id ? String(vote.bill_id) : null},
+        ${(vote.description || '').substring(0, 500)},
+        ${position}, ${sourceUrl}, ${sourceDate}, ${hash}
+      )
+      ON CONFLICT (content_hash) DO NOTHING
+    `;
+    return true;
+  } catch {
+    return false;
   }
 }
 
-async function fetchVoteDetail(congress, session, voteNumber) {
-  const paddedVote = String(voteNumber).padStart(5, '0');
-  const url = `https://www.senate.gov/legislative/LIS/roll_call_votes/vote${congress}${session}/vote_${congress}_${session}_${paddedVote}.xml`;
-  try {
-    const response = await axios.get(url, { timeout: 30000 });
-    return response.data;
-  } catch (error) {
-    return null;
+async function processMember(sql, member) {
+  const data = await legiScanFetch('getPersonVotes', {
+    id: member.pa_legislator_id,
+    session_id: CURRENT_SESSION_ID,
+  });
+
+  const votes = data.personvotes?.votes || [];
+  console.log(`    ${votes.length} votes found`);
+
+  let inserted = 0;
+  for (const vote of votes) {
+    if (await insertVote(sql, member.id, member.pa_legislator_id, vote)) inserted++;
   }
+  return inserted;
 }
 
 async function fetchVotingRecords() {
-  console.log('Fetching Senate voting records from Senate.gov...');
+  console.log('Fetching PA House voting records from LegiScan...');
 
   const databaseUrl = process.env.DATABASE_URL;
-  if (!databaseUrl) {
-    console.error('Missing DATABASE_URL');
+  if (!databaseUrl || !process.env.LEGISCAN_API_KEY) {
+    console.error('Missing DATABASE_URL or LEGISCAN_API_KEY');
     process.exit(1);
   }
 
   const sql = postgres(databaseUrl, { ssl: 'require', prepare: false });
 
   try {
-    // Build bioguide -> politician ID lookup
-    const senators = await sql`
-      SELECT id, bioguide_id, full_name, last_name
+    const members = await sql`
+      SELECT id, pa_legislator_id, full_name
       FROM politicians
-      WHERE is_active = true AND office_type = 'senate'
+      WHERE is_active = true AND office_type = 'pa_house'
     `;
-    const senatorsByLastName = {};
-    const senatorsById = {};
-    for (const s of senators) {
-      senatorsByLastName[s.last_name.toLowerCase()] = s;
-      senatorsById[s.bioguide_id] = s;
-    }
 
-    console.log(`  ${senators.length} active senators in DB`);
+    console.log(`  ${members.length} active PA House members in DB`);
 
     let totalInserted = 0;
-    let totalVotesChecked = 0;
 
-    // Check current congress (119th) and previous (118th)
-    const sessions = [
-      { congress: 119, session: 1 },
-      { congress: 118, session: 2 },
-      { congress: 118, session: 1 },
-    ];
-
-    for (const { congress, session } of sessions) {
-      console.log(`\n  Checking ${congress}th Congress, Session ${session}...`);
-
-      const voteListXml = await fetchVoteList(congress, session);
-      if (!voteListXml) continue;
-
-      // Extract vote entries from the list
-      const voteEntries = extractAllTags(voteListXml, 'vote');
-      console.log(`    Found ${voteEntries.length} total votes`);
-
-      // Check each vote's question/title for AI relevance
-      for (const voteXml of voteEntries) {
-        const voteNumber = extractTag(voteXml, 'vote_number');
-        const question = extractTag(voteXml, 'question');
-        const title = extractTag(voteXml, 'title');
-        const issueText = extractTag(voteXml, 'issue');
-        const voteDate = extractTag(voteXml, 'vote_date');
-
-        const searchText = `${question} ${title} ${issueText}`;
-        totalVotesChecked++;
-
-        if (!isAIRelevant(searchText)) continue;
-
-        console.log(`    AI-relevant vote #${voteNumber}: ${title.substring(0, 80)}...`);
-
-        // Fetch detailed vote data with per-senator votes
-        await new Promise((r) => setTimeout(r, 500)); // Rate limit
-        const detailXml = await fetchVoteDetail(congress, session, voteNumber);
-        if (!detailXml) continue;
-
-        // Extract individual member votes
-        const members = extractAllTags(detailXml, 'member');
-        let voteInserted = 0;
-
-        for (const memberXml of members) {
-          const lastName = extractTag(memberXml, 'last_name').toLowerCase();
-          const memberId = extractTag(memberXml, 'lis_member_id');
-          const voteCast = extractTag(memberXml, 'vote_cast').toLowerCase();
-
-          // Match senator by last name (imperfect but works for most)
-          const senator = senatorsByLastName[lastName];
-          if (!senator) continue;
-
-          const votePosition =
-            voteCast === 'yea' ? 'yea' :
-            voteCast === 'nay' ? 'nay' :
-            voteCast === 'not voting' ? 'not_voting' :
-            'abstain';
-
-          const hash = contentHash(senator.bioguide_id, congress, session, voteNumber);
-          const billTitle = `${title} - ${question}`.substring(0, 500);
-          const sourceUrl = `https://www.senate.gov/legislative/LIS/roll_call_votes/vote${congress}${session}/vote_${congress}_${session}_${String(voteNumber).padStart(5, '0')}.htm`;
-          const sourceDate = voteDate ? new Date(voteDate) : new Date();
-
-          try {
-            await sql`
-              INSERT INTO evidence_items (
-                politician_id, evidence_type, bill_id, bill_title,
-                vote_position, source_text, source_url,
-                source_date, content_hash
-              ) VALUES (
-                ${senator.id}, 'floor_vote', ${issueText || `vote-${voteNumber}`}, ${billTitle},
-                ${votePosition}, ${searchText}, ${sourceUrl},
-                ${sourceDate}, ${hash}
-              )
-              ON CONFLICT (content_hash) DO NOTHING
-            `;
-            voteInserted++;
-          } catch (insertError) {
-            // Duplicate or constraint error
-          }
-        }
-
-        totalInserted += voteInserted;
-        if (voteInserted > 0) {
-          console.log(`      + ${voteInserted} senator votes recorded`);
-        }
+    for (const member of members) {
+      console.log(`\n  Processing ${member.full_name}...`);
+      try {
+        const count = await processMember(sql, member);
+        totalInserted += count;
+        console.log(`    + ${count} relevant floor votes recorded`);
+      } catch (error) {
+        console.error(`    x Error for ${member.full_name}: ${error.message}`);
       }
     }
 
-    console.log(`\nVoting records complete:`);
-    console.log(`  Total votes checked: ${totalVotesChecked}`);
-    console.log(`  Evidence items inserted: ${totalInserted}`);
+    console.log(`\nVoting records complete: ${totalInserted} evidence items inserted`);
   } catch (error) {
     console.error('Job failed:', error);
     process.exit(1);

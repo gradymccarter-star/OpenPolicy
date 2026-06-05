@@ -11,8 +11,8 @@ const poppins = Poppins({
 })
 
 export const metadata: Metadata = {
-  title: 'OpenPolicy AI - Transparent AI Policy Scoring',
-  description: 'OpenPolicy AI evaluates US senators\' alignment with OECD AI principles using transparent, evidence-based methodology.',
+  title: 'PA Chamber Endorsement Intelligence',
+  description: 'Evidence-based candidate intelligence for the Pennsylvania Chamber of Commerce endorsement process.',
 }
 
 export default function RootLayout({

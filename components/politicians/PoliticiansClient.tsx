@@ -4,11 +4,16 @@ import { useState, useMemo } from 'react';
 import PoliticianCard from './PoliticianCard';
 import type { PoliticianWithScores } from '@/lib/utils/types';
 
-const US_STATES = [
-  'AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA',
-  'KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ',
-  'NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT',
-  'VA','WA','WV','WI','WY',
+const PA_COUNTIES = [
+  'Adams','Allegheny','Armstrong','Beaver','Bedford','Berks','Blair','Bradford',
+  'Bucks','Butler','Cambria','Cameron','Carbon','Centre','Chester','Clarion',
+  'Clearfield','Clinton','Columbia','Crawford','Cumberland','Dauphin','Delaware',
+  'Elk','Erie','Fayette','Forest','Franklin','Fulton','Greene','Huntingdon',
+  'Indiana','Jefferson','Juniata','Lackawanna','Lancaster','Lawrence','Lebanon',
+  'Lehigh','Luzerne','Lycoming','McKean','Mercer','Mifflin','Monroe','Montgomery',
+  'Montour','Northampton','Northumberland','Perry','Philadelphia','Pike','Potter',
+  'Schuylkill','Snyder','Somerset','Sullivan','Susquehanna','Tioga','Union',
+  'Venango','Warren','Washington','Wayne','Westmoreland','Wyoming','York',
 ];
 
 interface PoliticiansClientProps {
@@ -19,39 +24,24 @@ interface PoliticiansClientProps {
 export default function PoliticiansClient({ politicians, showExamples }: PoliticiansClientProps) {
   const [search, setSearch] = useState('');
   const [party, setParty] = useState<string>('all');
-  const [state, setState] = useState<string>('all');
+  const [county, setCounty] = useState<string>('all');
   const [scoreRange, setScoreRange] = useState<[number, number]>([0, 100]);
   const [confidenceRange, setConfidenceRange] = useState<[number, number]>([0, 100]);
 
   const filtered = useMemo(() => {
     return politicians.filter((p) => {
-      // Search
-      if (search && !p.full_name.toLowerCase().includes(search.toLowerCase())) {
-        return false;
-      }
-      // Party
-      if (party !== 'all' && p.party !== party) {
-        return false;
-      }
-      // State
-      if (state !== 'all' && p.state !== state) {
-        return false;
-      }
-      // Score
+      if (search && !p.full_name.toLowerCase().includes(search.toLowerCase())) return false;
+      if (party !== 'all' && p.party !== party) return false;
+      if (county !== 'all' && p.county !== county) return false;
       const score = (p.overall_score?.overall_score ?? 0) * 100;
-      if (score < scoreRange[0] || score > scoreRange[1]) {
-        return false;
-      }
-      // Confidence
+      if (score < scoreRange[0] || score > scoreRange[1]) return false;
       const confidence = (p.overall_score?.overall_confidence ?? 0) * 100;
-      if (confidence < confidenceRange[0] || confidence > confidenceRange[1]) {
-        return false;
-      }
+      if (confidence < confidenceRange[0] || confidence > confidenceRange[1]) return false;
       return true;
     });
-  }, [politicians, search, party, state, scoreRange, confidenceRange]);
+  }, [politicians, search, party, county, scoreRange, confidenceRange]);
 
-  const hasActiveFilters = party !== 'all' || state !== 'all' || scoreRange[0] > 0 || scoreRange[1] < 100 || confidenceRange[0] > 0 || confidenceRange[1] < 100 || search !== '';
+  const hasActiveFilters = party !== 'all' || county !== 'all' || scoreRange[0] > 0 || scoreRange[1] < 100 || confidenceRange[0] > 0 || confidenceRange[1] < 100 || search !== '';
 
   return (
     <div>
@@ -94,18 +84,18 @@ export default function PoliticiansClient({ politicians, showExamples }: Politic
             </div>
           </div>
 
-          {/* State */}
+          {/* County */}
           <div>
-            <label className="text-caption font-medium text-primary-500 mb-1 block">State</label>
+            <label className="text-caption font-medium text-primary-500 mb-1 block">County</label>
             <select
-              value={state}
-              onChange={(e) => setState(e.target.value)}
+              value={county}
+              onChange={(e) => setCounty(e.target.value)}
               className="w-full px-3 py-1.5 rounded-md text-caption"
               style={{ background: 'var(--surface-canvas)', border: '1px solid var(--border)' }}
             >
-              <option value="all">All States</option>
-              {US_STATES.map((s) => (
-                <option key={s} value={s}>{s}</option>
+              <option value="all">All Counties</option>
+              {PA_COUNTIES.map((c) => (
+                <option key={c} value={c}>{c}</option>
               ))}
             </select>
           </div>
@@ -177,13 +167,13 @@ export default function PoliticiansClient({ politicians, showExamples }: Politic
         {hasActiveFilters && (
           <div className="flex items-center justify-between pt-1">
             <p className="text-caption text-primary-400">
-              {filtered.length} of {politicians.length} senators shown
+              {filtered.length} of {politicians.length} candidates shown
             </p>
             <button
               onClick={() => {
                 setSearch('');
                 setParty('all');
-                setState('all');
+                setCounty('all');
                 setScoreRange([0, 100]);
                 setConfidenceRange([0, 100]);
               }}
@@ -204,7 +194,7 @@ export default function PoliticiansClient({ politicians, showExamples }: Politic
 
       {filtered.length === 0 && (
         <p className="text-center text-body-sm text-primary-400 py-12">
-          No senators match your filters.
+          No candidates match your filters.
         </p>
       )}
 

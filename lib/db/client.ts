@@ -1,39 +1,25 @@
-import postgres from 'postgres';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import type { OverallScore } from '@/lib/utils/types';
 
-// Singleton PostgreSQL connection
-let sql: ReturnType<typeof postgres> | null = null;
+let client: SupabaseClient | null = null;
 
-export function getDB() {
-  if (!sql) {
-    const databaseUrl = process.env.DATABASE_URL;
-    if (!databaseUrl) {
-      throw new Error('DATABASE_URL environment variable is not set');
+export function getSupabase(): SupabaseClient {
+  if (!client) {
+    const url = process.env.SUPABASE_URL;
+    const key = process.env.SUPABASE_SERVICE_KEY;
+    if (!url || !key) {
+      throw new Error('SUPABASE_URL and SUPABASE_SERVICE_KEY must be set');
     }
-
-    sql = postgres(databaseUrl, {
-      max: 50, // Connection pool size
-      idle_timeout: 20,
-      connect_timeout: 10,
-      ssl: 'require',
-      prepare: false, // Required for Supabase pooler (transaction mode)
+    client = createClient(url, key, {
+      auth: { persistSession: false },
     });
   }
-
-  return sql;
+  return client;
 }
 
-// Helper to close connection (useful for scripts)
-export async function closeDB() {
-  if (sql) {
-    await sql.end();
-    sql = null;
-  }
-}
-
-// Transaction helper
-export async function withTransaction<T>(
-  callback: (tx: postgres.TransactionSql) => Promise<T>
-): Promise<T> {
-  const db = getDB();
-  return db.begin(callback) as Promise<T>;
+// Supabase embeds FK relations as arrays; this pulls out the single-row overall_scores embed
+export function extractOverallScore(row: any): OverallScore | null {
+  if (!row.overall_scores) return null;
+  const os = Array.isArray(row.overall_scores) ? row.overall_scores[0] : row.overall_scores;
+  return os ?? null;
 }

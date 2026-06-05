@@ -4,16 +4,27 @@ import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { ComparisonRadar } from '@/components/scores/RadarChart';
 import ScoreGauge from '@/components/scores/ScoreGauge';
-import { PartyBadge, StateBadge } from '@/components/ui/Badge';
-import { OECD_PRINCIPLES, PARTY_COLORS } from '@/lib/utils/constants';
+import { PartyBadge } from '@/components/ui/Badge';
+import { PA_CHAMBER_PRINCIPLES, PARTY_COLORS } from '@/lib/utils/constants';
 import { formatScore, getScoreColor } from '@/lib/utils/helpers';
 import type { PoliticianWithScores } from '@/lib/utils/types';
 
-const US_STATES = [
-  'AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA',
-  'KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ',
-  'NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT',
-  'VA','WA','WV','WI','WY','DC',
+function partyLabel(party: string): string {
+  if (party === 'D') return 'Democrat';
+  if (party === 'R') return 'Republican';
+  return 'Independent';
+}
+
+const PA_COUNTIES = [
+  'Adams','Allegheny','Armstrong','Beaver','Bedford','Berks','Blair','Bradford',
+  'Bucks','Butler','Cambria','Cameron','Carbon','Centre','Chester','Clarion',
+  'Clearfield','Clinton','Columbia','Crawford','Cumberland','Dauphin','Delaware',
+  'Elk','Erie','Fayette','Forest','Franklin','Fulton','Greene','Huntingdon',
+  'Indiana','Jefferson','Juniata','Lackawanna','Lancaster','Lawrence','Lebanon',
+  'Lehigh','Luzerne','Lycoming','McKean','Mercer','Mifflin','Monroe','Montgomery',
+  'Montour','Northampton','Northumberland','Perry','Philadelphia','Pike','Potter',
+  'Schuylkill','Snyder','Somerset','Sullivan','Susquehanna','Tioga','Union',
+  'Venango','Warren','Washington','Wayne','Westmoreland','Wyoming','York',
 ];
 
 interface CompareClientProps {
@@ -27,8 +38,8 @@ export default function CompareClient({ allPoliticians, initialA, initialB }: Co
   const [selectedA, setSelectedA] = useState<string | null>(initialA || null);
   const [selectedB, setSelectedB] = useState<string | null>(initialB || null);
 
-  const senatorA = allPoliticians.find(p => p.id === selectedA);
-  const senatorB = allPoliticians.find(p => p.id === selectedB);
+  const candidateA = allPoliticians.find(p => p.id === selectedA);
+  const candidateB = allPoliticians.find(p => p.id === selectedB);
 
   function handleCompare() {
     if (selectedA && selectedB) {
@@ -37,29 +48,29 @@ export default function CompareClient({ allPoliticians, initialA, initialB }: Co
   }
 
   function getRadarData(politician: PoliticianWithScores) {
-    const os = politician.overall_score;
-    return Object.entries(OECD_PRINCIPLES).map(([key]) => ({
+    const os = politician.overall_score as any;
+    return Object.entries(PA_CHAMBER_PRINCIPLES).map(([key]) => ({
       label: key,
-      value: os?.[`${key.toLowerCase()}_score` as keyof typeof os] as number ?? 0,
+      value: os?.[`${key.toLowerCase()}_score`] ?? 0,
     }));
   }
 
-  const principleKeys = Object.keys(OECD_PRINCIPLES);
+  const principleKeys = Object.keys(PA_CHAMBER_PRINCIPLES);
 
   return (
     <>
       {/* Selectors */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-        <PoliticianSelector
-          label="Politician 1"
+        <CandidateSelector
+          label="Candidate 1"
           politicians={allPoliticians}
           selected={selectedA}
           onSelect={setSelectedA}
           excludeId={selectedB}
         />
 
-        <PoliticianSelector
-          label="Politician 2"
+        <CandidateSelector
+          label="Candidate 2"
           politicians={allPoliticians}
           selected={selectedB}
           onSelect={setSelectedB}
@@ -68,19 +79,16 @@ export default function CompareClient({ allPoliticians, initialA, initialB }: Co
       </div>
 
       {/* Compare Button */}
-      {selectedA && selectedB && !senatorA && !senatorB && (
+      {selectedA && selectedB && !candidateA && !candidateB && (
         <div className="flex justify-center mb-8">
-          <button
-            onClick={handleCompare}
-            className="btn-primary"
-          >
+          <button onClick={handleCompare} className="btn-primary">
             Compare Now
           </button>
         </div>
       )}
 
       {/* Results */}
-      {senatorA && senatorB && (
+      {candidateA && candidateB && (
         <>
           {/* Overlaid Radar Chart */}
           <div className="card p-8 mb-8">
@@ -92,14 +100,14 @@ export default function CompareClient({ allPoliticians, initialA, initialB }: Co
                 size={340}
                 datasets={[
                   {
-                    scores: getRadarData(senatorA),
-                    color: PARTY_COLORS[senatorA.party] || '#0a0e1a',
-                    name: senatorA.full_name,
+                    scores: getRadarData(candidateA),
+                    color: PARTY_COLORS[candidateA.party] || '#0a0e1a',
+                    name: candidateA.full_name,
                   },
                   {
-                    scores: getRadarData(senatorB),
-                    color: PARTY_COLORS[senatorB.party] || '#9ca3af',
-                    name: senatorB.full_name,
+                    scores: getRadarData(candidateB),
+                    color: PARTY_COLORS[candidateB.party] || '#9ca3af',
+                    name: candidateB.full_name,
                   },
                 ]}
               />
@@ -108,8 +116,8 @@ export default function CompareClient({ allPoliticians, initialA, initialB }: Co
 
           {/* Side-by-Side Stats */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-            <SenatorSummaryCard politician={senatorA} />
-            <SenatorSummaryCard politician={senatorB} />
+            <CandidateSummaryCard politician={candidateA} />
+            <CandidateSummaryCard politician={candidateB} />
           </div>
 
           {/* Principle-by-Principle Comparison */}
@@ -122,23 +130,23 @@ export default function CompareClient({ allPoliticians, initialA, initialB }: Co
                 <thead>
                   <tr style={{ borderBottom: '1px solid var(--border)' }}>
                     <th className="text-left py-3 pr-4 font-semibold text-primary-950">Principle</th>
-                    <th className="text-center py-3 px-4 font-semibold text-primary-950">{senatorA.full_name}</th>
-                    <th className="text-center py-3 px-4 font-semibold text-primary-950">{senatorB.full_name}</th>
+                    <th className="text-center py-3 px-4 font-semibold text-primary-950">{candidateA.full_name}</th>
+                    <th className="text-center py-3 px-4 font-semibold text-primary-950">{candidateB.full_name}</th>
                     <th className="text-center py-3 pl-4 font-semibold text-primary-950">Difference</th>
                   </tr>
                 </thead>
                 <tbody>
                   {principleKeys.map((key) => {
-                    const scoreA = (senatorA.overall_score as any)?.[`${key.toLowerCase()}_score`] ?? 0;
-                    const scoreB = (senatorB.overall_score as any)?.[`${key.toLowerCase()}_score`] ?? 0;
+                    const os = PA_CHAMBER_PRINCIPLES[key];
+                    const scoreA = (candidateA.overall_score as any)?.[`${key.toLowerCase()}_score`] ?? 0;
+                    const scoreB = (candidateB.overall_score as any)?.[`${key.toLowerCase()}_score`] ?? 0;
                     const diff = scoreA - scoreB;
-                    const principle = OECD_PRINCIPLES[key];
 
                     return (
                       <tr key={key} style={{ borderBottom: '1px solid var(--border-subtle)' }}>
                         <td className="py-3 pr-4">
                           <span className="font-medium text-primary-950">{key}:</span>{' '}
-                          <span className="text-primary-500">{principle.name}</span>
+                          <span className="text-primary-500">{os.name}</span>
                         </td>
                         <td className="text-center py-3 px-4">
                           <span className="font-bold" style={{ color: getScoreColor(scoreA) }}>
@@ -151,7 +159,7 @@ export default function CompareClient({ allPoliticians, initialA, initialB }: Co
                           </span>
                         </td>
                         <td className="text-center py-3 pl-4">
-                          <span className={`font-bold ${diff > 0 ? 'text-primary-950' : diff < 0 ? 'text-primary-400' : 'text-primary-400'}`}>
+                          <span className={`font-bold ${diff > 0 ? 'text-primary-950' : 'text-primary-400'}`}>
                             {diff > 0 ? '+' : ''}{Math.round(diff * 100)}%
                           </span>
                         </td>
@@ -161,20 +169,20 @@ export default function CompareClient({ allPoliticians, initialA, initialB }: Co
                   <tr style={{ borderTop: '2px solid var(--faint)' }}>
                     <td className="py-3 pr-4 font-bold text-primary-950">Overall</td>
                     <td className="text-center py-3 px-4">
-                      <span className="font-bold text-lg" style={{ color: getScoreColor(senatorA.overall_score?.overall_score ?? 0) }}>
-                        {formatScore(senatorA.overall_score?.overall_score ?? 0)}
+                      <span className="font-bold text-lg" style={{ color: getScoreColor(candidateA.overall_score?.overall_score ?? 0) }}>
+                        {formatScore(candidateA.overall_score?.overall_score ?? 0)}
                       </span>
                     </td>
                     <td className="text-center py-3 px-4">
-                      <span className="font-bold text-lg" style={{ color: getScoreColor(senatorB.overall_score?.overall_score ?? 0) }}>
-                        {formatScore(senatorB.overall_score?.overall_score ?? 0)}
+                      <span className="font-bold text-lg" style={{ color: getScoreColor(candidateB.overall_score?.overall_score ?? 0) }}>
+                        {formatScore(candidateB.overall_score?.overall_score ?? 0)}
                       </span>
                     </td>
                     <td className="text-center py-3 pl-4">
                       {(() => {
-                        const d = (senatorA.overall_score?.overall_score ?? 0) - (senatorB.overall_score?.overall_score ?? 0);
+                        const d = (candidateA.overall_score?.overall_score ?? 0) - (candidateB.overall_score?.overall_score ?? 0);
                         return (
-                          <span className={`font-bold text-lg ${d > 0 ? 'text-primary-950' : d < 0 ? 'text-primary-400' : 'text-primary-400'}`}>
+                          <span className={`font-bold text-lg ${d > 0 ? 'text-primary-950' : 'text-primary-400'}`}>
                             {d > 0 ? '+' : ''}{Math.round(d * 100)}%
                           </span>
                         );
@@ -191,32 +199,32 @@ export default function CompareClient({ allPoliticians, initialA, initialB }: Co
   );
 }
 
-function PoliticianSelector({
+function CandidateSelector({
   label,
   politicians,
   selected,
   onSelect,
   excludeId,
 }: {
-  label: string;
-  politicians: PoliticianWithScores[];
-  selected: string | null;
-  onSelect: (id: string | null) => void;
-  excludeId: string | null;
+  readonly label: string;
+  readonly politicians: PoliticianWithScores[];
+  readonly selected: string | null;
+  readonly onSelect: (id: string | null) => void;
+  readonly excludeId: string | null;
 }) {
   const [partyFilter, setPartyFilter] = useState<string>('all');
-  const [stateFilter, setStateFilter] = useState<string>('all');
+  const [countyFilter, setCountyFilter] = useState<string>('all');
   const [search, setSearch] = useState('');
 
   const filtered = useMemo(() => {
     return politicians.filter(p => {
       if (p.id === excludeId) return false;
       if (partyFilter !== 'all' && p.party !== partyFilter) return false;
-      if (stateFilter !== 'all' && p.state !== stateFilter) return false;
+      if (countyFilter !== 'all' && p.county !== countyFilter) return false;
       if (search && !p.full_name.toLowerCase().includes(search.toLowerCase())) return false;
       return true;
     });
-  }, [politicians, excludeId, partyFilter, stateFilter, search]);
+  }, [politicians, excludeId, partyFilter, countyFilter, search]);
 
   const selectedPolitician = politicians.find(p => p.id === selected);
 
@@ -241,16 +249,16 @@ function PoliticianSelector({
           </select>
         </div>
         <div>
-          <label className="block text-caption font-medium text-primary-400 mb-1">State</label>
+          <label className="block text-caption font-medium text-primary-400 mb-1">County</label>
           <select
-            value={stateFilter}
-            onChange={(e) => setStateFilter(e.target.value)}
+            value={countyFilter}
+            onChange={(e) => setCountyFilter(e.target.value)}
             className="w-full px-2.5 py-2 text-caption rounded-lg transition-colors"
             style={{ background: 'var(--surface-canvas)', border: '1px solid var(--border)' }}
           >
-            <option value="all">All States</option>
-            {US_STATES.map(s => (
-              <option key={s} value={s}>{s}</option>
+            <option value="all">All Counties</option>
+            {PA_COUNTIES.map(c => (
+              <option key={c} value={c}>{c}</option>
             ))}
           </select>
         </div>
@@ -277,7 +285,9 @@ function PoliticianSelector({
             <p className="font-medium text-body-sm text-primary-950">{selectedPolitician.full_name}</p>
             <div className="flex items-center gap-1.5 mt-0.5">
               <PartyBadge party={selectedPolitician.party} />
-              <StateBadge state={selectedPolitician.state} />
+              {selectedPolitician.county && (
+                <span className="text-caption text-primary-400">{selectedPolitician.county} Co.</span>
+              )}
             </div>
           </div>
           <div className="text-lg font-bold" style={{ color: getScoreColor(selectedPolitician.overall_score?.overall_score ?? 0) }}>
@@ -309,7 +319,9 @@ function PoliticianSelector({
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-medium text-body-sm text-primary-950 truncate">{p.full_name}</p>
-                <p className="text-caption text-primary-400">{p.party === 'D' ? 'Democrat' : p.party === 'R' ? 'Republican' : 'Independent'} &middot; {p.state}</p>
+                <p className="text-caption text-primary-400">
+                  {partyLabel(p.party)}{p.county && ` · ${p.county} Co.`}
+                </p>
               </div>
               <span className="text-body-sm font-bold" style={{ color: getScoreColor(p.overall_score?.overall_score ?? 0) }}>
                 {formatScore(p.overall_score?.overall_score ?? 0)}
@@ -318,7 +330,7 @@ function PoliticianSelector({
           ))}
           {filtered.length === 0 && (
             <p className="text-center text-primary-400 text-caption py-6">
-              No politicians match your filters
+              No candidates match your filters
             </p>
           )}
         </div>
@@ -327,7 +339,7 @@ function PoliticianSelector({
   );
 }
 
-function SenatorSummaryCard({ politician }: { politician: PoliticianWithScores }) {
+function CandidateSummaryCard({ politician }: { readonly politician: PoliticianWithScores }) {
   const os = politician.overall_score;
 
   return (
@@ -340,7 +352,9 @@ function SenatorSummaryCard({ politician }: { politician: PoliticianWithScores }
           <h3 className="font-bold text-primary-950">{politician.full_name}</h3>
           <div className="flex items-center space-x-1.5 mt-0.5">
             <PartyBadge party={politician.party} />
-            <StateBadge state={politician.state} />
+            {politician.county && (
+              <span className="text-caption text-primary-400">{politician.county} Co.</span>
+            )}
           </div>
         </div>
         <div className="ml-auto">

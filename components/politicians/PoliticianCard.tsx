@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { PartyBadge, StateBadge } from '@/components/ui/Badge';
+import { PartyBadge } from '@/components/ui/Badge';
 import { getScoreColor, formatScore, getConfidenceColor } from '@/lib/utils/helpers';
 import type { PoliticianWithScores } from '@/lib/utils/types';
 
@@ -19,6 +19,10 @@ export default function PoliticianCard({ politician }: PoliticianCardProps) {
     P3: os?.p3_score ?? 0,
     P4: os?.p4_score ?? 0,
     P5: os?.p5_score ?? 0,
+    P6: os?.p6_score ?? 0,
+    P7: os?.p7_score ?? 0,
+    P8: os?.p8_score ?? 0,
+    P9: os?.p9_score ?? 0,
   };
 
   return (
@@ -47,9 +51,14 @@ export default function PoliticianCard({ politician }: PoliticianCardProps) {
               <h3 className="text-body-sm font-bold text-primary-950 truncate">
                 {politician.full_name}
               </h3>
-              <div className="flex items-center space-x-1.5 mt-1">
+              <div className="flex items-center space-x-1.5 mt-1 flex-wrap gap-y-1">
                 <PartyBadge party={politician.party} />
-                <StateBadge state={politician.state} />
+                {politician.district && (
+                  <span className="text-caption text-primary-400">Dist. {politician.district}</span>
+                )}
+                {politician.county && (
+                  <span className="text-caption text-primary-400">{politician.county} Co.</span>
+                )}
               </div>
             </div>
 
@@ -67,8 +76,8 @@ export default function PoliticianCard({ politician }: PoliticianCardProps) {
           </div>
 
           {/* Mini Principle Breakdown */}
-          <div className="grid grid-cols-5 gap-1.5">
-            {['P1', 'P2', 'P3', 'P4', 'P5'].map((key) => {
+          <div className="grid grid-cols-9 gap-1">
+            {['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P8', 'P9'].map((key) => {
               const score = principleScores[key] || 0;
               const color = getScoreColor(score);
               const height = score * 100;

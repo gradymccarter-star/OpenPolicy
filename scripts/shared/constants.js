@@ -1,78 +1,75 @@
 /**
  * Shared constants for pipeline scripts (CommonJS)
- * Single source of truth for AI relevance keywords.
+ * Single source of truth for PA business relevance keywords.
+ * Keep in sync with lib/utils/constants.ts
  */
 
-const AI_RELEVANCE_KEYWORDS = [
-  // Core AI/ML terms
-  'artificial intelligence', 'machine learning', 'deep learning',
-  'neural network', 'algorithm', 'algorithmic',
-  'large language model', 'generative ai', 'generative artificial intelligence',
-  'chatbot', 'robotics', 'computer vision',
+const PA_RELEVANCE_KEYWORDS = [
+  // Taxes & competitiveness
+  'corporate net income', 'cni tax', 'net operating loss', 'nol', 'tax reform',
+  'corporate tax', 'tax rate', 'tax cut', 'tax credit', 'tax burden',
+  'business tax', 'small business tax', 'startup tax', 'local tax',
+  'tax competitiveness', 'flat tax', 'income tax',
 
-  // Biometrics & recognition
-  'facial recognition', 'face recognition', 'biometric',
+  // Permitting & regulatory reform
+  'permitting reform', 'permit reform', 'speed program', 'regulatory reform',
+  'permit streamlining', 'regulatory burden', 'deregulation', 'red tape',
+  'environmental permit', 'dep permit', 'permit delay', 'economic development permit',
 
-  // Autonomous systems
-  'autonomous vehicle', 'autonomous weapon', 'autonomous system',
-  'lethal autonomous', 'unmanned',
+  // Civil justice & legal reform
+  'lawsuit abuse', 'tort reform', 'venue shopping', 'civil justice',
+  'liability reform', 'litigation reform', 'punitive damages', 'joint and several',
+  'asbestos litigation', 'medical malpractice', 'legal reform',
 
-  // Synthetic content
-  'deepfake', 'deep fake', 'synthetic media',
+  // Fiscal responsibility & state spending
+  'state budget', 'fiscal responsibility', 'balanced budget', 'state spending',
+  'pension reform', 'public pension', 'pension debt', 'pension liability',
+  'privatization', 'public private partnership', 'government efficiency',
+  'budget deficit', 'state debt', 'spending reform',
 
-  // Surveillance & policing
-  'surveillance', 'predictive policing',
+  // Workforce & education
+  'workforce development', 'job training', 'apprenticeship', 'career readiness',
+  'upskilling', 'reskilling', 'workforce reentry', 'job creation',
+  'school choice', 'educational choice', 'charter school', 'voucher',
+  'higher education', 'community college', 'career and technical education', 'cte',
+  'childcare', 'child care', 'early childhood education',
 
-  // Privacy & data
-  'data privacy', 'data protection', 'personal data',
+  // Energy & environment
+  'natural gas', 'energy policy', 'all of the above energy', 'energy independence',
+  'nuclear energy', 'hydrogen energy', 'small modular reactor', 'smr',
+  'energy mandate', 'renewable portfolio standard', 'rggi', 'carbon tax',
+  'energy costs', 'electricity rates', 'power grid', 'pipeline',
+  'environmental regulation', 'clean air', 'clean water', 'emissions',
+  'fracking', 'natural gas production', 'marcellus shale',
 
-  // Cybersecurity
-  'cybersecurity', 'cyber security',
+  // Labor & employment
+  'workers compensation', "workers' compensation", 'work comp',
+  'unemployment compensation', 'prevailing wage', 'union dues', 'right to work',
+  'minimum wage', 'overtime', 'independent contractor', 'gig worker',
+  'paid leave', 'family leave', 'sick leave', 'nlra', 'collective bargaining',
+  'labor law', 'employment law', 'workplace safety', 'osha',
 
-  // Automated systems
-  'automated decision', 'automated system',
+  // Infrastructure & transportation
+  'transportation funding', 'road funding', 'bridge repair', 'highway',
+  'broadband', 'broadband access', 'rural broadband', 'internet access',
+  'infrastructure investment', 'public transit', 'mass transit',
+  'telecom', 'telecommunications', 'utility infrastructure',
 
-  // AI governance
-  'ai safety', 'ai alignment', 'ai governance', 'ai regulation',
-  'ai ethics', 'responsible ai', 'trustworthy ai',
-  'ai transparency', 'algorithmic transparency', 'algorithmic accountability',
-  'ai bias', 'algorithmic bias', 'algorithmic discrimination',
-  'ai audit', 'algorithm audit',
-  'ai workforce', 'automation displacement', 'ai job',
-  'ai innovation', 'ai research', 'ai development',
-  'national ai', 'ai strategy', 'ai competitiveness',
-  'ai standards', 'nist ai', 'ai framework',
-  'ai disclosure', 'ai labeling', 'ai watermark',
+  // Health care
+  'health insurance', 'health care costs', 'employer mandate', 'aca',
+  'insurance reform', 'prescription drug', 'drug pricing', 'medicaid',
+  'health care access', 'certificate of need', 'con law', 'hospital competition',
+  'health care competition', 'employer sponsored insurance',
 
-  // Specific legislation
-  'future of ai act', 'algorithmic accountability act', 'ai leadership act',
-  'no fakes act', 'take it down act',
-  'kids online safety', 'kosa',
-  'american privacy rights act', 'apra',
-  'american data privacy', 'adppa',
-  'protect elections from deceptive ai', 'deepfakes accountability',
-  'ai foundation model transparency', 'bipartisan framework for ai',
-
-  // Executive orders & government
-  'executive order on ai', 'executive order 14110', 'ai executive order',
-  'safe secure trustworthy ai', 'ai bill of rights', 'ai safety institute',
-
-  // Broader tech policy
-  'frontier model', 'foundation model', 'open source ai',
-  'semiconductor', 'chips act', 'chips and science',
-  'section 230', 'content moderation',
-  'tech regulation', 'big tech',
-  'digital platform', 'online platform',
-  'child safety online', 'quantum computing',
-
-  // AI application domains
-  'ai in healthcare', 'ai in education', 'ai in defense',
-  'ai in finance', 'ai in hiring',
+  // General business climate
+  'business climate', 'economic growth', 'job growth', 'business regulation',
+  'business competitiveness', 'economic competitiveness', 'pro-business',
+  'chamber of commerce', 'economic development', 'business-friendly',
 ];
 
-function isAIRelevant(text) {
+function isPABusinessRelevant(text) {
   const lower = (text || '').toLowerCase();
-  return AI_RELEVANCE_KEYWORDS.some((kw) => lower.includes(kw));
+  return PA_RELEVANCE_KEYWORDS.some((kw) => lower.includes(kw));
 }
 
-module.exports = { AI_RELEVANCE_KEYWORDS, isAIRelevant };
+module.exports = { PA_RELEVANCE_KEYWORDS, isPABusinessRelevant };

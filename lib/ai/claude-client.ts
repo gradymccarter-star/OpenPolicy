@@ -1,7 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk';
-import { getDB } from '../db/client';
+import { getSupabase } from '../db/client';
 import { estimateClaudeCost } from '../utils/helpers';
-import { OECD_PRINCIPLES, RELEVANCE_CONFIDENCE_THRESHOLD } from '../utils/constants';
+import { PA_CHAMBER_PRINCIPLES } from '../utils/constants';
 import type {
   RelevanceClassificationResult,
   BillDirectionResult,
@@ -172,21 +172,21 @@ export async function classifyBillDirection(
   billTextExcerpt: string,
   principle: PrincipleId,
 ): Promise<BillDirectionResult> {
-  const p = OECD_PRINCIPLES[principle];
+  const p = PA_CHAMBER_PRINCIPLES[principle];
 
-  const prompt = `You are classifying the direction of a legislative bill relative to a specific OECD AI principle.
+  const prompt = `You are classifying the direction of a legislative bill relative to a PA Chamber of Commerce business priority.
 
 BILL ID: ${billId}
 BILL TITLE: ${billTitle}
 BILL SUMMARY: ${billSummary}
 BILL TEXT (excerpt): ${billTextExcerpt}
 
-OECD PRINCIPLE: ${p.name}
-PRINCIPLE DESCRIPTION: ${p.description}
+PA CHAMBER PRIORITY: ${p.name}
+PRIORITY DESCRIPTION: ${p.description}
 KEY INDICATORS: ${p.indicators.join(', ')}
 
-Question: If a senator votes YEA (in favor) on this bill, does that SUPPORT (+1) or OPPOSE (-1)
-this OECD principle?
+Question: If a representative votes YEA (in favor) on this bill, does that SUPPORT (+1) or OPPOSE (-1)
+this PA Chamber priority?
 
 Return ONLY valid JSON with no other text:
 {
@@ -286,18 +286,13 @@ async function logAPIUsage(
   errorMessage?: string,
 ): Promise<void> {
   try {
-    const db = getDB();
-    await db`
-      INSERT INTO api_usage_log (
-        api_name, tokens_used, estimated_cost, status, error_message
-      ) VALUES (
-        ${apiName},
-        ${inputTokens + outputTokens},
-        ${estimatedCost},
-        ${status},
-        ${errorMessage || null}
-      )
-    `;
+    await getSupabase().from('api_usage_log').insert({
+      api_name: apiName,
+      tokens_used: inputTokens + outputTokens,
+      estimated_cost: estimatedCost,
+      status,
+      error_message: errorMessage ?? null,
+    });
   } catch (error) {
     console.error('Failed to log API usage:', error);
   }
@@ -305,18 +300,16 @@ async function logAPIUsage(
 
 export async function getTodaysCost(): Promise<number> {
   try {
-    const db = getDB();
     const today = new Date().toISOString().split('T')[0];
-    const result = await db`
-      SELECT COALESCE(SUM(estimated_cost), 0) as total
-      FROM api_usage_log
-      WHERE api_name = 'claude'
-        AND created_at >= ${today}::date
-        AND status = 'success'
-    `;
-    return parseFloat(result[0].total) || 0;
+    const { data } = await getSupabase()
+      .from('api_usage_log')
+      .select('estimated_cost')
+      .eq('api_name', 'claude')
+      .eq('status', 'success')
+      .gte('created_at', today);
+    return (data ?? []).reduce((sum, row) => sum + (row.estimated_cost ?? 0), 0);
   } catch (error) {
-    console.error('Failed to get today\'s cost:', error);
+    console.error("Failed to get today's cost:", error);
     return 0;
   }
 }

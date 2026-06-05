@@ -1,4 +1,4 @@
-import { OECD_PRINCIPLES } from '@/lib/utils/constants';
+import { PA_CHAMBER_PRINCIPLES } from '@/lib/utils/constants';
 import ScoringPipeline from '@/components/methodology/ScoringPipeline';
 
 export default function PrinciplesPage() {
@@ -8,11 +8,11 @@ export default function PrinciplesPage() {
       <section className="py-14 lg:py-20" style={{ background: 'var(--surface-canvas)' }}>
         <div className="container-page">
           <h1 className="text-heading-1 mb-4">
-            Our Scoring Formula
+            Scoring Criteria
           </h1>
           <p className="text-body text-primary-500 max-w-2xl leading-relaxed">
-            Every score starts with real evidence: votes, sponsorships,{' '}
-            <span className="inline-block">committee actions and public statements.</span>{' '}
+            Every score starts with real evidence: votes, bill sponsorships,{' '}
+            committee actions, public statements, and questionnaire responses.{' '}
             Here&apos;s how it works.
           </p>
         </div>
@@ -22,27 +22,29 @@ export default function PrinciplesPage() {
       <section className="container-page py-10 lg:py-14">
         <div className="rounded-xl p-6 mb-10" style={{ background: 'var(--surface-canvas)', borderLeft: '4px solid var(--foreground)' }}>
           <p className="text-body text-primary-500 leading-relaxed">
-            <span className="inline-block">OpenPolicy AI evaluates every U.S. senator&apos;s alignment with the five OECD AI Principles:</span>{' '}
-            <span className="inline-block"><strong className="text-primary-950">inclusive growth, human-centered values, transparency, robustness and safety, and accountability</strong>.</span>{' '}
-            Every score traces back to a specific vote or quote with a source link.
+            Each PA House candidate is scored against{' '}
+            <strong className="text-primary-950">nine PA Chamber of Commerce business priorities</strong>:{' '}
+            taxes, permitting reform, civil justice, fiscal responsibility, workforce &amp; education,
+            energy &amp; environment, labor, infrastructure, and health care.{' '}
+            Bill sponsorships carry the highest weight. Every claim links back to a traceable source.
           </p>
         </div>
 
         <ScoringPipeline />
       </section>
 
-      {/* OECD Principles */}
+      {/* PA Chamber Principles */}
       <section className="py-10 lg:py-14" style={{ background: 'var(--surface-canvas)' }}>
         <div className="container-page">
           <h2 className="text-heading-2 mb-2">
-            OECD AI Principles
+            PA Chamber Business Priorities
           </h2>
           <p className="text-body-sm text-primary-500 mb-8">
-            The international framework for responsible AI governance — what we measure
+            Derived from the PA Chamber&apos;s 2025 Legislative Agenda — the nine dimensions we score each candidate on
           </p>
 
           <div className="space-y-6">
-            {Object.entries(OECD_PRINCIPLES).map(([key, principle], index) => (
+            {Object.entries(PA_CHAMBER_PRINCIPLES).map(([key, principle], index) => (
               <div key={key} className="card p-8">
                 <div className="flex items-start space-x-4">
                   <div className="flex-shrink-0 w-12 h-12 bg-primary-950 text-white rounded-full flex items-center justify-center text-lg font-bold">
@@ -67,6 +69,16 @@ export default function PrinciplesPage() {
                 </div>
               </div>
             ))}
+          </div>
+
+          <div className="mt-8 rounded-xl p-6" style={{ background: 'var(--surface-canvas)', borderLeft: '4px solid var(--foreground)' }}>
+            <p className="text-body-sm text-primary-500 leading-relaxed">
+              <strong className="text-primary-950">Evidence weighting:</strong>{' '}
+              Bill sponsorships carry the highest weight, followed by floor and committee votes,
+              co-sponsorships, and questionnaire responses. Sponsorships tied to Chamber priority bills
+              receive an additional 3× multiplier. Public statements, press releases, and social media
+              carry lower weight but provide crucial context for challengers without a voting record.
+            </p>
           </div>
         </div>
       </section>

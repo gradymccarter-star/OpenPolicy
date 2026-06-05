@@ -1,18 +1,20 @@
-// Core Types for Political AI Alignment Evaluator
-// Updated: Evidence-based multi-signal evaluation methodology
+// Core Types for PA Chamber of Commerce Endorsement Tool
 
 export type PartyType = 'D' | 'R' | 'I';
-export type OfficeType = 'senate' | 'house' | 'governor';
-export type PrincipleId = 'P1' | 'P2' | 'P3' | 'P4' | 'P5';
+export type OfficeType = 'pa_house' | 'pa_senate' | 'governor';
+export type PrincipleId = 'P1' | 'P2' | 'P3' | 'P4' | 'P5' | 'P6' | 'P7' | 'P8' | 'P9';
 
 export type EvidenceType =
   | 'floor_vote'
+  | 'committee_vote'
   | 'bill_sponsorship'
   | 'bill_cosponsorship'
   | 'committee_statement'
   | 'floor_speech'
   | 'press_release'
-  | 'social_media';
+  | 'social_media'
+  | 'questionnaire_response'
+  | 'other_endorsement';
 
 export type VotePosition = 'yea' | 'nay' | 'abstain' | 'not_voting';
 export type Stance = 'support' | 'oppose' | 'neutral' | 'conditional';
@@ -21,13 +23,13 @@ export type Strength = 'strong' | 'moderate' | 'weak';
 // Politician
 export interface Politician {
   id: string;
-  bioguide_id: string;
+  pa_legislator_id: string;       // PA General Assembly unique ID
   first_name: string;
   last_name: string;
   full_name: string;
   party: PartyType;
-  state: string;
   district?: string;
+  county?: string;
   office_type: OfficeType;
   title: string;
 
@@ -164,6 +166,10 @@ export interface OverallScore {
   p3_score?: number; p3_confidence?: number;
   p4_score?: number; p4_confidence?: number;
   p5_score?: number; p5_confidence?: number;
+  p6_score?: number; p6_confidence?: number;
+  p7_score?: number; p7_confidence?: number;
+  p8_score?: number; p8_confidence?: number;
+  p9_score?: number; p9_confidence?: number;
 
   overall_rank?: number;
   party_rank?: number;

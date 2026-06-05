@@ -1,19 +1,21 @@
 import CompareClient from '@/components/compare/CompareClient';
-import { getDB } from '@/lib/db/client';
+import { getSupabase, extractOverallScore } from '@/lib/db/client';
 import { EXAMPLE_POLITICIANS } from '@/lib/utils/constants';
 import type { PoliticianWithScores } from '@/lib/utils/types';
 
 async function getAllPoliticians(): Promise<PoliticianWithScores[]> {
   try {
-    const db = getDB();
-    const rows = await db`
-      SELECT p.*, row_to_json(os.*) as overall_score
-      FROM politicians p
-      LEFT JOIN overall_scores os ON p.id = os.politician_id
-      WHERE p.is_active = true
-      ORDER BY p.full_name
-    `;
-    return rows as unknown as PoliticianWithScores[];
+    const supabase = getSupabase();
+    const { data } = await supabase
+      .from('politicians')
+      .select('*, overall_scores(*)')
+      .eq('is_active', true)
+      .order('full_name');
+
+    return (data ?? []).map((row) => ({
+      ...row,
+      overall_score: extractOverallScore(row),
+    })) as PoliticianWithScores[];
   } catch {
     return [];
   }

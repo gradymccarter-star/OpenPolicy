@@ -1,22 +1,27 @@
 import PoliticiansClient from '@/components/politicians/PoliticiansClient';
-import { getDB } from '@/lib/db/client';
+import { getSupabase, extractOverallScore } from '@/lib/db/client';
 import { EXAMPLE_POLITICIANS } from '@/lib/utils/constants';
 import type { PoliticianWithScores } from '@/lib/utils/types';
 
 async function getPoliticians() {
-  const db = getDB();
+  const supabase = getSupabase();
 
-  const politicians = await db<PoliticianWithScores[]>`
-    SELECT
-      p.*,
-      row_to_json(os.*) as overall_score
-    FROM politicians p
-    LEFT JOIN overall_scores os ON p.id = os.politician_id
-    WHERE p.is_active = true
-    ORDER BY os.overall_score DESC NULLS LAST, p.full_name
-  `;
+  const { data, error } = await supabase
+    .from('politicians')
+    .select('*, overall_scores(*)')
+    .eq('is_active', true)
+    .order('full_name');
 
-  return politicians;
+  if (error) throw error;
+
+  const politicians = (data ?? []).map((row) => ({
+    ...row,
+    overall_score: extractOverallScore(row),
+  })) as PoliticianWithScores[];
+
+  return politicians.sort((a, b) =>
+    (b.overall_score?.overall_score ?? 0) - (a.overall_score?.overall_score ?? 0)
+  );
 }
 
 export default async function PoliticiansPage() {
@@ -37,10 +42,10 @@ export default async function PoliticiansPage() {
     <main className="container-page py-12">
       <div className="mb-8">
         <h1 className="text-heading-1 mb-2">
-          All Politicians
+          PA House Candidates
         </h1>
         <p className="text-body-sm text-primary-500">
-          {displayPoliticians.length} senators evaluated for AI governance alignment
+          {displayPoliticians.length} candidate{displayPoliticians.length === 1 ? '' : 's'} scored against PA Chamber business priorities
         </p>
       </div>
 
