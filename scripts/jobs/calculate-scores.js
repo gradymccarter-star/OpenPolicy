@@ -30,6 +30,20 @@ try {
 
 const { createClient } = require('@supabase/supabase-js');
 
+async function fetchAllPages(buildQuery, pageSize = 1000) {
+  const results = [];
+  let offset = 0;
+  while (true) {
+    const { data, error } = await buildQuery().range(offset, offset + pageSize - 1);
+    if (error) throw error;
+    if (!data || data.length === 0) break;
+    results.push(...data);
+    if (data.length < pageSize) break;
+    offset += pageSize;
+  }
+  return results;
+}
+
 // ============================================================
 // CONSTANTS (mirrored from lib/utils/constants.ts for Node.js)
 // ============================================================
@@ -305,12 +319,11 @@ async function processPolitician(supabase, politician, billClassMap, claimsByIte
 // ============================================================
 
 async function updateRankings(supabase) {
-  const { data: allScores } = await supabase
-    .from('overall_scores')
-    .select('id, overall_score, politicians(party)')
-    .limit(500);
+  const allScores = await fetchAllPages(() =>
+    supabase.from('overall_scores').select('id, overall_score, politicians(party)')
+  );
 
-  const sorted = [...(allScores || [])].sort((a, b) => b.overall_score - a.overall_score);
+  const sorted = [...allScores].sort((a, b) => b.overall_score - a.overall_score);
 
   const partyGroups = {};
   for (const row of sorted) {
@@ -346,32 +359,30 @@ async function calculateScores() {
   const supabase = createClient(supabaseUrl, supabaseKey, { auth: { persistSession: false } });
 
   try {
-    const { data: politicians } = await supabase
-      .from('politicians')
-      .select('id, full_name, party')
-      .eq('is_active', true)
-      .limit(500);
+    const politicians = await fetchAllPages(() =>
+      supabase.from('politicians').select('id, full_name, party').eq('is_active', true)
+    );
 
-    console.log(`Found ${(politicians || []).length} politicians\n`);
+    console.log(`Found ${politicians.length} politicians\n`);
 
     // Pre-load all bill classifications and claims to avoid per-politician DB round-trips
-    const [{ data: allBillClasses }, { data: allClaims }] = await Promise.all([
-      supabase.from('bill_classifications').select('bill_id, principle, yea_direction, classification_confidence').limit(100000),
-      supabase.from('extracted_claims').select('evidence_item_id, stance, strength, is_hedged, extraction_confidence, tagged_principles').limit(100000),
+    const [allBillClasses, allClaims] = await Promise.all([
+      fetchAllPages(() => supabase.from('bill_classifications').select('bill_id, principle, yea_direction, classification_confidence')),
+      fetchAllPages(() => supabase.from('extracted_claims').select('evidence_item_id, stance, strength, is_hedged, extraction_confidence, tagged_principles')),
     ]);
 
     const globalBillClassMap = new Map();
-    for (const bc of allBillClasses || []) {
+    for (const bc of allBillClasses) {
       globalBillClassMap.set(`${bc.bill_id}:${bc.principle}`, bc);
     }
 
     const globalClaimsByItemId = new Map();
-    for (const claim of allClaims || []) {
+    for (const claim of allClaims) {
       if (!globalClaimsByItemId.has(claim.evidence_item_id)) globalClaimsByItemId.set(claim.evidence_item_id, []);
       globalClaimsByItemId.get(claim.evidence_item_id).push(claim);
     }
 
-    for (const politician of politicians || []) {
+    for (const politician of politicians) {
       console.log(`${politician.full_name} (${politician.party})`);
       await processPolitician(supabase, politician, globalBillClassMap, globalClaimsByItemId);
     }

@@ -225,23 +225,32 @@ function parseJSON(text) {
   return JSON.parse(match[0]);
 }
 
+// Supabase enforces a server-side row cap of 1000. Paginate to get all rows.
+async function fetchAllPages(buildQuery, pageSize = 1000) {
+  const results = [];
+  let offset = 0;
+  while (true) {
+    const { data, error } = await buildQuery().range(offset, offset + pageSize - 1);
+    if (error) throw error;
+    if (!data || data.length === 0) break;
+    results.push(...data);
+    if (data.length < pageSize) break;
+    offset += pageSize;
+  }
+  return results;
+}
+
 // ============================================================
 // STEP 1: KEYWORD PRE-FILTER
 // ============================================================
 
 async function runStep1(supabase) {
-  // Supabase caps at 1000 rows by default — use a large explicit limit
-  const [{ data: newItems }, { data: reprocessItems }] = await Promise.all([
-    supabase.from('evidence_items').select('id, bill_title, source_text').is('keyword_filter_passed', null).limit(50000),
-    supabase
-      .from('evidence_items')
-      .select('id, bill_title, source_text')
-      .eq('keyword_filter_passed', false)
-      .is('is_relevant', null)
-      .limit(50000),
+  const [newItems, reprocessItems] = await Promise.all([
+    fetchAllPages(() => supabase.from('evidence_items').select('id, bill_title, source_text').is('keyword_filter_passed', null)),
+    fetchAllPages(() => supabase.from('evidence_items').select('id, bill_title, source_text').eq('keyword_filter_passed', false).is('is_relevant', null)),
   ]);
 
-  const unfiltered = [...(newItems || []), ...(reprocessItems || [])];
+  const unfiltered = [...newItems, ...reprocessItems];
   const passedIds = [];
   const failedIds = [];
 
@@ -269,14 +278,12 @@ async function runStep1(supabase) {
 // ============================================================
 
 async function runStep2(supabase, anthropic, maxBudget) {
-  const { data: keywordPassed } = await supabase
-    .from('evidence_items')
-    .select('id, evidence_type, bill_title, source_text')
-    .eq('keyword_filter_passed', true)
-    .is('is_relevant', null)
-    .limit(50000);
-
-  const items = keywordPassed || [];
+  const items = await fetchAllPages(() =>
+    supabase.from('evidence_items')
+      .select('id, evidence_type, bill_title, source_text')
+      .eq('keyword_filter_passed', true)
+      .is('is_relevant', null)
+  );
   console.log(`  ${items.length} items need relevance classification`);
 
   let cost = 0;
@@ -375,13 +382,13 @@ async function loadExistingClassKeys(supabase, pairs) {
 }
 
 async function runStep3(supabase, anthropic, maxBudget) {
-  const { data: relevantBillItems } = await supabase
-    .from('evidence_items')
-    .select('bill_id, bill_title, tagged_principles')
-    .eq('is_relevant', true)
-    .not('bill_id', 'is', null)
-    .in('evidence_type', BILL_EVIDENCE_TYPES)
-    .limit(50000);
+  const relevantBillItems = await fetchAllPages(() =>
+    supabase.from('evidence_items')
+      .select('bill_id, bill_title, tagged_principles')
+      .eq('is_relevant', true)
+      .not('bill_id', 'is', null)
+      .in('evidence_type', BILL_EVIDENCE_TYPES)
+  );
 
   const billPrinciplePairs = buildBillPrinciplePairs(relevantBillItems || []);
   const existingClassKeys = await loadExistingClassKeys(supabase, billPrinciplePairs);
@@ -453,20 +460,15 @@ Rules:
 // ============================================================
 
 async function runStep4(supabase, anthropic, maxBudget) {
-  const [{ data: relevantStatements }, { data: allPoliticians }, { data: alreadyClaimed }] = await Promise.all([
-    supabase
-      .from('evidence_items')
-      .select('id, evidence_type, source_text, source_date, politician_id')
-      .eq('is_relevant', true)
-      .in('evidence_type', STATEMENT_EVIDENCE_TYPES)
-      .limit(50000),
-    supabase.from('politicians').select('id, full_name, party, county').limit(500),
-    supabase.from('extracted_claims').select('evidence_item_id').limit(50000),
+  const [relevantStatements, allPoliticians, alreadyClaimed] = await Promise.all([
+    fetchAllPages(() => supabase.from('evidence_items').select('id, evidence_type, source_text, source_date, politician_id').eq('is_relevant', true).in('evidence_type', STATEMENT_EVIDENCE_TYPES)),
+    fetchAllPages(() => supabase.from('politicians').select('id, full_name, party, county')),
+    fetchAllPages(() => supabase.from('extracted_claims').select('evidence_item_id')),
   ]);
 
-  const politicianMap = new Map((allPoliticians || []).map((p) => [p.id, p]));
-  const claimedIds = new Set((alreadyClaimed || []).map((c) => c.evidence_item_id));
-  const unprocessed = (relevantStatements || []).filter((s) => !claimedIds.has(s.id));
+  const politicianMap = new Map(allPoliticians.map((p) => [p.id, p]));
+  const claimedIds = new Set(alreadyClaimed.map((c) => c.evidence_item_id));
+  const unprocessed = relevantStatements.filter((s) => !claimedIds.has(s.id));
 
   console.log(`  ${unprocessed.length} statements need claim extraction`);
 

@@ -19,7 +19,7 @@ async function getPoliticians() {
     overall_score: extractOverallScore(row),
   })) as PoliticianWithScores[];
 
-  return politicians.sort((a, b) =>
+  return politicians.toSorted((a, b) =>
     (b.overall_score?.overall_score ?? 0) - (a.overall_score?.overall_score ?? 0)
   );
 }

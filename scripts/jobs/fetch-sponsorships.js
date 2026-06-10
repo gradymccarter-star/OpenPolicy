@@ -50,8 +50,10 @@ async function insertSponsorship(supabase, member, bill, evidenceType, sponsorsh
   if (!isPABusinessRelevant(searchText)) return false;
 
   const hash = contentHash(member.pa_legislator_id, bill.bill_id, sponsorshipType);
-  const sourceDate = bill.status_date ? new Date(bill.status_date).toISOString() : new Date().toISOString();
-  const sourceUrl = `https://legiscan.com/PA/bill/id/${bill.bill_id}`;
+  const sourceDate = (bill.introduced_date || bill.last_action_date || bill.status_date)
+    ? new Date(bill.introduced_date || bill.last_action_date || bill.status_date).toISOString()
+    : new Date().toISOString();
+  const sourceUrl = bill.summary_link || `https://legiscan.com/PA/bill/id/${bill.bill_id}`;
 
   const { error } = await supabase.from('evidence_items').upsert({
     politician_id: member.id,
