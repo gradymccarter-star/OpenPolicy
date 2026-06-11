@@ -30,7 +30,6 @@ const crypto = require('node:crypto');
 const { isPABusinessRelevant } = require('../shared/constants');
 
 const NEWS_BASE = 'https://news.google.com/rss/search';
-const ARTICLE_DELAY_MS = 1000;
 const SEARCH_DELAY_MS = 1500;
 
 // General business topics to search alongside each member's name
@@ -80,30 +79,6 @@ async function searchGoogleNews(query) {
   }
 }
 
-async function scrapeArticleText(url) {
-  await new Promise((r) => setTimeout(r, ARTICLE_DELAY_MS));
-  try {
-    const response = await axios.get(url, {
-      timeout: 12000,
-      maxRedirects: 5,
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; OpenPolicyAI/1.0)' },
-    });
-
-    // Simple text extraction — strip tags and collapse whitespace
-    const text = response.data
-      .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
-      .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
-      .replace(/<[^>]+>/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim()
-      .substring(0, 5000);
-
-    return text.length > 100 ? text : null;
-  } catch {
-    return null;
-  }
-}
-
 function parseArticleDate(item) {
   const raw = item.pubDate || item['dc:date'];
   if (!raw) return new Date();
@@ -146,6 +121,8 @@ function isHeadlineRelevant(title, lastName) {
 
 async function processArticle(supabase, politicianId, item, seenUrls) {
   const title = typeof item.title === 'string' ? item.title : '';
+  if (!title || !isPABusinessRelevant(title)) return false;
+
   const url = resolveArticleUrl(item);
   if (!url || seenUrls.has(url)) return false;
   seenUrls.add(url);
@@ -153,17 +130,21 @@ async function processArticle(supabase, politicianId, item, seenUrls) {
   const hash = contentHash(url);
   if (await checkExists(supabase, hash)) return false;
 
-  const text = await scrapeArticleText(url);
-  if (!text || !isPABusinessRelevant(text)) return false;
+  // Google News redirect URLs don't resolve to article content, so we store
+  // the headline as source_text — sufficient for LLM classification
+  const publisher = item.source?.['#text'] || '';
+  const sourceText = publisher ? `${title} — ${publisher}` : title;
 
   const { error } = await supabase.from('evidence_items').upsert({
     politician_id: politicianId,
     evidence_type: 'press_release',
     bill_title: title.substring(0, 500),
-    source_text: text,
+    source_text: sourceText,
     source_url: url,
     source_date: parseArticleDate(item).toISOString(),
     content_hash: hash,
+    // Title already passed isPABusinessRelevant — mark filter done so LLM step picks it up
+    keyword_filter_passed: true,
   }, { onConflict: 'content_hash', ignoreDuplicates: true });
 
   return !error;
@@ -173,8 +154,6 @@ async function processTopic(supabase, member, topic, seenUrls) {
   const items = await searchGoogleNews(`"${member.full_name}" Pennsylvania ${topic}`);
   let inserted = 0;
   for (const item of items.slice(0, 10)) {
-    const title = typeof item.title === 'string' ? item.title : '';
-    if (!isHeadlineRelevant(title, member.last_name)) continue;
     if (await processArticle(supabase, member.id, item, seenUrls)) inserted++;
   }
   return inserted;
@@ -191,12 +170,7 @@ async function processMember(supabase, member) {
 
   // PA Chamber-specific issue searches using quoted phrases
   for (const issue of ISSUE_SEARCHES) {
-    const items = await searchGoogleNews(`"${member.full_name}" Pennsylvania ${issue}`);
-    for (const item of items.slice(0, 10)) {
-      const title = typeof item.title === 'string' ? item.title : '';
-      if (!isHeadlineRelevant(title, member.last_name)) continue;
-      if (await processArticle(supabase, member.id, item, seenUrls)) inserted++;
-    }
+    inserted += await processTopic(supabase, member, issue, seenUrls);
   }
 
   return inserted;

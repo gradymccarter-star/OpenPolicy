@@ -278,12 +278,25 @@ async function runStep1(supabase) {
 // ============================================================
 
 async function runStep2(supabase, anthropic, maxBudget) {
-  const items = await fetchAllPages(() =>
-    supabase.from('evidence_items')
-      .select('id, evidence_type, bill_title, source_text')
-      .eq('keyword_filter_passed', true)
-      .is('is_relevant', null)
-  );
+  // Fetch items that passed keyword filter but haven't been LLM-classified yet.
+  // is_relevant defaults to false in the DB, so we check for both null and false
+  // (null = never set, false = default or explicitly failed — either needs LLM).
+  const [nullItems, falseItems] = await Promise.all([
+    fetchAllPages(() =>
+      supabase.from('evidence_items')
+        .select('id, evidence_type, bill_title, source_text')
+        .eq('keyword_filter_passed', true)
+        .is('is_relevant', null)
+    ),
+    fetchAllPages(() =>
+      supabase.from('evidence_items')
+        .select('id, evidence_type, bill_title, source_text')
+        .eq('keyword_filter_passed', true)
+        .eq('is_relevant', false)
+        .is('llm_relevance_score', null)
+    ),
+  ]);
+  const items = [...nullItems, ...falseItems];
   console.log(`  ${items.length} items need relevance classification`);
 
   let cost = 0;
