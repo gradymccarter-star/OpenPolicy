@@ -30,19 +30,27 @@ const crypto = require('node:crypto');
 const { isPABusinessRelevant } = require('../shared/constants');
 
 const NEWS_BASE = 'https://news.google.com/rss/search';
-const ARTICLE_DELAY_MS = 2000;
-const SEARCH_DELAY_MS = 3000;
+const ARTICLE_DELAY_MS = 1000;
+const SEARCH_DELAY_MS = 1500;
 
-// Business topics to search alongside each member's name
+// General business topics to search alongside each member's name
 const SEARCH_TOPICS = [
   'business',
   'economy',
-  'jobs',
   'tax',
   'energy',
   'healthcare',
-  'budget',
-  'legislation',
+];
+
+// PA Chamber-specific issue searches (quoted phrases for precision)
+const ISSUE_SEARCHES = [
+  '"tax reform"',
+  '"regulatory reform"',
+  '"minimum wage"',
+  '"workers compensation"',
+  '"natural gas"',
+  '"state budget"',
+  '"workforce development"',
 ];
 
 function contentHash(url) {
@@ -175,9 +183,22 @@ async function processTopic(supabase, member, topic, seenUrls) {
 async function processMember(supabase, member) {
   const seenUrls = new Set();
   let inserted = 0;
-  for (const topic of SEARCH_TOPICS.slice(0, 4)) {
+
+  // All 8 general topic searches
+  for (const topic of SEARCH_TOPICS) {
     inserted += await processTopic(supabase, member, topic, seenUrls);
   }
+
+  // PA Chamber-specific issue searches using quoted phrases
+  for (const issue of ISSUE_SEARCHES) {
+    const items = await searchGoogleNews(`"${member.full_name}" Pennsylvania ${issue}`);
+    for (const item of items.slice(0, 10)) {
+      const title = typeof item.title === 'string' ? item.title : '';
+      if (!isHeadlineRelevant(title, member.last_name)) continue;
+      if (await processArticle(supabase, member.id, item, seenUrls)) inserted++;
+    }
+  }
+
   return inserted;
 }
 
