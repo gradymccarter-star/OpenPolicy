@@ -24,7 +24,12 @@ async function getPoliticians() {
   );
 }
 
-export default async function PoliticiansPage() {
+interface Props {
+  readonly searchParams: Promise<{ q?: string }>;
+}
+
+export default async function PoliticiansPage({ searchParams }: Props) {
+  const { q } = await searchParams;
   let politicians: PoliticianWithScores[] = [];
 
   try {
@@ -50,7 +55,7 @@ export default async function PoliticiansPage() {
         </p>
       </div>
 
-      <PoliticiansClient politicians={displayPoliticians} showExamples={showExamples} />
+      <PoliticiansClient politicians={displayPoliticians} showExamples={showExamples} initialQuery={q ?? ''} />
     </main>
   );
 }

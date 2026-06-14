@@ -2,39 +2,25 @@
 
 import { useState, useMemo } from 'react';
 import PoliticianCard from './PoliticianCard';
-import PaOutline from '@/components/ui/PaOutline';
 import type { PoliticianWithScores } from '@/lib/utils/types';
-
-const PA_COUNTIES = [
-  'Adams','Allegheny','Armstrong','Beaver','Bedford','Berks','Blair','Bradford',
-  'Bucks','Butler','Cambria','Cameron','Carbon','Centre','Chester','Clarion',
-  'Clearfield','Clinton','Columbia','Crawford','Cumberland','Dauphin','Delaware',
-  'Elk','Erie','Fayette','Forest','Franklin','Fulton','Greene','Huntingdon',
-  'Indiana','Jefferson','Juniata','Lackawanna','Lancaster','Lawrence','Lebanon',
-  'Lehigh','Luzerne','Lycoming','McKean','Mercer','Mifflin','Monroe','Montgomery',
-  'Montour','Northampton','Northumberland','Perry','Philadelphia','Pike','Potter',
-  'Schuylkill','Snyder','Somerset','Sullivan','Susquehanna','Tioga','Union',
-  'Venango','Warren','Washington','Wayne','Westmoreland','Wyoming','York',
-];
 
 interface PoliticiansClientProps {
   readonly politicians: PoliticianWithScores[];
   readonly showExamples: boolean;
+  readonly initialQuery?: string;
 }
 
-export default function PoliticiansClient({ politicians, showExamples }: PoliticiansClientProps) {
-  const [search, setSearch] = useState('');
+export default function PoliticiansClient({ politicians, showExamples, initialQuery = '' }: PoliticiansClientProps) {
+  const [search, setSearch] = useState(initialQuery);
   const [party, setParty] = useState<string>('all');
-  const [county, setCounty] = useState<string>('all');
   const [minScore, setMinScore] = useState(0);
   const [sort, setSort] = useState<'score' | 'name'>('score');
 
   const filtered = useMemo(() => {
     const results = politicians.filter((p) => {
       const q = search.toLowerCase();
-      if (q && !p.full_name.toLowerCase().includes(q) && !p.county?.toLowerCase().includes(q) && !p.district?.toString().includes(q)) return false;
+      if (q && !p.full_name.toLowerCase().includes(q) && !p.district?.toString().includes(q)) return false;
       if (party !== 'all' && p.party !== party) return false;
-      if (county !== 'all' && p.county !== county) return false;
       const score = (p.overall_score?.overall_score ?? 0) * 100;
       if (score < minScore) return false;
       return true;
@@ -44,18 +30,14 @@ export default function PoliticiansClient({ politicians, showExamples }: Politic
       if (sort === 'name') return a.full_name.localeCompare(b.full_name);
       return (b.overall_score?.overall_score ?? 0) - (a.overall_score?.overall_score ?? 0);
     });
-  }, [politicians, search, party, county, minScore, sort]);
+  }, [politicians, search, party, minScore, sort]);
 
-  const hasFilters = party !== 'all' || county !== 'all' || minScore > 0 || search !== '';
+  const hasFilters = party !== 'all' || minScore > 0 || search !== '';
 
   return (
     <div>
-      {/* ZoomInfo-style search header */}
-      <div className="mb-6 p-6 rounded-2xl relative overflow-hidden" style={{ background: '#0a1628' }}>
-        {/* PA state outline watermark */}
-        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none select-none opacity-10" style={{ width: '200px' }}>
-          <PaOutline style={{ color: 'white', width: '100%', height: 'auto' }} strokeWidth={2} />
-        </div>
+      {/* Search header */}
+      <div className="mb-6 p-6 rounded-2xl" style={{ background: '#0a1628' }}>
         <p className="text-caption font-semibold uppercase tracking-widest mb-3" style={{ color: '#c9a84c' }}>
           Search 2026 PA House Members
         </p>
@@ -65,7 +47,7 @@ export default function PoliticiansClient({ politicians, showExamples }: Politic
           </svg>
           <input
             type="text"
-            placeholder="Search by name, district, or county..."
+            placeholder="Search by name or district number..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             autoFocus
@@ -101,17 +83,6 @@ export default function PoliticiansClient({ politicians, showExamples }: Politic
             ))}
           </div>
 
-          {/* County */}
-          <select
-            value={county}
-            onChange={(e) => setCounty(e.target.value)}
-            className="px-3 py-1.5 rounded-lg text-caption font-semibold outline-none"
-            style={{ background: 'rgba(255,255,255,0.08)', color: county === 'all' ? 'rgba(255,255,255,0.6)' : '#c9a84c', border: '1px solid rgba(255,255,255,0.15)' }}
-          >
-            <option value="all">All Counties</option>
-            {PA_COUNTIES.map((c) => <option key={c} value={c}>{c} County</option>)}
-          </select>
-
           {/* Min alignment */}
           <select
             value={minScore}
@@ -138,7 +109,7 @@ export default function PoliticiansClient({ politicians, showExamples }: Politic
 
           {hasFilters && (
             <button
-              onClick={() => { setSearch(''); setParty('all'); setCounty('all'); setMinScore(0); }}
+              onClick={() => { setSearch(''); setParty('all'); setMinScore(0); }}
               className="px-3 py-1.5 rounded-lg text-caption font-semibold transition-all"
               style={{ color: 'rgba(255,255,255,0.4)', border: '1px solid rgba(255,255,255,0.1)' }}
             >
