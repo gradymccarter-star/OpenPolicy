@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import PrintButton from '@/components/ui/PrintButton';
 import { getSupabase, extractOverallScore } from '@/lib/db/client';
 import { PA_CHAMBER_PRINCIPLES, EVIDENCE_TYPE_LABELS } from '@/lib/utils/constants';
 
@@ -103,12 +104,7 @@ export default async function EndorsementBriefPage({
         <Link href={`/politicians/${params.id}`} className="text-body-sm text-primary-500 hover:text-primary-950 transition-colors">
           &larr; Back to full profile
         </Link>
-        <button
-          onClick={() => globalThis.print()}
-          className="btn-secondary text-caption py-2 px-4"
-        >
-          Print / Save PDF
-        </button>
+        <PrintButton />
       </div>
 
       {/* Brief header */}

@@ -1,54 +1,37 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import PoliticianCard from '@/components/politicians/PoliticianCard';
 import { getSupabase, extractOverallScore } from '@/lib/db/client';
-import { cacheGet, cacheSet } from '@/lib/cache/redis';
-import { CACHE_TTL, EXAMPLE_POLITICIANS } from '@/lib/utils/constants';
+import { EXAMPLE_POLITICIANS } from '@/lib/utils/constants';
 import type { PoliticianWithScores } from '@/lib/utils/types';
 
 async function getStats() {
-  const cached = await cacheGet<any>('stats');
-  if (cached) return cached;
-
   const supabase = getSupabase();
-
   const [{ count: politiciansCount }, { count: evidenceCount }, { count: claimsCount }] =
     await Promise.all([
       supabase.from('politicians').select('*', { count: 'exact', head: true }).eq('is_active', true),
       supabase.from('evidence_items').select('*', { count: 'exact', head: true }).eq('is_relevant', true),
       supabase.from('extracted_claims').select('*', { count: 'exact', head: true }),
     ]);
-
-  const stats = {
+  return {
     politicians: politiciansCount ?? 0,
     evidence_items: evidenceCount ?? 0,
     claims: claimsCount ?? 0,
   };
-
-  await cacheSet('stats', stats, CACHE_TTL.STATS);
-  return stats;
 }
 
-async function getTopPoliticians(limit: number = 6) {
-  const cached = await cacheGet<PoliticianWithScores[]>('top-politicians');
-  if (cached) return cached;
-
+async function getTopPoliticians(limit = 6) {
   const supabase = getSupabase();
-
   const { data } = await supabase
     .from('politicians')
     .select('*, overall_scores(*)')
     .eq('is_active', true)
     .order('full_name')
-    .limit(limit * 2); // fetch extra so we can sort by score in JS
+    .limit(limit * 2);
 
-  const politicians = (data ?? [])
+  return (data ?? [])
     .map((row) => ({ ...row, overall_score: extractOverallScore(row) }) as PoliticianWithScores)
     .sort((a, b) => (b.overall_score?.overall_score ?? 0) - (a.overall_score?.overall_score ?? 0))
     .slice(0, limit);
-
-  await cacheSet('top-politicians', politicians, CACHE_TTL.POLITICIANS_LIST);
-  return politicians;
 }
 
 export default async function HomePage() {
@@ -56,8 +39,7 @@ export default async function HomePage() {
   let topPoliticians: PoliticianWithScores[] = [];
 
   try {
-    stats = await getStats();
-    topPoliticians = await getTopPoliticians();
+    [stats, topPoliticians] = await Promise.all([getStats(), getTopPoliticians()]);
   } catch (error) {
     console.error('Failed to load homepage data:', error);
   }
@@ -70,107 +52,83 @@ export default async function HomePage() {
   return (
     <main>
       {/* Hero */}
-      <section className="relative py-20 md:py-28 overflow-hidden">
-        <div className="absolute inset-0">
-          <Image
-            src="/hero-capitol.jpg"
-            alt="US Capitol building at night"
-            fill
-            className="object-cover grayscale"
-            priority
-          />
-          <div className="absolute inset-0 bg-black/60" />
+      <section className="relative py-24 md:py-32 overflow-hidden" style={{ background: '#0a1628' }}>
+        {/* PA keystone watermark */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none select-none">
+          <span style={{ fontSize: '32rem', lineHeight: 1, color: 'white', fontWeight: 900 }}>PA</span>
         </div>
-        <div className="container-page relative z-10 text-center animate-fade-in">
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-6">
-            Endorsement Intelligence
+
+        <div className="container-page relative z-10 text-center">
+          <div className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full text-caption font-semibold tracking-widest uppercase" style={{ background: 'rgba(255,255,255,0.1)', color: '#c9a84c' }}>
+            2026 PA House Elections
+          </div>
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-5">
+            PA Chamber<br />Endorsement Intelligence
           </h1>
-          <p className="text-base sm:text-lg lg:text-xl text-white/70 max-w-2xl mx-auto mb-10">
-            Evidence-based candidate scoring for the Pennsylvania Chamber of Commerce.{' '}
-            Every claim is cited. Every score is explainable.
+          <p className="text-lg text-white/60 max-w-2xl mx-auto mb-10">
+            Evidence-based scoring for all 209 Pennsylvania House candidates — ranked against the Chamber&apos;s nine business priorities. Every score is traceable.
           </p>
-          <Link href="/politicians" className="btn-primary">
-            View Candidates &rarr;
+          <Link href="/politicians" className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-base transition-all" style={{ background: '#c9a84c', color: '#0a1628' }}>
+            Search Candidates &rarr;
           </Link>
         </div>
       </section>
 
-      {/* Mission Statement + Image */}
-      <section className="container-page py-10 md:py-14">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          <div className="relative aspect-[4/3] rounded-xl overflow-hidden">
-            <Image
-              src="/mission-statement.jpg"
-              alt="A view of the United States Capitol"
-              fill
-              className="object-cover grayscale"
-            />
+      {/* Stats bar */}
+      <section style={{ background: '#c9a84c' }}>
+        <div className="container-page py-4 grid grid-cols-3 gap-4 text-center">
+          <div>
+            <p className="text-2xl font-bold" style={{ color: '#0a1628' }}>{stats.politicians || 209}</p>
+            <p className="text-caption font-semibold" style={{ color: '#0a1628', opacity: 0.7 }}>PA House Members</p>
           </div>
-          <div className="flex items-center">
-            <div>
-              <h2 className="text-heading-2 font-bold leading-snug text-primary-950">
-                Smart endorsement decisions require more than a voting record.
-              </h2>
-              <p className="mt-2 text-primary-500 font-medium text-xl">We surface what&apos;s hard to find.</p>
-            </div>
+          <div>
+            <p className="text-2xl font-bold" style={{ color: '#0a1628' }}>{stats.evidence_items.toLocaleString()}</p>
+            <p className="text-caption font-semibold" style={{ color: '#0a1628', opacity: 0.7 }}>Evidence Items</p>
+          </div>
+          <div>
+            <p className="text-2xl font-bold" style={{ color: '#0a1628' }}>{stats.claims.toLocaleString()}</p>
+            <p className="text-caption font-semibold" style={{ color: '#0a1628', opacity: 0.7 }}>Policy Claims</p>
           </div>
         </div>
       </section>
 
-      {/* Why This Matters */}
-      <section className="py-8 lg:py-10" style={{ background: 'var(--surface-canvas)' }}>
+      {/* How it works */}
+      <section className="py-16" style={{ background: 'var(--surface-canvas)' }}>
         <div className="container-page">
-          <h2 className="text-heading-1 mb-4">How It Works</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 items-start">
-            <div className="relative aspect-[4/3] rounded-xl overflow-hidden">
-              <Image
-                src="/hero-capitol.jpg"
-                alt="US Capitol building"
-                fill
-                className="object-cover grayscale"
-              />
-            </div>
-            <div className="space-y-3">
-              <p className="text-body-sm text-primary-500 leading-relaxed">
-                Voting records only tell part of the story. We surface bill sponsorships,
-                committee votes, public statements, press coverage, and questionnaire
-                responses — then score each candidate against the Chamber&apos;s nine business priorities.
-              </p>
-              <p className="text-caption text-primary-400 leading-relaxed">
-                Every score links back to its source. Your team can verify any claim before
-                presenting an endorsement recommendation.
-              </p>
-              <div className="grid grid-cols-3 gap-4 pt-2">
-                <div>
-                  <p className="text-heading-3 font-bold">{stats.politicians || 0}</p>
-                  <p className="text-caption text-primary-400">Candidates Tracked</p>
+          <h2 className="text-heading-2 mb-2">How It Works</h2>
+          <p className="text-body-sm text-primary-500 mb-10 max-w-2xl">
+            We analyze every PA House member&apos;s legislative record against the Chamber&apos;s 9 business priorities — automatically, with cited sources your team can verify.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { num: '1', title: 'Collect Evidence', desc: 'Floor votes, bill sponsorships, Bluesky posts, and news coverage for all 209 PA House members are collected from public legislative records and press sources.' },
+              { num: '2', title: 'AI Scores Against 9 Priorities', desc: 'Claude AI classifies each piece of evidence against priorities like Taxes, Energy, Labor, and Infrastructure — with confidence scores and rationale.' },
+              { num: '3', title: 'Generate Endorsement Briefs', desc: 'Click any member to get a one-page endorsement brief with a staff recommendation, issue-by-issue breakdown, and cited sources.' },
+            ].map(step => (
+              <div key={step.num} className="p-6 rounded-xl bg-white" style={{ border: '1px solid var(--border)' }}>
+                <div className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-white text-body-sm mb-4" style={{ background: '#0a1628' }}>
+                  {step.num}
                 </div>
-                <div>
-                  <p className="text-heading-3 font-bold">{stats.evidence_items || 0}</p>
-                  <p className="text-caption text-primary-400">Evidence Items</p>
-                </div>
-                <div>
-                  <p className="text-heading-3 font-bold">{stats.claims || 0}</p>
-                  <p className="text-caption text-primary-400">Claims Extracted</p>
-                </div>
+                <h3 className="font-bold text-primary-950 mb-2">{step.title}</h3>
+                <p className="text-caption text-primary-500 leading-relaxed">{step.desc}</p>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Top Politicians */}
-      <section className="py-10 lg:py-14">
+      {/* Top candidates */}
+      <section className="py-16">
         <div className="container-page">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-heading-2">
-              {showExamples ? 'Example Candidates' : 'PA House Candidates'}
-            </h2>
-            <Link
-              href="/politicians"
-              className="text-body-sm font-medium text-primary-500 hover:text-primary-950 transition-colors"
-            >
-              View All &rarr;
+          <div className="flex items-end justify-between mb-8">
+            <div>
+              <h2 className="text-heading-2 mb-1">
+                {showExamples ? 'Example Candidates' : 'Top PA House Candidates'}
+              </h2>
+              <p className="text-body-sm text-primary-500">Highest Chamber alignment scores</p>
+            </div>
+            <Link href="/politicians" className="btn-secondary text-caption py-2 px-4">
+              View All 209 &rarr;
             </Link>
           </div>
 
@@ -179,12 +137,6 @@ export default async function HomePage() {
               <PoliticianCard key={politician.id} politician={politician} />
             ))}
           </div>
-
-          {showExamples && (
-            <p className="text-center text-caption text-primary-400 mt-6">
-              Example data shown. Run the evaluation pipeline to see real scores.
-            </p>
-          )}
         </div>
       </section>
     </main>

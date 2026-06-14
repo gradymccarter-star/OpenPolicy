@@ -22,7 +22,8 @@ export default function Header() {
         <div className="flex items-center justify-between h-16 lg:h-20">
           <div className="flex-shrink-0">
             <Link href="/" className="flex items-center">
-              <span className="text-body-sm font-bold text-primary-950 tracking-tight">PA Chamber Intelligence</span>
+              <span className="text-body-sm font-bold tracking-tight" style={{ color: '#0a1628' }}>PA Chamber</span>
+              <span className="text-body-sm font-bold tracking-tight ml-1" style={{ color: '#c9a84c' }}>· 2026</span>
             </Link>
           </div>
 

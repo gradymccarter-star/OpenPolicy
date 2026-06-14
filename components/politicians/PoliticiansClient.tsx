@@ -25,177 +25,140 @@ export default function PoliticiansClient({ politicians, showExamples }: Politic
   const [search, setSearch] = useState('');
   const [party, setParty] = useState<string>('all');
   const [county, setCounty] = useState<string>('all');
-  const [scoreRange, setScoreRange] = useState<[number, number]>([0, 100]);
-  const [confidenceRange, setConfidenceRange] = useState<[number, number]>([0, 100]);
+  const [minScore, setMinScore] = useState(0);
+  const [sort, setSort] = useState<'score' | 'name'>('score');
 
   const filtered = useMemo(() => {
-    return politicians.filter((p) => {
-      if (search && !p.full_name.toLowerCase().includes(search.toLowerCase())) return false;
+    const results = politicians.filter((p) => {
+      const q = search.toLowerCase();
+      if (q && !p.full_name.toLowerCase().includes(q) && !p.county?.toLowerCase().includes(q) && !p.district?.toString().includes(q)) return false;
       if (party !== 'all' && p.party !== party) return false;
       if (county !== 'all' && p.county !== county) return false;
       const score = (p.overall_score?.overall_score ?? 0) * 100;
-      if (score < scoreRange[0] || score > scoreRange[1]) return false;
-      const confidence = (p.overall_score?.overall_confidence ?? 0) * 100;
-      if (confidence < confidenceRange[0] || confidence > confidenceRange[1]) return false;
+      if (score < minScore) return false;
       return true;
     });
-  }, [politicians, search, party, county, scoreRange, confidenceRange]);
 
-  const hasActiveFilters = party !== 'all' || county !== 'all' || scoreRange[0] > 0 || scoreRange[1] < 100 || confidenceRange[0] > 0 || confidenceRange[1] < 100 || search !== '';
+    return results.toSorted((a, b) => {
+      if (sort === 'name') return a.full_name.localeCompare(b.full_name);
+      return (b.overall_score?.overall_score ?? 0) - (a.overall_score?.overall_score ?? 0);
+    });
+  }, [politicians, search, party, county, minScore, sort]);
+
+  const hasFilters = party !== 'all' || county !== 'all' || minScore > 0 || search !== '';
 
   return (
     <div>
-      {/* Filters */}
-      <div className="card p-4 mb-6 space-y-4">
-        {/* Search */}
-        <input
-          type="text"
-          placeholder="Search by name..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full px-3 py-2 rounded-lg text-body-sm"
-          style={{ background: 'var(--surface-canvas)', border: '1px solid var(--border)' }}
-        />
+      {/* ZoomInfo-style search header */}
+      <div className="mb-6 p-6 rounded-2xl" style={{ background: '#0a1628' }}>
+        <p className="text-caption font-semibold uppercase tracking-widest mb-3" style={{ color: '#c9a84c' }}>
+          Search 2026 PA House Members
+        </p>
+        <div className="relative mb-4">
+          <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input
+            type="text"
+            placeholder="Search by name, district, or county..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            autoFocus
+            className="w-full pl-12 pr-4 py-4 rounded-xl text-base font-medium text-white placeholder-white/30 outline-none focus:ring-2"
+            style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)' }}
+          />
+          {search && (
+            <button
+              onClick={() => setSearch('')}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70 transition-colors"
+            >
+              ✕
+            </button>
+          )}
+        </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Filter row */}
+        <div className="flex flex-wrap gap-3 items-center">
           {/* Party */}
-          <div>
-            <label className="text-caption font-medium text-primary-500 mb-1 block">Party</label>
-            <div className="flex gap-1">
-              {[
-                { value: 'all', label: 'All' },
-                { value: 'D', label: 'D' },
-                { value: 'R', label: 'R' },
-                { value: 'I', label: 'I' },
-              ].map((opt) => (
-                <button
-                  key={opt.value}
-                  onClick={() => setParty(opt.value)}
-                  className={`px-3 py-1.5 rounded-md text-caption font-medium transition-colors ${
-                    party === opt.value
-                      ? 'bg-primary-950 text-white'
-                      : 'text-primary-500 hover:bg-primary-50'
-                  }`}
-                  style={party !== opt.value ? { border: '1px solid var(--border)' } : undefined}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
+          <div className="flex gap-1">
+            {[{ value: 'all', label: 'All Parties' }, { value: 'R', label: 'Republican' }, { value: 'D', label: 'Democrat' }].map((opt) => (
+              <button
+                key={opt.value}
+                onClick={() => setParty(opt.value)}
+                className="px-3 py-1.5 rounded-lg text-caption font-semibold transition-all"
+                style={party === opt.value
+                  ? { background: '#c9a84c', color: '#0a1628' }
+                  : { background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.15)' }
+                }
+              >
+                {opt.label}
+              </button>
+            ))}
           </div>
 
           {/* County */}
-          <div>
-            <label className="text-caption font-medium text-primary-500 mb-1 block">County</label>
-            <select
-              value={county}
-              onChange={(e) => setCounty(e.target.value)}
-              className="w-full px-3 py-1.5 rounded-md text-caption"
-              style={{ background: 'var(--surface-canvas)', border: '1px solid var(--border)' }}
-            >
-              <option value="all">All Counties</option>
-              {PA_COUNTIES.map((c) => (
-                <option key={c} value={c}>{c}</option>
-              ))}
-            </select>
-          </div>
+          <select
+            value={county}
+            onChange={(e) => setCounty(e.target.value)}
+            className="px-3 py-1.5 rounded-lg text-caption font-semibold outline-none"
+            style={{ background: 'rgba(255,255,255,0.08)', color: county === 'all' ? 'rgba(255,255,255,0.6)' : '#c9a84c', border: '1px solid rgba(255,255,255,0.15)' }}
+          >
+            <option value="all">All Counties</option>
+            {PA_COUNTIES.map((c) => <option key={c} value={c}>{c} County</option>)}
+          </select>
 
-          {/* Alignment Score */}
-          <div>
-            <label className="text-caption font-medium text-primary-500 mb-1 block">
-              Alignment: {scoreRange[0]}% – {scoreRange[1]}%
-            </label>
-            <div className="flex items-center gap-2">
-              <input
-                type="range"
-                min={0}
-                max={100}
-                value={scoreRange[0]}
-                onChange={(e) => {
-                  const val = Number(e.target.value);
-                  setScoreRange([Math.min(val, scoreRange[1]), scoreRange[1]]);
-                }}
-                className="w-full accent-primary-950"
-              />
-              <input
-                type="range"
-                min={0}
-                max={100}
-                value={scoreRange[1]}
-                onChange={(e) => {
-                  const val = Number(e.target.value);
-                  setScoreRange([scoreRange[0], Math.max(val, scoreRange[0])]);
-                }}
-                className="w-full accent-primary-950"
-              />
-            </div>
-          </div>
+          {/* Min alignment */}
+          <select
+            value={minScore}
+            onChange={(e) => setMinScore(Number(e.target.value))}
+            className="px-3 py-1.5 rounded-lg text-caption font-semibold outline-none"
+            style={{ background: 'rgba(255,255,255,0.08)', color: minScore > 0 ? '#c9a84c' : 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.15)' }}
+          >
+            <option value={0}>Any Alignment</option>
+            <option value={55}>55%+ Alignment</option>
+            <option value={60}>60%+ Alignment</option>
+            <option value={65}>65%+ Alignment</option>
+          </select>
 
-          {/* Confidence */}
-          <div>
-            <label className="text-caption font-medium text-primary-500 mb-1 block">
-              Confidence: {confidenceRange[0]}% – {confidenceRange[1]}%
-            </label>
-            <div className="flex items-center gap-2">
-              <input
-                type="range"
-                min={0}
-                max={100}
-                value={confidenceRange[0]}
-                onChange={(e) => {
-                  const val = Number(e.target.value);
-                  setConfidenceRange([Math.min(val, confidenceRange[1]), confidenceRange[1]]);
-                }}
-                className="w-full accent-primary-950"
-              />
-              <input
-                type="range"
-                min={0}
-                max={100}
-                value={confidenceRange[1]}
-                onChange={(e) => {
-                  const val = Number(e.target.value);
-                  setConfidenceRange([confidenceRange[0], Math.max(val, confidenceRange[0])]);
-                }}
-                className="w-full accent-primary-950"
-              />
-            </div>
-          </div>
-        </div>
+          {/* Sort */}
+          <select
+            value={sort}
+            onChange={(e) => setSort(e.target.value as 'score' | 'name')}
+            className="px-3 py-1.5 rounded-lg text-caption font-semibold outline-none"
+            style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.15)' }}
+          >
+            <option value="score">Sort: Top Score</option>
+            <option value="name">Sort: A–Z</option>
+          </select>
 
-        {/* Active filter count + clear */}
-        {hasActiveFilters && (
-          <div className="flex items-center justify-between pt-1">
-            <p className="text-caption text-primary-400">
-              {filtered.length} of {politicians.length} candidates shown
-            </p>
+          {hasFilters && (
             <button
-              onClick={() => {
-                setSearch('');
-                setParty('all');
-                setCounty('all');
-                setScoreRange([0, 100]);
-                setConfidenceRange([0, 100]);
-              }}
-              className="text-caption font-medium text-primary-500 hover:text-primary-950 transition-colors"
+              onClick={() => { setSearch(''); setParty('all'); setCounty('all'); setMinScore(0); }}
+              className="px-3 py-1.5 rounded-lg text-caption font-semibold transition-all"
+              style={{ color: 'rgba(255,255,255,0.4)', border: '1px solid rgba(255,255,255,0.1)' }}
             >
-              Clear Filters
+              Clear
             </button>
-          </div>
-        )}
+          )}
+
+          <span className="ml-auto text-caption font-semibold" style={{ color: 'rgba(255,255,255,0.4)' }}>
+            {filtered.length} of {politicians.length} members
+          </span>
+        </div>
       </div>
 
-      {/* Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filtered.map((politician) => (
-          <PoliticianCard key={politician.id} politician={politician} />
-        ))}
-      </div>
-
-      {filtered.length === 0 && (
-        <p className="text-center text-body-sm text-primary-400 py-12">
-          No candidates match your filters.
-        </p>
+      {/* Results grid */}
+      {filtered.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {filtered.map((politician) => (
+            <PoliticianCard key={politician.id} politician={politician} />
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-20">
+          <p className="text-heading-3 text-primary-950 mb-2">No members found</p>
+          <p className="text-body-sm text-primary-400">Try adjusting your search or filters.</p>
+        </div>
       )}
 
       {showExamples && (
