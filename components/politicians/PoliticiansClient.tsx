@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import PoliticianCard from './PoliticianCard';
+import PaOutline from '@/components/ui/PaOutline';
 import type { PoliticianWithScores } from '@/lib/utils/types';
 
 const PA_COUNTIES = [
@@ -17,8 +18,8 @@ const PA_COUNTIES = [
 ];
 
 interface PoliticiansClientProps {
-  politicians: PoliticianWithScores[];
-  showExamples: boolean;
+  readonly politicians: PoliticianWithScores[];
+  readonly showExamples: boolean;
 }
 
 export default function PoliticiansClient({ politicians, showExamples }: PoliticiansClientProps) {
@@ -50,7 +51,11 @@ export default function PoliticiansClient({ politicians, showExamples }: Politic
   return (
     <div>
       {/* ZoomInfo-style search header */}
-      <div className="mb-6 p-6 rounded-2xl" style={{ background: '#0a1628' }}>
+      <div className="mb-6 p-6 rounded-2xl relative overflow-hidden" style={{ background: '#0a1628' }}>
+        {/* PA state outline watermark */}
+        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none select-none opacity-10" style={{ width: '200px' }}>
+          <PaOutline style={{ color: 'white', width: '100%', height: 'auto' }} strokeWidth={2} />
+        </div>
         <p className="text-caption font-semibold uppercase tracking-widest mb-3" style={{ color: '#c9a84c' }}>
           Search 2026 PA House Members
         </p>

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Keystone from './Keystone';
 
 const NAV_LINKS = [
   { href: '/', label: 'Home' },
@@ -21,9 +22,10 @@ export default function Header() {
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           <div className="flex-shrink-0">
-            <Link href="/" className="flex items-center">
+            <Link href="/" className="flex items-center gap-2">
+              <Keystone size={20} style={{ color: '#c9a84c' }} />
               <span className="text-body-sm font-bold tracking-tight" style={{ color: '#0a1628' }}>PA Chamber</span>
-              <span className="text-body-sm font-bold tracking-tight ml-1" style={{ color: '#c9a84c' }}>· 2026</span>
+              <span className="text-body-sm font-bold tracking-tight" style={{ color: '#c9a84c' }}>· 2026</span>
             </Link>
           </div>
 

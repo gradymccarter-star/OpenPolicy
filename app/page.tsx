@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import PoliticianCard from '@/components/politicians/PoliticianCard';
+import PaOutline from '@/components/ui/PaOutline';
+import Keystone from '@/components/ui/Keystone';
 import { getSupabase, extractOverallScore } from '@/lib/db/client';
 import { EXAMPLE_POLITICIANS } from '@/lib/utils/constants';
 import type { PoliticianWithScores } from '@/lib/utils/types';
@@ -53,20 +55,24 @@ export default async function HomePage() {
     <main>
       {/* Hero */}
       <section className="relative py-24 md:py-32 overflow-hidden" style={{ background: '#0a1628' }}>
-        {/* PA keystone watermark */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none select-none">
-          <span style={{ fontSize: '32rem', lineHeight: 1, color: 'white', fontWeight: 900 }}>PA</span>
+        {/* PA state outline — large, subtle, right side */}
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none select-none opacity-10" style={{ width: '55%' }}>
+          <PaOutline style={{ color: 'white', width: '100%', height: 'auto' }} strokeWidth={1.5} />
         </div>
 
         <div className="container-page relative z-10 text-center">
           <div className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full text-caption font-semibold tracking-widest uppercase" style={{ background: 'rgba(255,255,255,0.1)', color: '#c9a84c' }}>
+            <Keystone size={14} style={{ color: '#c9a84c' }} />
             2026 PA House Elections
           </div>
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-5">
             PA Chamber<br />Endorsement Intelligence
           </h1>
-          <p className="text-lg text-white/60 max-w-2xl mx-auto mb-10">
+          <p className="text-lg text-white/60 max-w-2xl mx-auto mb-3">
             Evidence-based scoring for all 209 Pennsylvania House candidates — ranked against the Chamber&apos;s nine business priorities. Every score is traceable.
+          </p>
+          <p className="text-caption tracking-widest uppercase mb-10" style={{ color: '#c9a84c', opacity: 0.7 }}>
+            Virtue, Liberty and Independence
           </p>
           <Link href="/politicians" className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-base transition-all" style={{ background: '#c9a84c', color: '#0a1628' }}>
             Search Candidates &rarr;

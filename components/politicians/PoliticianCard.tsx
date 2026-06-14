@@ -1,11 +1,12 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { PartyBadge } from '@/components/ui/Badge';
+import Keystone from '@/components/ui/Keystone';
 import { getScoreColor, formatScore, getConfidenceColor } from '@/lib/utils/helpers';
 import type { PoliticianWithScores } from '@/lib/utils/types';
 
 interface PoliticianCardProps {
-  politician: PoliticianWithScores;
+  readonly politician: PoliticianWithScores;
 }
 
 export default function PoliticianCard({ politician }: PoliticianCardProps) {
@@ -54,7 +55,10 @@ export default function PoliticianCard({ politician }: PoliticianCardProps) {
               <div className="flex items-center space-x-1.5 mt-1 flex-wrap gap-y-1">
                 <PartyBadge party={politician.party} />
                 {politician.district && (
-                  <span className="text-caption text-primary-400">Dist. {politician.district}</span>
+                  <span className="inline-flex items-center gap-0.5 text-caption text-primary-400">
+                    <Keystone size={9} style={{ color: '#c9a84c', flexShrink: 0 }} />
+                    HD-{politician.district}
+                  </span>
                 )}
                 {politician.county && (
                   <span className="text-caption text-primary-400">{politician.county} Co.</span>
