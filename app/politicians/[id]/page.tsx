@@ -2,6 +2,7 @@ import Link from 'next/link';
 import ScoreGauge from '@/components/scores/ScoreGauge';
 import PrincipleScoreBar from '@/components/scores/PrincipleScoreBar';
 import RadarChart from '@/components/scores/RadarChart';
+import EvidenceAccordion from '@/components/politicians/EvidenceAccordion';
 import { PartyBadge } from '@/components/ui/Badge';
 import { getSupabase, extractOverallScore } from '@/lib/db/client';
 import { PA_CHAMBER_PRINCIPLES, EVIDENCE_TYPE_LABELS, EVIDENCE_WEIGHTS } from '@/lib/utils/constants';
@@ -194,85 +195,9 @@ export default async function CandidateDetailPage({
       <div className="card p-8">
         <h2 className="text-heading-3 mb-2">Evidence Trail</h2>
         <p className="text-body-sm text-primary-400 mb-6">
-          Every score is traceable to the specific evidence items below. Click any source link to verify.
+          Every score is traceable to the specific evidence items below, organized by source type. Click any folder to expand it.
         </p>
-        <div className="space-y-4">
-          {evidenceItems.map((item: any) => (
-            <div key={item.id} className="p-4" style={{ border: '1px solid var(--border)', borderRadius: '12px' }}>
-              <div className="flex items-center space-x-3 mb-2">
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-caption font-medium" style={{ background: 'var(--surface-canvas)', color: 'var(--foreground)' }}>
-                  {EVIDENCE_TYPE_LABELS[item.evidence_type] || item.evidence_type}
-                </span>
-                <span className="text-caption text-primary-400">
-                  {new Date(item.source_date).toLocaleDateString('en-US', {
-                    year: 'numeric', month: 'short', day: 'numeric',
-                  })}
-                </span>
-                {item.tagged_principles?.map((p: string) => (
-                  <span key={p} className="inline-flex items-center px-1.5 py-0.5 rounded text-caption font-medium bg-primary-100 text-primary-600">
-                    {p}
-                  </span>
-                ))}
-              </div>
-
-              {item.vote_position && (() => {
-                let voteClass = 'text-primary-300';
-                if (item.vote_position === 'yea') voteClass = 'text-primary-950 font-semibold';
-                else if (item.vote_position === 'nay') voteClass = 'text-primary-400';
-                return (
-                  <p className="text-body-sm text-primary-500 mb-1">
-                    <span className="font-medium">Vote:</span>{' '}
-                    <span className={voteClass}>{item.vote_position.toUpperCase()}</span>
-                    {item.bill_title && ` on ${item.bill_title}`}
-                  </p>
-                );
-              })()}
-
-              {item.source_text && !item.vote_position && (
-                <p className="text-body-sm text-primary-500 line-clamp-3 mb-2">
-                  {item.source_text}
-                </p>
-              )}
-
-              {item.claims && item.claims.length > 0 && (
-                <div className="mt-2 space-y-1">
-                  {item.claims.map((claim: any) => {
-                    let stanceClass = 'bg-primary-100 text-primary-600';
-                    if (claim.stance === 'support') stanceClass = 'bg-primary-950 text-white';
-                    else if (claim.stance === 'oppose') stanceClass = 'bg-primary-200 text-primary-600';
-                    else if (claim.stance === 'conditional') stanceClass = 'bg-primary-100 text-primary-500';
-                    return (
-                      <div key={claim.id} className="flex items-start space-x-2 text-caption rounded p-2" style={{ background: 'var(--surface-canvas)' }}>
-                        <span className={`inline-flex px-1.5 py-0.5 rounded font-medium ${stanceClass}`}>
-                          {claim.stance}/{claim.strength}
-                        </span>
-                        <span className="text-primary-500 flex-1">
-                          &ldquo;{claim.claim_text}&rdquo;
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-
-              {item.source_url && (
-                <a
-                  href={item.source_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-caption text-primary-500 hover:text-primary-950 mt-1 inline-block transition-colors underline"
-                >
-                  View source &rarr;
-                </a>
-              )}
-            </div>
-          ))}
-          {evidenceItems.length === 0 && (
-            <p className="text-primary-400 text-center py-8">
-              No evidence items found. Run the evaluation pipeline to collect evidence.
-            </p>
-          )}
-        </div>
+        <EvidenceAccordion items={evidenceItems} />
       </div>
     </main>
   );
