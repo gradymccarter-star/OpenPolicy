@@ -91,8 +91,8 @@ export default function CompareClient({ allPoliticians, initialA, initialB }: Co
       {candidateA && candidateB && (
         <>
           {/* Overlaid Radar Chart */}
-          <div className="card p-8 mb-8">
-            <h2 className="text-heading-3 mb-6 text-center">
+          <div className="rounded-2xl p-8 mb-8" style={{ background: '#07111f', border: '1px solid rgba(255,255,255,0.08)' }}>
+            <h2 className="text-lg font-bold text-white mb-6 text-center tracking-tight">
               Principle Profile Comparison
             </h2>
             <div className="flex justify-center">
@@ -115,38 +115,38 @@ export default function CompareClient({ allPoliticians, initialA, initialB }: Co
           </div>
 
           {/* Side-by-Side Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-            <CandidateSummaryCard politician={candidateA} />
-            <CandidateSummaryCard politician={candidateB} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <CandidateSummaryCard politician={candidateA} accentColor={PARTY_COLORS[candidateA.party] || '#c9a84c'} />
+            <CandidateSummaryCard politician={candidateB} accentColor={PARTY_COLORS[candidateB.party] || '#9ca3af'} />
           </div>
 
           {/* Principle-by-Principle Comparison */}
-          <div className="card p-8">
-            <h2 className="text-heading-3 mb-6">
-              Principle-by-Principle Breakdown
-            </h2>
-            <div className="overflow-x-auto">
+          <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid #e5e7eb' }}>
+            <div className="px-8 py-5" style={{ background: '#0a1628' }}>
+              <h2 className="text-base font-bold text-white">Principle-by-Principle Breakdown</h2>
+            </div>
+            <div className="overflow-x-auto bg-white">
               <table className="w-full text-body-sm">
                 <thead>
-                  <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                    <th className="text-left py-3 pr-4 font-semibold text-primary-950">Principle</th>
-                    <th className="text-center py-3 px-4 font-semibold text-primary-950">{candidateA.full_name}</th>
-                    <th className="text-center py-3 px-4 font-semibold text-primary-950">{candidateB.full_name}</th>
-                    <th className="text-center py-3 pl-4 font-semibold text-primary-950">Difference</th>
+                  <tr style={{ background: '#f8f7f5', borderBottom: '1px solid #e5e7eb' }}>
+                    <th className="text-left py-3 px-6 font-semibold text-primary-950">Principle</th>
+                    <th className="text-center py-3 px-4 font-semibold" style={{ color: PARTY_COLORS[candidateA.party] || '#0a1628' }}>{candidateA.last_name}</th>
+                    <th className="text-center py-3 px-4 font-semibold" style={{ color: PARTY_COLORS[candidateB.party] || '#6b7280' }}>{candidateB.last_name}</th>
+                    <th className="text-center py-3 px-6 font-semibold text-primary-950">Δ</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {principleKeys.map((key) => {
+                  {principleKeys.map((key, idx) => {
                     const os = PA_CHAMBER_PRINCIPLES[key];
                     const scoreA = (candidateA.overall_score as any)?.[`${key.toLowerCase()}_score`] ?? 0;
                     const scoreB = (candidateB.overall_score as any)?.[`${key.toLowerCase()}_score`] ?? 0;
                     const diff = scoreA - scoreB;
 
                     return (
-                      <tr key={key} style={{ borderBottom: '1px solid var(--border-subtle)' }}>
-                        <td className="py-3 pr-4">
-                          <span className="font-medium text-primary-950">{key}:</span>{' '}
-                          <span className="text-primary-500">{os.name}</span>
+                      <tr key={key} style={{ borderBottom: '1px solid #f3f4f6', background: idx % 2 === 0 ? '#fff' : '#fafafa' }}>
+                        <td className="py-3 px-6">
+                          <span className="text-caption font-bold px-1.5 py-0.5 rounded mr-1.5" style={{ background: '#0a1628', color: '#c9a84c' }}>{key}</span>
+                          <span className="text-primary-500 text-caption">{os.name}</span>
                         </td>
                         <td className="text-center py-3 px-4">
                           <span className="font-bold" style={{ color: getScoreColor(scoreA) }}>
@@ -158,31 +158,37 @@ export default function CompareClient({ allPoliticians, initialA, initialB }: Co
                             {formatScore(scoreB)}
                           </span>
                         </td>
-                        <td className="text-center py-3 pl-4">
-                          <span className={`font-bold ${diff > 0 ? 'text-primary-950' : 'text-primary-400'}`}>
+                        <td className="text-center py-3 px-6">
+                          <span className="text-caption font-bold px-2 py-0.5 rounded-full" style={{
+                            background: diff > 0.02 ? 'rgba(16,185,129,0.1)' : diff < -0.02 ? 'rgba(239,68,68,0.1)' : 'rgba(107,114,128,0.1)',
+                            color: diff > 0.02 ? '#059669' : diff < -0.02 ? '#dc2626' : '#6b7280',
+                          }}>
                             {diff > 0 ? '+' : ''}{Math.round(diff * 100)}%
                           </span>
                         </td>
                       </tr>
                     );
                   })}
-                  <tr style={{ borderTop: '2px solid var(--faint)' }}>
-                    <td className="py-3 pr-4 font-bold text-primary-950">Overall</td>
-                    <td className="text-center py-3 px-4">
+                  <tr style={{ borderTop: '2px solid #e5e7eb', background: '#f8f7f5' }}>
+                    <td className="py-4 px-6 font-bold text-primary-950">Overall Score</td>
+                    <td className="text-center py-4 px-4">
                       <span className="font-bold text-lg" style={{ color: getScoreColor(candidateA.overall_score?.overall_score ?? 0) }}>
                         {formatScore(candidateA.overall_score?.overall_score ?? 0)}
                       </span>
                     </td>
-                    <td className="text-center py-3 px-4">
+                    <td className="text-center py-4 px-4">
                       <span className="font-bold text-lg" style={{ color: getScoreColor(candidateB.overall_score?.overall_score ?? 0) }}>
                         {formatScore(candidateB.overall_score?.overall_score ?? 0)}
                       </span>
                     </td>
-                    <td className="text-center py-3 pl-4">
+                    <td className="text-center py-4 px-6">
                       {(() => {
                         const d = (candidateA.overall_score?.overall_score ?? 0) - (candidateB.overall_score?.overall_score ?? 0);
                         return (
-                          <span className={`font-bold text-lg ${d > 0 ? 'text-primary-950' : 'text-primary-400'}`}>
+                          <span className="font-bold text-lg px-2 py-0.5 rounded-full" style={{
+                            background: d > 0.02 ? 'rgba(16,185,129,0.12)' : d < -0.02 ? 'rgba(239,68,68,0.12)' : 'rgba(107,114,128,0.12)',
+                            color: d > 0.02 ? '#059669' : d < -0.02 ? '#dc2626' : '#6b7280',
+                          }}>
                             {d > 0 ? '+' : ''}{Math.round(d * 100)}%
                           </span>
                         );
@@ -339,13 +345,16 @@ function CandidateSelector({
   );
 }
 
-function CandidateSummaryCard({ politician }: { readonly politician: PoliticianWithScores }) {
+function CandidateSummaryCard({ politician, accentColor }: { readonly politician: PoliticianWithScores; readonly accentColor: string }) {
   const os = politician.overall_score;
 
   return (
-    <div className="card p-6">
+    <div className="rounded-2xl p-6 bg-white" style={{ border: '1px solid #e5e7eb', borderTop: `4px solid ${accentColor}` }}>
       <div className="flex items-center space-x-4 mb-4">
-        <div className="w-12 h-12 rounded-full flex items-center justify-center font-bold text-primary-950" style={{ background: 'var(--surface-canvas)', border: '1px solid var(--border)' }}>
+        <div
+          className="w-12 h-12 rounded-full flex items-center justify-center font-bold text-white text-base"
+          style={{ background: accentColor, color: '#fff', filter: 'brightness(0.85)' }}
+        >
           {politician.first_name[0]}{politician.last_name[0]}
         </div>
         <div>

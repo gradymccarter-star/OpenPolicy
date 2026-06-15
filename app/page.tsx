@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import PoliticianCard from '@/components/politicians/PoliticianCard';
 import Keystone from '@/components/ui/Keystone';
-import HomeSearch from '@/components/ui/HomeSearch';
+import HeroBackground from '@/components/ui/HeroBackground';
 import { getSupabase, extractOverallScore } from '@/lib/db/client';
 import { EXAMPLE_POLITICIANS } from '@/lib/utils/constants';
 import type { PoliticianWithScores } from '@/lib/utils/types';
@@ -58,48 +58,78 @@ export default async function HomePage() {
         className="relative py-28 md:py-36 overflow-hidden"
         style={{ background: '#07111f' }}
       >
-        {/* Subtle grid pattern */}
+        {/* PA state flag — full bleed, darkened */}
         <div
-          className="absolute inset-0 pointer-events-none"
+          className="absolute inset-0"
           style={{
-            backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px)',
-            backgroundSize: '32px 32px',
-          }}
-        />
-        {/* Glow */}
-        <div
-          className="absolute left-1/2 top-0 -translate-x-1/2 w-[800px] h-[400px] pointer-events-none"
-          style={{
-            background: 'radial-gradient(ellipse at top, rgba(201,168,76,0.08) 0%, transparent 70%)',
+            backgroundImage: 'url(/pa-flag.png)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            opacity: 0.18,
           }}
         />
 
+        {/* Dark gradient overlay so text stays readable */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(to bottom, rgba(7,17,31,0.55) 0%, rgba(7,17,31,0.75) 60%, rgba(7,17,31,0.95) 100%)',
+          }}
+        />
+
+        {/* Dot grid on top */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px)',
+            backgroundSize: '32px 32px',
+          }}
+        />
+
+        {/* Animated particles, light sweep, glow */}
+        <HeroBackground />
+
         <div className="container-page relative z-10 text-center">
           <div
-            className="inline-flex items-center gap-2 mb-8 px-4 py-1.5 rounded-full text-caption font-semibold tracking-widest uppercase"
-            style={{ background: 'rgba(201,168,76,0.12)', color: '#c9a84c', border: '1px solid rgba(201,168,76,0.25)' }}
+            className="hero-fade-up inline-flex items-center gap-2 mb-8 px-4 py-1.5 rounded-full text-caption font-semibold tracking-widest uppercase"
+            style={{ background: 'rgba(201,168,76,0.12)', color: '#c9a84c', border: '1px solid rgba(201,168,76,0.25)', animationDelay: '0s' }}
           >
             <Keystone size={12} style={{ color: '#c9a84c' }} />
             PA Chamber · Fall 2026
           </div>
 
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-6 leading-tight">
+          <h1
+            className="hero-fade-up text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-6 leading-tight"
+            style={{ animationDelay: '0.15s' }}
+          >
             Legislative Intelligence<br />
             <span style={{ color: '#c9a84c' }}>for PA House Endorsements</span>
           </h1>
 
-          <p className="text-lg md:text-xl mb-10 max-w-xl mx-auto" style={{ color: 'rgba(255,255,255,0.5)' }}>
+          <p
+            className="hero-fade-up text-lg md:text-xl mb-10 max-w-xl mx-auto"
+            style={{ color: 'rgba(255,255,255,0.5)', animationDelay: '0.3s' }}
+          >
             Evidence-based scoring for all 209 PA House members — ranked against the Chamber&apos;s nine business priorities.
           </p>
 
-          <HomeSearch />
-
-          <p className="mt-5 text-caption" style={{ color: 'rgba(255,255,255,0.25)' }}>
-            Or{' '}
-            <Link href="/politicians" className="underline underline-offset-2 hover:text-white/50 transition-colors" style={{ color: 'rgba(255,255,255,0.35)' }}>
-              browse all {stats.politicians || 209} members
+          <div className="hero-fade-up flex flex-col sm:flex-row items-center justify-center gap-4" style={{ animationDelay: '0.45s' }}>
+            <Link
+              href="/politicians"
+              className="group inline-flex items-center gap-3 px-8 py-4 rounded-2xl text-lg font-bold transition-all duration-200 hover:scale-105 hover:shadow-2xl"
+              style={{ background: '#c9a84c', color: '#07111f' }}
+            >
+              Explore All {stats.politicians || 209} Candidates
+              <span className="text-xl transition-transform group-hover:translate-x-1">→</span>
             </Link>
-          </p>
+            <Link
+              href="/compare"
+              className="inline-flex items-center gap-2 px-6 py-4 rounded-2xl text-base font-semibold transition-all hover:bg-white/10"
+              style={{ color: 'rgba(255,255,255,0.7)', border: '1px solid rgba(255,255,255,0.2)' }}
+            >
+              Compare Members
+            </Link>
+          </div>
         </div>
       </section>
 

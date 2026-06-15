@@ -72,6 +72,38 @@
   }
 }
 
+/* Hero animations */
+@keyframes float-up {
+  0%   { transform: translateY(0) scale(1);   opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 0.6; }
+  100% { transform: translateY(-120vh) scale(0.8); opacity: 0; }
+}
+
+@keyframes light-sweep {
+  0%   { transform: translateX(-100%) skewX(-15deg); }
+  100% { transform: translateX(250%) skewX(-15deg); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.06; }
+  50%       { opacity: 0.12; }
+}
+
+@keyframes flag-drift {
+  0%, 100% { transform: translateY(0px) rotate(-1deg); }
+  50%       { transform: translateY(-12px) rotate(1deg); }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero-fade-up {
+  animation: fade-up 0.7s ease both;
+}
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;

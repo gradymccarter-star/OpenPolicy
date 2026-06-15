@@ -32,13 +32,14 @@ export default function PoliticianCard({ politician }: PoliticianCardProps) {
         <div className="p-5">
           {/* Header */}
           <div className="flex items-start space-x-3 mb-4">
-            <div className="relative w-14 h-14 rounded-full overflow-hidden flex-shrink-0" style={{ background: 'var(--surface-canvas)', border: '2px solid var(--border)' }}>
+            <div className="relative w-14 h-14 rounded-full overflow-hidden flex-shrink-0" style={{ background: 'var(--surface-canvas)', border: '2px solid #c9a84c' }}>
               {politician.photo_url ? (
                 <Image
                   src={politician.photo_url}
                   alt={politician.full_name}
                   fill
-                  className="object-cover grayscale"
+                  className="object-cover"
+                  style={{ objectPosition: '50% 15%' }}
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-lg font-bold text-primary-950">

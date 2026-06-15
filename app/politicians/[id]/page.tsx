@@ -69,12 +69,13 @@ export default async function CandidateDetailPage({
       <div className="card p-8 mb-8">
         <div className="flex items-start space-x-6">
           {politician.photo_url && (
-            <div className="relative w-32 h-32 rounded-full overflow-hidden flex-shrink-0" style={{ border: '2px solid var(--border)' }}>
+            <div className="relative w-32 h-32 rounded-full overflow-hidden flex-shrink-0" style={{ border: '3px solid #c9a84c' }}>
               <Image
                 src={politician.photo_url}
                 alt={politician.full_name}
                 fill
-                className="object-cover grayscale"
+                className="object-cover"
+                style={{ objectPosition: '50% 15%' }}
               />
             </div>
           )}

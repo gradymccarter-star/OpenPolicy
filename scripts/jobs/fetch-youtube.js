@@ -171,8 +171,9 @@ async function fetchYouTube() {
   );
 
   // 50 members × 1 search each = 50 searches = 5k quota units
-  // Leaves ~5k for channel sweeps (50 searches) and future runs
-  const targetMembers = sorted.slice(0, 50);
+  const offsetArg = process.argv.find(a => a.startsWith('--offset='));
+  const offset = offsetArg ? parseInt(offsetArg.split('=')[1], 10) : 0;
+  const targetMembers = sorted.slice(offset, offset + 50);
 
   console.log(`  ${members.length} members loaded, searching ${targetMembers.length} with lowest coverage\n`);
 

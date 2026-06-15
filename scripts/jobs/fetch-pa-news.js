@@ -61,7 +61,8 @@ const PA_FEEDS = [
   { name: 'PublicSource',         url: 'https://www.publicsource.org/feed/' },
 
   // Central PA
-  { name: 'PennLive / Patriot-News', url: 'https://www.pennlive.com/arc/outboundfeeds/rss/' },
+  { name: 'PennLive Politics',    url: 'https://www.pennlive.com/arc/outboundfeeds/rss/category/news/politics/' },
+  { name: 'PennLive State Gov',   url: 'https://www.pennlive.com/arc/outboundfeeds/rss/category/news/state/' },
   { name: 'WITF (Harrisburg)',    url: 'https://www.witf.org/rss/' },
 
   // Southeast PA
@@ -263,7 +264,7 @@ async function upsertEvidence(supabase, politicianId, item, sourceName, seenHash
 
   const { error } = await supabase.from('evidence_items').upsert({
     politician_id: politicianId,
-    evidence_type: 'news_article',
+    evidence_type: 'press_release',
     source_text: sourceText,
     source_url: url,
     source_date: parseDate(item.pubDate),

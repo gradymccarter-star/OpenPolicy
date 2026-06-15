@@ -13,14 +13,32 @@ interface PoliticiansClientProps {
 export default function PoliticiansClient({ politicians, showExamples, initialQuery = '' }: PoliticiansClientProps) {
   const [search, setSearch] = useState(initialQuery);
   const [party, setParty] = useState<string>('all');
+  const [county, setCounty] = useState<string>('all');
   const [minScore, setMinScore] = useState(0);
   const [sort, setSort] = useState<'score' | 'name'>('score');
+
+  const allCounties = useMemo(() => {
+    const seen = new Set<string>();
+    for (const p of politicians) {
+      if (p.county) {
+        for (const c of p.county.split(',')) {
+          const trimmed = c.trim();
+          if (trimmed) seen.add(trimmed);
+        }
+      }
+    }
+    return Array.from(seen).sort();
+  }, [politicians]);
 
   const filtered = useMemo(() => {
     const results = politicians.filter((p) => {
       const q = search.toLowerCase();
-      if (q && !p.full_name.toLowerCase().includes(q) && !p.district?.toString().includes(q)) return false;
+      if (q && !p.full_name.toLowerCase().includes(q) && !p.district?.toString().includes(q) && !p.county?.toLowerCase().includes(q)) return false;
       if (party !== 'all' && p.party !== party) return false;
+      if (county !== 'all') {
+        const pCounties = (p.county ?? '').split(',').map((c) => c.trim().toLowerCase());
+        if (!pCounties.includes(county.toLowerCase())) return false;
+      }
       const score = (p.overall_score?.overall_score ?? 0) * 100;
       if (score < minScore) return false;
       return true;
@@ -30,9 +48,9 @@ export default function PoliticiansClient({ politicians, showExamples, initialQu
       if (sort === 'name') return a.full_name.localeCompare(b.full_name);
       return (b.overall_score?.overall_score ?? 0) - (a.overall_score?.overall_score ?? 0);
     });
-  }, [politicians, search, party, minScore, sort]);
+  }, [politicians, search, party, county, minScore, sort]);
 
-  const hasFilters = party !== 'all' || minScore > 0 || search !== '';
+  const hasFilters = party !== 'all' || county !== 'all' || minScore > 0 || search !== '';
 
   return (
     <div>
@@ -47,7 +65,7 @@ export default function PoliticiansClient({ politicians, showExamples, initialQu
           </svg>
           <input
             type="text"
-            placeholder="Search by name or district number..."
+            placeholder="Search by name, district, or county..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             autoFocus
@@ -83,6 +101,19 @@ export default function PoliticiansClient({ politicians, showExamples, initialQu
             ))}
           </div>
 
+          {/* County */}
+          <select
+            value={county}
+            onChange={(e) => setCounty(e.target.value)}
+            className="px-3 py-1.5 rounded-lg text-caption font-semibold outline-none"
+            style={{ background: 'rgba(255,255,255,0.08)', color: county !== 'all' ? '#c9a84c' : 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.15)' }}
+          >
+            <option value="all">All Counties</option>
+            {allCounties.map((c) => (
+              <option key={c} value={c}>{c} County</option>
+            ))}
+          </select>
+
           {/* Min alignment */}
           <select
             value={minScore}
@@ -109,7 +140,7 @@ export default function PoliticiansClient({ politicians, showExamples, initialQu
 
           {hasFilters && (
             <button
-              onClick={() => { setSearch(''); setParty('all'); setMinScore(0); }}
+              onClick={() => { setSearch(''); setParty('all'); setCounty('all'); setMinScore(0); }}
               className="px-3 py-1.5 rounded-lg text-caption font-semibold transition-all"
               style={{ color: 'rgba(255,255,255,0.4)', border: '1px solid rgba(255,255,255,0.1)' }}
             >

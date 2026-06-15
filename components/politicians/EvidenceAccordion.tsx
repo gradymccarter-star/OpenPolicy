@@ -36,7 +36,7 @@ const FOLDERS: Record<string, FolderConfig> = {
   social_media: { label: 'Social Media & Video', icon: '💬', description: 'Posts, interviews, and YouTube coverage' },
   committee_statement: { label: 'Committee Statements', icon: '🎙', description: 'Remarks made during committee hearings' },
   floor_speech: { label: 'Floor Speeches', icon: '📢', description: 'Speeches delivered on the House floor' },
-  press_release: { label: 'Press Releases', icon: '📣', description: 'Official statements and press releases' },
+  press_release: { label: 'News Coverage', icon: '📰', description: 'Newspaper articles, media mentions, and press releases' },
 };
 
 const VOTE_STYLES: Record<string, { bg: string; color: string; label: string }> = {
@@ -62,7 +62,7 @@ function formatDate(d?: string | null) {
   }
 }
 
-function PrinciplePill({ p }: { p: string }) {
+function PrinciplePill({ p }: { readonly p: string }) {
   return (
     <span
       className="inline-flex items-center px-1.5 py-0.5 rounded text-caption font-semibold"
@@ -73,7 +73,7 @@ function PrinciplePill({ p }: { p: string }) {
   );
 }
 
-function FloorVoteRow({ item }: { item: EvidenceItem }) {
+function FloorVoteRow({ item }: { readonly item: EvidenceItem }) {
   const [open, setOpen] = useState(false);
   const vs = VOTE_STYLES[item.vote_position?.toLowerCase() ?? ''] ?? VOTE_STYLES.absent;
 
@@ -95,7 +95,7 @@ function FloorVoteRow({ item }: { item: EvidenceItem }) {
         <span className="text-caption text-primary-400 flex-shrink-0">{formatDate(item.source_date)}</span>
         {(item.tagged_principles?.length ?? 0) > 0 && (
           <div className="flex gap-1 flex-shrink-0">
-            {item.tagged_principles!.map((p) => <PrinciplePill key={p} p={p} />)}
+            {item.tagged_principles?.map((p) => <PrinciplePill key={p} p={p} />)}
           </div>
         )}
         <svg
@@ -137,7 +137,7 @@ function FloorVoteRow({ item }: { item: EvidenceItem }) {
   );
 }
 
-function SponsorshipRow({ item }: { item: EvidenceItem }) {
+function SponsorshipRow({ item }: { readonly item: EvidenceItem }) {
   const [open, setOpen] = useState(false);
   const hasClaims = (item.claims?.length ?? 0) > 0;
 
@@ -153,7 +153,7 @@ function SponsorshipRow({ item }: { item: EvidenceItem }) {
         <span className="text-caption text-primary-400 flex-shrink-0">{formatDate(item.source_date)}</span>
         {(item.tagged_principles?.length ?? 0) > 0 && (
           <div className="flex gap-1 flex-shrink-0">
-            {item.tagged_principles!.map((p) => <PrinciplePill key={p} p={p} />)}
+            {item.tagged_principles?.map((p) => <PrinciplePill key={p} p={p} />)}
           </div>
         )}
         {(hasClaims || item.source_url) && (
@@ -190,7 +190,145 @@ function SponsorshipRow({ item }: { item: EvidenceItem }) {
   );
 }
 
-function TextRow({ item }: { item: EvidenceItem }) {
+function ClaimsBlock({ claims }: { readonly claims?: Claim[] }) {
+  if (!claims?.length) return null;
+  return (
+    <div className="space-y-1.5">
+      {claims.map((c) => {
+        const ss = STANCE_STYLES[c.stance] ?? STANCE_STYLES.neutral;
+        return (
+          <div key={c.id} className="flex items-start gap-2 text-caption rounded p-2 bg-white" style={{ border: '1px solid #e2e8f0' }}>
+            <span className="flex-shrink-0 px-1.5 py-0.5 rounded font-semibold" style={{ background: ss.bg, color: ss.color, fontSize: 10 }}>
+              {c.stance} · {c.strength}
+            </span>
+            <span className="text-primary-600">&ldquo;{c.claim_text}&rdquo;</span>
+            <span className="flex-shrink-0 text-primary-300">{c.principle}</span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function SourceLink({ url, label = 'View source' }: { readonly url?: string | null; readonly label?: string }) {
+  if (!url) return null;
+  return (
+    <a href={url} target="_blank" rel="noopener noreferrer"
+      className="text-caption text-primary-400 hover:text-primary-700 underline underline-offset-2 inline-block transition-colors">
+      {label} &rarr;
+    </a>
+  );
+}
+
+function extractYouTubeId(url?: string | null): string | null {
+  if (!url) return null;
+  try {
+    return new URL(url).searchParams.get('v');
+  } catch {
+    return null;
+  }
+}
+
+function YouTubeRow({ item }: { readonly item: EvidenceItem }) {
+  const [open, setOpen] = useState(false);
+  const videoId = extractYouTubeId(item.source_url);
+  const lines = (item.source_text || '').split('\n\n');
+  const title = lines[0] || 'YouTube video';
+  const description = lines.slice(1).join('\n\n').trim();
+  const hasClaims = (item.claims?.length ?? 0) > 0;
+
+  return (
+    <div className="border-b last:border-b-0" style={{ borderColor: '#f1f5f9' }}>
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full text-left flex items-center gap-3 py-3 px-4 hover:bg-slate-50 transition-colors"
+      >
+        {/* Thumbnail */}
+        <div className="flex-shrink-0 relative rounded overflow-hidden" style={{ width: 96, height: 54, background: '#000' }}>
+          {videoId ? (
+            <img
+              src={`https://img.youtube.com/vi/${videoId}/mqdefault.jpg`}
+              alt=""
+              className="w-full h-full object-cover opacity-90"
+            />
+          ) : (
+            <div className="w-full h-full" style={{ background: '#1a1a2e' }} />
+          )}
+          {/* Play badge */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="rounded-full flex items-center justify-center" style={{ background: 'rgba(255,0,0,0.85)', width: 22, height: 22 }}>
+              <svg viewBox="0 0 24 24" fill="white" width={10} height={10} style={{ marginLeft: 2 }}>
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex-1 min-w-0">
+          <p className="text-body-sm text-primary-800 font-medium line-clamp-2 leading-snug">{title}</p>
+        </div>
+        <span className="text-caption text-primary-400 flex-shrink-0">{formatDate(item.source_date)}</span>
+        {(hasClaims || description) && (
+          <svg className="flex-shrink-0 w-4 h-4 text-primary-300 transition-transform"
+            style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}
+            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        )}
+      </button>
+
+      {open && (
+        <div className="px-4 pb-4 pt-1 space-y-2 bg-slate-50">
+          {description && (
+            <p className="text-caption text-primary-500 leading-relaxed">{description}</p>
+          )}
+          <ClaimsBlock claims={item.claims} />
+          <SourceLink url={item.source_url} label="Watch on YouTube" />
+        </div>
+      )}
+    </div>
+  );
+}
+
+function BlueskyRow({ item }: { readonly item: EvidenceItem }) {
+  const [open, setOpen] = useState(false);
+  const text = item.source_text || '';
+  const hasClaims = (item.claims?.length ?? 0) > 0;
+
+  return (
+    <div className="border-b last:border-b-0" style={{ borderColor: '#f1f5f9' }}>
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full text-left flex items-start gap-3 py-3 px-4 hover:bg-slate-50 transition-colors"
+      >
+        <span className="flex-shrink-0 text-base leading-none mt-0.5" style={{ color: '#0085ff' }}>🦋</span>
+        <div className="flex-1 min-w-0">
+          <p className="text-body-sm text-primary-800 line-clamp-2 leading-snug">{text}</p>
+        </div>
+        <span className="text-caption text-primary-400 flex-shrink-0 pt-0.5">{formatDate(item.source_date)}</span>
+        {(hasClaims || item.source_url) && (
+          <svg className="flex-shrink-0 w-4 h-4 text-primary-300 transition-transform mt-0.5"
+            style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}
+            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        )}
+      </button>
+
+      {open && (
+        <div className="px-4 pb-4 pt-1 space-y-2 bg-slate-50">
+          {text.length > 120 && (
+            <p className="text-caption text-primary-600 leading-relaxed">{text}</p>
+          )}
+          <ClaimsBlock claims={item.claims} />
+          <SourceLink url={item.source_url} label="View on Bluesky" />
+        </div>
+      )}
+    </div>
+  );
+}
+
+function TextRow({ item }: { readonly item: EvidenceItem }) {
   const [open, setOpen] = useState(false);
   const text = item.source_text || item.bill_title || '';
   const hasClaims = (item.claims?.length ?? 0) > 0;
@@ -219,24 +357,8 @@ function TextRow({ item }: { item: EvidenceItem }) {
           {text.length > 120 && (
             <p className="text-caption text-primary-600 leading-relaxed">{text}</p>
           )}
-          {item.claims?.map((c) => {
-            const ss = STANCE_STYLES[c.stance] ?? STANCE_STYLES.neutral;
-            return (
-              <div key={c.id} className="flex items-start gap-2 text-caption rounded p-2 bg-white" style={{ border: '1px solid #e2e8f0' }}>
-                <span className="flex-shrink-0 px-1.5 py-0.5 rounded font-semibold" style={{ background: ss.bg, color: ss.color, fontSize: 10 }}>
-                  {c.stance} · {c.strength}
-                </span>
-                <span className="text-primary-600">&ldquo;{c.claim_text}&rdquo;</span>
-                <span className="flex-shrink-0 text-primary-300">{c.principle}</span>
-              </div>
-            );
-          })}
-          {item.source_url && (
-            <a href={item.source_url} target="_blank" rel="noopener noreferrer"
-              className="text-caption text-primary-400 hover:text-primary-700 underline underline-offset-2 inline-block transition-colors">
-              View source &rarr;
-            </a>
-          )}
+          <ClaimsBlock claims={item.claims} />
+          <SourceLink url={item.source_url} />
         </div>
       )}
     </div>
@@ -248,9 +370,9 @@ function EvidenceFolder({
   items,
   defaultOpen = false,
 }: {
-  type: string;
-  items: EvidenceItem[];
-  defaultOpen?: boolean;
+  readonly type: string;
+  readonly items: EvidenceItem[];
+  readonly defaultOpen?: boolean;
 }) {
   const [open, setOpen] = useState(defaultOpen);
   const config = FOLDERS[type] ?? { label: type, icon: '📌', description: '' };
@@ -289,6 +411,10 @@ function EvidenceFolder({
           {items.map((item) => {
             if (type === 'floor_vote') return <FloorVoteRow key={item.id} item={item} />;
             if (type === 'bill_sponsorship' || type === 'bill_cosponsorship') return <SponsorshipRow key={item.id} item={item} />;
+            if (type === 'social_media') {
+              if (item.source_url?.includes('youtube.com')) return <YouTubeRow key={item.id} item={item} />;
+              if (item.source_url?.includes('bsky.app')) return <BlueskyRow key={item.id} item={item} />;
+            }
             return <TextRow key={item.id} item={item} />;
           })}
         </div>
@@ -308,7 +434,7 @@ const FOLDER_ORDER = [
   'social_media',
 ];
 
-export default function EvidenceAccordion({ items }: { items: EvidenceItem[] }) {
+export default function EvidenceAccordion({ items }: { readonly items: EvidenceItem[] }) {
   const groups: Record<string, EvidenceItem[]> = {};
   for (const item of items) {
     const type = item.evidence_type;
@@ -331,12 +457,12 @@ export default function EvidenceAccordion({ items }: { items: EvidenceItem[] }) 
 
   return (
     <div className="space-y-3">
-      {orderedTypes.map((type, i) => (
+      {orderedTypes.map((type) => (
         <EvidenceFolder
           key={type}
           type={type}
           items={groups[type]}
-          defaultOpen={i === 0}
+          defaultOpen={false}
         />
       ))}
     </div>
