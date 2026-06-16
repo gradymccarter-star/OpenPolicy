@@ -3,6 +3,14 @@ import { getSupabase, extractOverallScore } from '@/lib/db/client';
 import { EXAMPLE_POLITICIANS } from '@/lib/utils/constants';
 import type { PoliticianWithScores } from '@/lib/utils/types';
 
+async function getPoliticianIdsWithFunding() {
+  const supabase = getSupabase();
+  const { data } = await supabase
+    .from('campaign_contributions')
+    .select('politician_id');
+  return Array.from(new Set((data ?? []).map((r: { politician_id: string }) => r.politician_id)));
+}
+
 async function getPoliticians() {
   const supabase = getSupabase();
 
@@ -31,9 +39,13 @@ interface Props {
 export default async function PoliticiansPage({ searchParams }: Props) {
   const { q } = await searchParams;
   let politicians: PoliticianWithScores[] = [];
+  let politicianIdsWithFunding: string[] = [];
 
   try {
-    politicians = await getPoliticians();
+    [politicians, politicianIdsWithFunding] = await Promise.all([
+      getPoliticians(),
+      getPoliticianIdsWithFunding(),
+    ]);
   } catch (error) {
     console.error('Failed to load politicians:', error);
   }
@@ -55,7 +67,7 @@ export default async function PoliticiansPage({ searchParams }: Props) {
         </p>
       </div>
 
-      <PoliticiansClient politicians={displayPoliticians} showExamples={showExamples} initialQuery={q ?? ''} />
+      <PoliticiansClient politicians={displayPoliticians} showExamples={showExamples} initialQuery={q ?? ''} politicianIdsWithFunding={politicianIdsWithFunding} />
     </main>
   );
 }

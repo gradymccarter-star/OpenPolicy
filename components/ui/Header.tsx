@@ -9,6 +9,7 @@ const NAV_LINKS = [
   { href: '/', label: 'Home' },
   { href: '/politicians', label: 'Candidates' },
   { href: '/compare', label: 'Compare' },
+  { href: '/funding-intelligence', label: 'Funding Intel' },
   { href: '/principles', label: 'Scoring Criteria' },
   { href: '/about', label: 'About' },
 ];

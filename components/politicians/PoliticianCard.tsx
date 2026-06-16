@@ -7,9 +7,10 @@ import type { PoliticianWithScores } from '@/lib/utils/types';
 
 interface PoliticianCardProps {
   readonly politician: PoliticianWithScores;
+  readonly hasFunding?: boolean;
 }
 
-export default function PoliticianCard({ politician }: PoliticianCardProps) {
+export default function PoliticianCard({ politician, hasFunding = false }: PoliticianCardProps) {
   const os = politician.overall_score;
   const overallScore = os?.overall_score || 0;
   const overallConfidence = os?.overall_confidence || 0;
@@ -63,6 +64,15 @@ export default function PoliticianCard({ politician }: PoliticianCardProps) {
                 )}
                 {politician.county && (
                   <span className="text-caption text-primary-400">{politician.county} Co.</span>
+                )}
+                {hasFunding && (
+                  <span
+                    className="inline-flex items-center gap-0.5 font-bold rounded-full px-2 py-0.5"
+                    style={{ fontSize: '10px', background: '#16a34a', color: '#fff', letterSpacing: '0.02em' }}
+                    title="Campaign finance data available"
+                  >
+                    $ data
+                  </span>
                 )}
               </div>
             </div>

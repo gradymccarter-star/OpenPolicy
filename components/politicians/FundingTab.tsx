@@ -44,12 +44,89 @@ function LeanBadge({ lean }: { lean: Lean }) {
   );
 }
 
+function DonutChart({ buckets, total }: { buckets: Record<Lean, number>; total: number }) {
+  const SIZE = 160;
+  const CX = SIZE / 2;
+  const CY = SIZE / 2;
+  const R = 64;
+  const IR = 40;
+
+  const order: Lean[] = ['pro_chamber', 'anti_chamber', 'neutral', 'unknown'];
+  const segments: Array<{ lean: Lean; startAngle: number; endAngle: number }> = [];
+
+  let startAngle = -Math.PI / 2;
+  for (const lean of order) {
+    const pct = total > 0 ? buckets[lean] / total : 0;
+    if (pct < 0.005) continue;
+    const sweep = pct * 2 * Math.PI;
+    segments.push({ lean, startAngle, endAngle: startAngle + sweep });
+    startAngle += sweep;
+  }
+
+  if (segments.length === 0) return null;
+
+  function makeArcPath(sa: number, ea: number): string {
+    const fullCircle = Math.abs(ea - sa) >= 2 * Math.PI - 0.001;
+    if (fullCircle) {
+      const mid = sa + Math.PI;
+      return [
+        `M ${CX + R * Math.cos(sa)} ${CY + R * Math.sin(sa)}`,
+        `A ${R} ${R} 0 1 1 ${CX + R * Math.cos(mid)} ${CY + R * Math.sin(mid)}`,
+        `A ${R} ${R} 0 1 1 ${CX + R * Math.cos(sa)} ${CY + R * Math.sin(sa)}`,
+        `L ${CX + IR * Math.cos(sa)} ${CY + IR * Math.sin(sa)}`,
+        `A ${IR} ${IR} 0 1 0 ${CX + IR * Math.cos(mid)} ${CY + IR * Math.sin(mid)}`,
+        `A ${IR} ${IR} 0 1 0 ${CX + IR * Math.cos(sa)} ${CY + IR * Math.sin(sa)}`,
+        'Z',
+      ].join(' ');
+    }
+    const largeArc = ea - sa > Math.PI ? 1 : 0;
+    const ox1 = CX + R * Math.cos(sa); const oy1 = CY + R * Math.sin(sa);
+    const ox2 = CX + R * Math.cos(ea); const oy2 = CY + R * Math.sin(ea);
+    const ix1 = CX + IR * Math.cos(ea); const iy1 = CY + IR * Math.sin(ea);
+    const ix2 = CX + IR * Math.cos(sa); const iy2 = CY + IR * Math.sin(sa);
+    return [
+      `M ${ox1} ${oy1}`,
+      `A ${R} ${R} 0 ${largeArc} 1 ${ox2} ${oy2}`,
+      `L ${ix1} ${iy1}`,
+      `A ${IR} ${IR} 0 ${largeArc} 0 ${ix2} ${iy2}`,
+      'Z',
+    ].join(' ');
+  }
+
+  const dominant = order.reduce((best, lean) =>
+    buckets[lean] > buckets[best] ? lean : best, order[0]
+  );
+  const dominantPct = total > 0 ? Math.round((buckets[dominant] / total) * 100) : 0;
+  const cfg = LEAN_CONFIG[dominant];
+
+  return (
+    <div className="flex-shrink-0 flex flex-col items-center">
+      <svg width={SIZE} height={SIZE} viewBox={`0 0 ${SIZE} ${SIZE}`}>
+        {segments.map(({ lean, startAngle, endAngle }) => (
+          <path
+            key={lean}
+            d={makeArcPath(startAngle, endAngle)}
+            fill={LEAN_CONFIG[lean].bar}
+            stroke="white"
+            strokeWidth="2"
+          />
+        ))}
+        <text x={CX} y={CY - 6} textAnchor="middle" fontSize="20" fontWeight="bold" fill={cfg.color}>
+          {dominantPct}%
+        </text>
+        <text x={CX} y={CY + 12} textAnchor="middle" fontSize="9" fill="#9ca3af" fontWeight="500">
+          {cfg.label}
+        </text>
+      </svg>
+    </div>
+  );
+}
+
 function LeanBreakdown({ rows }: { rows: Contribution[] }) {
   const total = rows.reduce((s, c) => s + c.amount, 0);
   if (total === 0) return null;
 
   const buckets: Record<Lean, number> = { pro_chamber: 0, anti_chamber: 0, neutral: 0, unknown: 0 };
-
   for (const c of rows) {
     const lean = (c.donor_type !== 'individual' && c.donor_organizations?.lean)
       ? c.donor_organizations.lean
@@ -64,35 +141,41 @@ function LeanBreakdown({ rows }: { rows: Contribution[] }) {
       <h3 className="text-heading-3 mb-1">Funding Alignment</h3>
       <p className="text-caption text-primary-400 mb-4">Based on donor organization classification across all contributions this cycle</p>
 
-      {/* Stacked bar */}
-      <div className="flex rounded-full overflow-hidden h-4 mb-4" style={{ background: '#f3f4f6' }}>
-        {order.map(lean => {
-          const pct = total > 0 ? (buckets[lean] / total) * 100 : 0;
-          if (pct < 1) return null;
-          return (
-            <div
-              key={lean}
-              style={{ width: `${pct}%`, background: LEAN_CONFIG[lean].bar }}
-              title={`${LEAN_CONFIG[lean].label}: ${Math.round(pct)}%`}
-            />
-          );
-        })}
-      </div>
+      <div className="flex flex-col md:flex-row gap-6 items-center">
+        <DonutChart buckets={buckets} total={total} />
 
-      {/* Legend rows */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {order.map(lean => {
-          const amount = buckets[lean];
-          const pct = total > 0 ? Math.round((amount / total) * 100) : 0;
-          const cfg = LEAN_CONFIG[lean];
-          return (
-            <div key={lean} className="rounded-xl p-3" style={{ border: `1px solid ${cfg.bg === '#f9fafb' ? '#e5e7eb' : cfg.bg}`, background: cfg.bg }}>
-              <div className="text-caption font-semibold mb-0.5" style={{ color: cfg.color }}>{cfg.label}</div>
-              <div className="text-xl font-bold text-primary-950">{pct}%</div>
-              <div className="text-caption text-primary-400">{fmt(amount)}</div>
-            </div>
-          );
-        })}
+        <div className="flex-1 space-y-3">
+          {/* Stacked bar */}
+          <div className="flex rounded-full overflow-hidden h-3" style={{ background: '#f3f4f6' }}>
+            {order.map(lean => {
+              const pct = total > 0 ? (buckets[lean] / total) * 100 : 0;
+              if (pct < 1) return null;
+              return (
+                <div
+                  key={lean}
+                  style={{ width: `${pct}%`, background: LEAN_CONFIG[lean].bar }}
+                  title={`${LEAN_CONFIG[lean].label}: ${Math.round(pct)}%`}
+                />
+              );
+            })}
+          </div>
+
+          {/* Legend grid */}
+          <div className="grid grid-cols-2 gap-2">
+            {order.map(lean => {
+              const amount = buckets[lean];
+              const pct = total > 0 ? Math.round((amount / total) * 100) : 0;
+              const cfg = LEAN_CONFIG[lean];
+              return (
+                <div key={lean} className="rounded-xl p-3" style={{ border: `1px solid ${cfg.bg === '#f9fafb' ? '#e5e7eb' : cfg.bg}`, background: cfg.bg }}>
+                  <div className="text-caption font-semibold mb-0.5" style={{ color: cfg.color }}>{cfg.label}</div>
+                  <div className="text-xl font-bold text-primary-950">{pct}%</div>
+                  <div className="text-caption text-primary-400">{fmt(amount)}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -204,6 +287,26 @@ export default function FundingTab({ contributions }: Props) {
 
   return (
     <div className="space-y-6">
+      {/* Funding Intelligence banner */}
+      <a href="/funding-intelligence">
+        <div
+          className="rounded-xl p-4 flex items-center justify-between transition-opacity hover:opacity-90 cursor-pointer"
+          style={{ background: 'linear-gradient(135deg, #0a1628 0%, #162444 100%)', border: '1px solid #c9a84c' }}
+        >
+          <div>
+            <p className="text-caption font-bold uppercase tracking-wider mb-0.5" style={{ color: '#c9a84c' }}>
+              Funding Intelligence
+            </p>
+            <p className="text-caption" style={{ color: 'rgba(255,255,255,0.65)' }}>
+              See how every donor organization is classified by PA Chamber alignment →
+            </p>
+          </div>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" strokeWidth="2" strokeLinecap="round" className="ml-4 flex-shrink-0">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </div>
+      </a>
+
       {/* Cycle selector */}
       <div className="card p-6">
         <h3 className="text-heading-3 mb-4">Fundraising by Cycle</h3>
@@ -228,7 +331,7 @@ export default function FundingTab({ contributions }: Props) {
         </div>
       </div>
 
-      {/* Lean breakdown headline */}
+      {/* Lean breakdown with donut chart */}
       <LeanBreakdown rows={cycleRows} />
 
       {/* Contribution tables */}
@@ -248,12 +351,6 @@ export default function FundingTab({ contributions }: Props) {
           defaultOpen={false}
         />
       </div>
-
-      {/* Link to org intelligence page */}
-      <p className="text-caption text-primary-400 text-center">
-        See how donor organizations are classified →{' '}
-        <a href="/funding-intelligence" className="underline hover:text-primary-700">Funding Intelligence</a>
-      </p>
     </div>
   );
 }
