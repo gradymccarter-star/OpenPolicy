@@ -87,7 +87,7 @@ export default async function EndorsementBriefPage({
     return <div className="container-page py-12 text-primary-500">Candidate not found</div>;
   }
 
-  const [{ data: rawPrincipleScores }, { data: evidenceData }] = await Promise.all([
+  const [{ data: rawPrincipleScores }, { data: evidenceData }, { data: contributionData }] = await Promise.all([
     supabase
       .from('principle_scores')
       .select('*')
@@ -100,11 +100,36 @@ export default async function EndorsementBriefPage({
       .eq('is_relevant', true)
       .order('source_date', { ascending: false })
       .limit(200),
+    supabase
+      .from('campaign_contributions')
+      .select('donor_name, donor_type, amount, cycle_year, donor_organizations(lean, name)')
+      .eq('politician_id', params.id)
+      .order('amount', { ascending: false }),
   ]);
 
   const politician = politicianRow;
   const principleScores = rawPrincipleScores ?? [];
   const evidence = evidenceData ?? [];
+  const contributions = (contributionData ?? []) as any[];
+
+  // Compute funding breakdown for most recent cycle with data
+  const cyclesWithData = [2024, 2022, 2020].filter(y => contributions.some((c: any) => c.cycle_year === y));
+  const latestCycle = cyclesWithData[0] ?? null;
+  const cycleContribs = latestCycle ? contributions.filter((c: any) => c.cycle_year === latestCycle) : [];
+  const fundingTotal = cycleContribs.reduce((s: number, c: any) => s + c.amount, 0);
+  const fundingBuckets = { pro_chamber: 0, anti_chamber: 0, unknown: 0 };
+  for (const c of cycleContribs) {
+    const lean = c.donor_type !== 'individual' && c.donor_organizations?.lean
+      ? c.donor_organizations.lean as string
+      : 'unknown';
+    if (lean === 'pro_chamber') fundingBuckets.pro_chamber += c.amount;
+    else if (lean === 'anti_chamber') fundingBuckets.anti_chamber += c.amount;
+    else fundingBuckets.unknown += c.amount;
+  }
+  const topOrgDonors = cycleContribs
+    .filter((c: any) => c.donor_type !== 'individual')
+    .slice(0, 6);
+  const hasFunding = cycleContribs.length > 0;
 
   const overallData = extractOverallScore(politicianRow);
   const overallScore = overallData?.overall_score ?? 0;
@@ -385,6 +410,69 @@ export default async function EndorsementBriefPage({
               );
             })}
           </div>
+        </section>
+      )}
+
+      {/* CAMPAIGN FUNDING */}
+      {hasFunding && (
+        <section className="mb-8">
+          <h2 className="text-lg font-bold text-primary-950 mb-4 uppercase tracking-wide" style={{ borderBottom: '1px solid #e2e8f0', paddingBottom: 6 }}>
+            Campaign Funding — {latestCycle} Cycle
+          </h2>
+
+          {/* Alignment breakdown */}
+          <div className="rounded-xl p-4 mb-4" style={{ border: '1px solid #e2e8f0', background: '#f8fafc' }}>
+            <p className="text-caption text-primary-500 mb-3">
+              Total raised: <strong className="text-primary-950">{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(fundingTotal)}</strong>
+            </p>
+            {/* Stacked bar */}
+            <div className="flex rounded-full overflow-hidden h-3 mb-3" style={{ background: '#e5e7eb' }}>
+              {fundingTotal > 0 && (['pro_chamber', 'anti_chamber', 'unknown'] as const).map(lean => {
+                const pct = (fundingBuckets[lean] / fundingTotal) * 100;
+                if (pct < 1) return null;
+                const colors: Record<string, string> = { pro_chamber: '#16a34a', anti_chamber: '#dc2626', unknown: '#d1d5db' };
+                return <div key={lean} style={{ width: `${pct}%`, background: colors[lean] }} />;
+              })}
+            </div>
+            <div className="flex gap-4 flex-wrap text-caption">
+              {([['pro_chamber', '#166534', '#dcfce7'], ['anti_chamber', '#991b1b', '#fee2e2'], ['unknown', '#6b7280', '#f3f4f6']] as const).map(([lean, color, bg]) => {
+                const pct = fundingTotal > 0 ? Math.round((fundingBuckets[lean] / fundingTotal) * 100) : 0;
+                const labels: Record<string, string> = { pro_chamber: 'Pro-Chamber', anti_chamber: 'Anti-Chamber', unknown: 'Unknown/Individual' };
+                return (
+                  <span key={lean} className="flex items-center gap-1.5 font-semibold px-2 py-0.5 rounded" style={{ color, background: bg }}>
+                    {pct}% {labels[lean]}
+                  </span>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Top org donors */}
+          {topOrgDonors.length > 0 && (
+            <div>
+              <p className="text-caption font-semibold uppercase tracking-wide text-primary-400 mb-2">Top Organizational Donors</p>
+              <div className="space-y-1.5">
+                {topOrgDonors.map((c: any, i: number) => {
+                  const lean = c.donor_organizations?.lean ?? 'unknown';
+                  const leanColors: Record<string, [string, string]> = {
+                    pro_chamber: ['#166534', '#dcfce7'],
+                    anti_chamber: ['#991b1b', '#fee2e2'],
+                    neutral: ['#374151', '#f3f4f6'],
+                    unknown: ['#6b7280', '#f9fafb'],
+                  };
+                  const leanLabels: Record<string, string> = { pro_chamber: 'Pro-Chamber', anti_chamber: 'Anti-Chamber', neutral: 'Neutral', unknown: 'Unknown' };
+                  const [color, bg] = leanColors[lean] ?? leanColors.unknown;
+                  return (
+                    <div key={i} className="flex items-center justify-between gap-3 py-2 px-3 rounded-lg text-caption" style={{ border: '1px solid #f1f5f9' }}>
+                      <span className="text-primary-800 font-medium flex-1">{c.donor_name}</span>
+                      <span className="font-semibold px-2 py-0.5 rounded text-xs flex-shrink-0" style={{ color, background: bg }}>{leanLabels[lean]}</span>
+                      <span className="font-mono text-primary-900 flex-shrink-0">{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(c.amount)}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </section>
       )}
 
