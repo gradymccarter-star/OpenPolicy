@@ -264,7 +264,7 @@ async function upsertEvidence(supabase, politicianId, item, sourceName, seenHash
 
   const { error } = await supabase.from('evidence_items').upsert({
     politician_id: politicianId,
-    evidence_type: 'press_release',
+    evidence_type: 'news_article',
     source_text: sourceText,
     source_url: url,
     source_date: parseDate(item.pubDate),

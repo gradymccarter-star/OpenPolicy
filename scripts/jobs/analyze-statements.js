@@ -168,7 +168,7 @@ const CLAIM_SCORE_MAP = {
 };
 
 const BILL_EVIDENCE_TYPES = ['floor_vote', 'bill_sponsorship', 'bill_cosponsorship'];
-const STATEMENT_EVIDENCE_TYPES = ['committee_statement', 'floor_speech', 'press_release', 'social_media'];
+const STATEMENT_EVIDENCE_TYPES = ['committee_statement', 'floor_speech', 'press_release', 'news_article', 'social_media'];
 const CHUNK = 200;
 
 // ============================================================
