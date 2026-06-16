@@ -54,7 +54,7 @@ const delay = ms => new Promise(r => setTimeout(r, ms));
 const CANDIDATE_COMMITTEE_PATTERNS = [
   /\bfor\s+(state\s+)?(?:house|senate|congress|representative|rep\.|governor|gov\.)\b/i,
   /\belecti(?:on|ng)\b.*\bcommittee\b/i,
-  /\bcampaign\s+(?:committee|fund|account)\b/i,
+  /\bcampaign\s+(?:committee|cmte|fund|account)\b/i,
   /\bfriends\s+of\b/i,
   /\bcitizens?\s+for\b/i,
   /\bvote\s+for\b/i,
