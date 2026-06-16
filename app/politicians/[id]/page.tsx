@@ -2,7 +2,7 @@ import Link from 'next/link';
 import ScoreGauge from '@/components/scores/ScoreGauge';
 import PrincipleScoreBar from '@/components/scores/PrincipleScoreBar';
 import RadarChart from '@/components/scores/RadarChart';
-import EvidenceAccordion from '@/components/politicians/EvidenceAccordion';
+import ProfileTabs from '@/components/politicians/ProfileTabs';
 import { PartyBadge } from '@/components/ui/Badge';
 import { getSupabase, extractOverallScore } from '@/lib/db/client';
 import { PA_CHAMBER_PRINCIPLES, EVIDENCE_TYPE_LABELS, EVIDENCE_WEIGHTS } from '@/lib/utils/constants';
@@ -31,7 +31,7 @@ export default async function CandidateDetailPage({
     return <div className="container-page py-12 text-primary-500">Candidate not found</div>;
   }
 
-  const [{ data: rawPrincipleScores }, { data: evidenceData }] = await Promise.all([
+  const [{ data: rawPrincipleScores }, { data: evidenceData }, { data: contributionData }] = await Promise.all([
     supabase
       .from('principle_scores')
       .select('*')
@@ -44,6 +44,11 @@ export default async function CandidateDetailPage({
       .eq('is_relevant', true)
       .order('source_date', { ascending: false })
       .limit(50),
+    supabase
+      .from('campaign_contributions')
+      .select('*, donor_organizations(lean, industry)')
+      .eq('politician_id', params.id)
+      .order('amount', { ascending: false }),
   ]);
 
   const politician = politicianRow;
@@ -52,6 +57,7 @@ export default async function CandidateDetailPage({
     ...item,
     claims: item.extracted_claims ?? [],
   }));
+  const contributions = (contributionData ?? []) as any[];
 
   const overallData = extractOverallScore(politicianRow);
   const overallScore = overallData?.overall_score ?? 0;
@@ -62,6 +68,82 @@ export default async function CandidateDetailPage({
     const ps = principleScores.find((s: any) => s.principle === key);
     return { label: key, value: ps?.score ?? ((overallData as any)?.[`${key.toLowerCase()}_score`] ?? 0) };
   });
+
+  const principleScoresSection = (
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="card p-8 flex items-center justify-center">
+        <RadarChart scores={radarScores} size={260} label="Issue Profile" />
+      </div>
+      <div className="lg:col-span-2 card p-8">
+        <h2 className="text-heading-3 mb-6">PA Chamber Priority Alignment</h2>
+        <div className="space-y-6">
+          {principleScores.map((ps: any) => {
+            const principleInfo = PA_CHAMBER_PRINCIPLES[ps.principle];
+            return (
+              <PrincipleScoreBar
+                key={ps.principle}
+                principleName={principleInfo?.name ?? ps.principle}
+                score={ps.score}
+                confidence={ps.confidence_overall}
+                numEvidenceItems={ps.num_evidence_items}
+                numVotes={ps.num_votes}
+                numSponsorships={ps.num_sponsorships}
+                numStatements={ps.num_statements}
+              />
+            );
+          })}
+          {principleScores.length === 0 && (
+            <div className="space-y-6">
+              {Object.entries(PA_CHAMBER_PRINCIPLES).map(([key, p]) => {
+                const score = (overallData as any)?.[`${key.toLowerCase()}_score`] ?? 0;
+                return (
+                  <PrincipleScoreBar
+                    key={key}
+                    principleName={p.name}
+                    score={score}
+                    confidence={overallConfidence}
+                  />
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+
+  const methodologySection = (
+    <div className="card p-8">
+      <h2 className="text-heading-3 mb-6">How This Score Was Calculated</h2>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {[
+          { num: '1', title: 'Evidence Collection', desc: 'We collect floor votes, committee votes, bill sponsorships, co-sponsorships, committee statements, floor speeches, press releases, and candidate questionnaire responses from PA General Assembly records and public sources.' },
+          { num: '2', title: 'AI Classification', desc: 'Each evidence item is filtered by PA business relevance keywords, then classified by Claude AI for alignment with the nine Chamber priorities. Bills are classified for direction. Statements have structured claims extracted.' },
+          { num: '3', title: 'Weighted Scoring', desc: 'Scores are computed using transparent math. Bill sponsorships carry the highest weight. Sponsorships tied to Chamber priority bills receive a 3× multiplier. Temporal decay reduces older evidence. Every claim links to its source.' },
+        ].map(step => (
+          <div key={step.num} className="p-5" style={{ border: '1px solid var(--border)', borderRadius: '12px' }}>
+            <div className="w-8 h-8 bg-primary-950 text-white rounded-full flex items-center justify-center font-bold text-caption mb-3">{step.num}</div>
+            <h3 className="font-semibold text-primary-950 mb-2 text-body-sm">{step.title}</h3>
+            <p className="text-caption text-primary-500 leading-relaxed">{step.desc}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-6 pt-6" style={{ borderTop: '1px solid var(--border)' }}>
+        <h3 className="font-semibold text-primary-950 mb-3 text-body-sm">Evidence Type Weights</h3>
+        <div className="flex flex-wrap gap-3">
+          {Object.entries(EVIDENCE_WEIGHTS).map(([type, weight]) => (
+            <div key={type} className="flex items-center space-x-2 rounded-lg px-3 py-2" style={{ background: 'var(--surface-canvas)' }}>
+              <span className="text-caption font-medium text-primary-500">
+                {EVIDENCE_TYPE_LABELS[type] || type}
+              </span>
+              <span className="text-caption font-bold text-primary-950">{weight}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <main className="container-page py-12">
@@ -118,88 +200,13 @@ export default async function CandidateDetailPage({
         </div>
       </div>
 
-      {/* Radar + Principle Bars */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-        <div className="card p-8 flex items-center justify-center">
-          <RadarChart scores={radarScores} size={260} label="Issue Profile" />
-        </div>
-        <div className="lg:col-span-2 card p-8">
-          <h2 className="text-heading-3 mb-6">PA Chamber Priority Alignment</h2>
-          <div className="space-y-6">
-            {principleScores.map((ps: any) => {
-              const principleInfo = PA_CHAMBER_PRINCIPLES[ps.principle];
-              return (
-                <PrincipleScoreBar
-                  key={ps.principle}
-                  principleName={principleInfo?.name ?? ps.principle}
-                  score={ps.score}
-                  confidence={ps.confidence_overall}
-                  numEvidenceItems={ps.num_evidence_items}
-                  numVotes={ps.num_votes}
-                  numSponsorships={ps.num_sponsorships}
-                  numStatements={ps.num_statements}
-                />
-              );
-            })}
-            {principleScores.length === 0 && (
-              <div className="space-y-6">
-                {Object.entries(PA_CHAMBER_PRINCIPLES).map(([key, p]) => {
-                  const score = (overallData as any)?.[`${key.toLowerCase()}_score`] ?? 0;
-                  return (
-                    <PrincipleScoreBar
-                      key={key}
-                      principleName={p.name}
-                      score={score}
-                      confidence={overallConfidence}
-                    />
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Methodology */}
-      <div className="card p-8 mb-8">
-        <h2 className="text-heading-3 mb-6">How This Score Was Calculated</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            { num: '1', title: 'Evidence Collection', desc: 'We collect floor votes, committee votes, bill sponsorships, co-sponsorships, committee statements, floor speeches, press releases, and candidate questionnaire responses from PA General Assembly records and public sources.' },
-            { num: '2', title: 'AI Classification', desc: 'Each evidence item is filtered by PA business relevance keywords, then classified by Claude AI for alignment with the nine Chamber priorities. Bills are classified for direction. Statements have structured claims extracted.' },
-            { num: '3', title: 'Weighted Scoring', desc: 'Scores are computed using transparent math. Bill sponsorships carry the highest weight. Sponsorships tied to Chamber priority bills receive a 3× multiplier. Temporal decay reduces older evidence. Every claim links to its source.' },
-          ].map(step => (
-            <div key={step.num} className="p-5" style={{ border: '1px solid var(--border)', borderRadius: '12px' }}>
-              <div className="w-8 h-8 bg-primary-950 text-white rounded-full flex items-center justify-center font-bold text-caption mb-3">{step.num}</div>
-              <h3 className="font-semibold text-primary-950 mb-2 text-body-sm">{step.title}</h3>
-              <p className="text-caption text-primary-500 leading-relaxed">{step.desc}</p>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-6 pt-6" style={{ borderTop: '1px solid var(--border)' }}>
-          <h3 className="font-semibold text-primary-950 mb-3 text-body-sm">Evidence Type Weights</h3>
-          <div className="flex flex-wrap gap-3">
-            {Object.entries(EVIDENCE_WEIGHTS).map(([type, weight]) => (
-              <div key={type} className="flex items-center space-x-2 rounded-lg px-3 py-2" style={{ background: 'var(--surface-canvas)' }}>
-                <span className="text-caption font-medium text-primary-500">
-                  {EVIDENCE_TYPE_LABELS[type] || type}
-                </span>
-                <span className="text-caption font-bold text-primary-950">{weight}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Evidence Trail */}
-      <div className="card p-8">
-        <h2 className="text-heading-3 mb-2">Evidence Trail</h2>
-        <p className="text-body-sm text-primary-400 mb-6">
-          Every score is traceable to the specific evidence items below, organized by source type. Click any folder to expand it.
-        </p>
-        <EvidenceAccordion items={evidenceItems} />
-      </div>
+      {/* Tabbed content: Analysis | Funding */}
+      <ProfileTabs
+        evidenceItems={evidenceItems}
+        contributions={contributions}
+        principleScoresSection={principleScoresSection}
+        methodologySection={methodologySection}
+      />
     </main>
   );
 }
