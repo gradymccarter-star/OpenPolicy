@@ -26,7 +26,7 @@ const LEAN_CONFIG: Record<Lean, { label: string; color: string; bg: string; bar:
   pro_chamber:  { label: 'Pro-Chamber',  color: '#166534', bg: '#dcfce7', bar: '#16a34a' },
   anti_chamber: { label: 'Anti-Chamber', color: '#991b1b', bg: '#fee2e2', bar: '#dc2626' },
   neutral:      { label: 'Neutral',      color: '#374151', bg: '#f3f4f6', bar: '#6b7280' },
-  unknown:      { label: 'Unknown',      color: '#6b7280', bg: '#f9fafb', bar: '#d1d5db' },
+  unknown:      { label: 'Neutral / Unknown', color: '#6b7280', bg: '#f9fafb', bar: '#d1d5db' },
 };
 
 const CYCLES = [2024, 2022, 2020];

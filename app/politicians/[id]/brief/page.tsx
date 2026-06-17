@@ -437,7 +437,7 @@ export default async function EndorsementBriefPage({
             <div className="flex gap-4 flex-wrap text-caption">
               {([['pro_chamber', '#166534', '#dcfce7'], ['anti_chamber', '#991b1b', '#fee2e2'], ['unknown', '#6b7280', '#f3f4f6']] as const).map(([lean, color, bg]) => {
                 const pct = fundingTotal > 0 ? Math.round((fundingBuckets[lean] / fundingTotal) * 100) : 0;
-                const labels: Record<string, string> = { pro_chamber: 'Pro-Chamber', anti_chamber: 'Anti-Chamber', unknown: 'Unknown/Individual' };
+                const labels: Record<string, string> = { pro_chamber: 'Pro-Chamber', anti_chamber: 'Anti-Chamber', unknown: 'Neutral / Unknown' };
                 return (
                   <span key={lean} className="flex items-center gap-1.5 font-semibold px-2 py-0.5 rounded" style={{ color, background: bg }}>
                     {pct}% {labels[lean]}
@@ -460,7 +460,7 @@ export default async function EndorsementBriefPage({
                     neutral: ['#374151', '#f3f4f6'],
                     unknown: ['#6b7280', '#f9fafb'],
                   };
-                  const leanLabels: Record<string, string> = { pro_chamber: 'Pro-Chamber', anti_chamber: 'Anti-Chamber', neutral: 'Neutral', unknown: 'Unknown' };
+                  const leanLabels: Record<string, string> = { pro_chamber: 'Pro-Chamber', anti_chamber: 'Anti-Chamber', neutral: 'Neutral', unknown: 'Neutral / Unknown' };
                   const [color, bg] = leanColors[lean] ?? leanColors.unknown;
                   return (
                     <div key={i} className="flex items-center justify-between gap-3 py-2 px-3 rounded-lg text-caption" style={{ border: '1px solid #f1f5f9' }}>
