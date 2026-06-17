@@ -122,7 +122,7 @@ function DonutChart({ buckets, total }: { buckets: Record<Lean, number>; total: 
   );
 }
 
-function LeanBreakdown({ rows }: { rows: Contribution[] }) {
+function LeanBreakdown({ rows, cycle }: { readonly rows: Contribution[]; readonly cycle: number }) {
   const total = rows.reduce((s, c) => s + c.amount, 0);
   if (total === 0) return null;
 
@@ -138,8 +138,8 @@ function LeanBreakdown({ rows }: { rows: Contribution[] }) {
 
   return (
     <div className="card p-6 mb-6">
-      <h3 className="text-heading-3 mb-1">Funding Alignment</h3>
-      <p className="text-caption text-primary-400 mb-4">Based on donor organization classification across all contributions this cycle</p>
+      <h3 className="text-heading-3 mb-1">Funding Alignment — {cycle} Election Cycle</h3>
+      <p className="text-caption text-primary-400 mb-4">Breakdown of {fmt(total)} raised during the {cycle} cycle by donor organization alignment</p>
 
       <div className="flex flex-col md:flex-row gap-6 items-center">
         <DonutChart buckets={buckets} total={total} />
@@ -247,7 +247,7 @@ function CollapsibleTable({
                     <td className="px-5 py-2.5 text-right text-primary-400">
                       {r.contribution_date
                         ? new Date(r.contribution_date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-                        : `${r.cycle_year}`}
+                        : `${r.cycle_year} cycle`}
                     </td>
                   </tr>
                 );
@@ -307,9 +307,38 @@ export default function FundingTab({ contributions }: Props) {
         </div>
       </a>
 
+      {/* Cross-cycle summary */}
+      {(() => {
+        const allTotal = cycleTotals.filter(c => c.hasData).reduce((s, c) => s + c.total, 0);
+        const cycles = cycleTotals.filter(c => c.hasData).map(c => c.year);
+        const allDonors = cycleTotals.filter(c => c.hasData).reduce((s, c) => s + c.count, 0);
+        return allTotal > 0 ? (
+          <div className="rounded-xl px-5 py-4 flex flex-wrap gap-4 items-center" style={{ background: 'var(--surface-canvas)', border: '1px solid var(--border)' }}>
+            <div>
+              <div className="text-caption text-primary-400 mb-0.5">Total raised across all cycles</div>
+              <div className="text-xl font-bold text-primary-950">{fmt(allTotal)}</div>
+            </div>
+            <div className="w-px h-8 hidden md:block" style={{ background: 'var(--border)' }} />
+            <div>
+              <div className="text-caption text-primary-400 mb-0.5">Election cycles covered</div>
+              <div className="text-body-sm font-bold text-primary-950">{cycles.join(' · ')}</div>
+            </div>
+            <div className="w-px h-8 hidden md:block" style={{ background: 'var(--border)' }} />
+            <div>
+              <div className="text-caption text-primary-400 mb-0.5">Total donor contributions</div>
+              <div className="text-body-sm font-bold text-primary-950">{allDonors.toLocaleString()}</div>
+            </div>
+            <div className="ml-auto text-caption text-primary-400 hidden md:block">Source: FollowTheMoney.org</div>
+          </div>
+        ) : null;
+      })()}
+
       {/* Cycle selector */}
       <div className="card p-6">
-        <h3 className="text-heading-3 mb-4">Fundraising by Cycle</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-heading-3">Fundraising by Election Cycle</h3>
+          <span className="text-caption text-primary-400">Select a cycle to explore</span>
+        </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {cycleTotals.map(({ year, total, count, hasData }) => (
             <button
@@ -323,16 +352,18 @@ export default function FundingTab({ contributions }: Props) {
                 cursor: hasData ? 'pointer' : 'default',
               }}
             >
-              <div className="text-caption font-semibold text-primary-400 mb-1">{year}</div>
+              <div className="text-caption font-semibold mb-0.5" style={{ color: activeCycle === year ? '#c9a84c' : 'var(--primary-400)' }}>
+                {year} Election Cycle
+              </div>
               <div className="text-body-sm font-bold text-primary-950">{hasData ? fmt(total) : '—'}</div>
-              {hasData && <div className="text-caption text-primary-400">{count} donor{count !== 1 ? 's' : ''}</div>}
+              {hasData && <div className="text-caption text-primary-400 mt-0.5">{count.toLocaleString()} contribution{count === 1 ? '' : 's'}</div>}
             </button>
           ))}
         </div>
       </div>
 
       {/* Lean breakdown with donut chart */}
-      <LeanBreakdown rows={cycleRows} />
+      <LeanBreakdown rows={cycleRows} cycle={activeCycle} />
 
       {/* Contribution tables */}
       <div className="space-y-3">

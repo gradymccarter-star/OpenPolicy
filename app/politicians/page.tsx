@@ -5,10 +5,21 @@ import type { PoliticianWithScores } from '@/lib/utils/types';
 
 async function getPoliticianIdsWithFunding() {
   const supabase = getSupabase();
-  const { data } = await supabase
-    .from('campaign_contributions')
-    .select('politician_id');
-  return Array.from(new Set((data ?? []).map((r: { politician_id: string }) => r.politician_id)));
+  // Paginate to bypass the 1000-row default limit — there are ~36k contribution rows
+  const ids = new Set<string>();
+  const PAGE = 1000;
+  let from = 0;
+  while (true) {
+    const { data } = await supabase
+      .from('campaign_contributions')
+      .select('politician_id')
+      .range(from, from + PAGE - 1);
+    if (!data || data.length === 0) break;
+    for (const r of data) if (r.politician_id) ids.add(r.politician_id);
+    if (data.length < PAGE) break;
+    from += PAGE;
+  }
+  return Array.from(ids);
 }
 
 async function getPoliticians() {
