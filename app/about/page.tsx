@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { PA_CHAMBER_PRINCIPLES } from '@/lib/utils/constants';
+import ScoringPipeline from '@/components/methodology/ScoringPipeline';
 
 const TEAM_MEMBERS = [
   {
@@ -20,29 +21,6 @@ const TEAM_MEMBERS = [
 const PRINCIPLE_COLORS = [
   '#c9a84c','#3b82f6','#10b981','#f59e0b','#8b5cf6',
   '#ef4444','#06b6d4','#f97316','#ec4899',
-];
-
-const HOW_IT_WORKS = [
-  {
-    step: '1',
-    title: 'Evidence Collection',
-    body: 'Floor votes, bill sponsorships, committee actions, press releases, and public statements are gathered from official PA House records, LegiScan, and public sources.',
-  },
-  {
-    step: '2',
-    title: 'AI Classification',
-    body: 'Claude AI reads each evidence item, determines which of the 9 PA Chamber priorities it touches, whether the action supports or opposes that priority, and extracts the key claim.',
-  },
-  {
-    step: '3',
-    title: 'Deterministic Scoring',
-    body: 'Scores are calculated with transparent, fixed math — the AI never produces a score directly. Bill sponsorships carry the highest weight; floor votes and co-sponsorships follow. Every score is traceable to a specific source.',
-  },
-  {
-    step: '4',
-    title: 'Confidence Weighting',
-    body: 'Each candidate gets a confidence percentage based on how much evidence exists. Challengers with no voting record receive lower confidence scores. The final alignment score and confidence are displayed together.',
-  },
 ];
 
 export default function AboutPage() {
@@ -66,7 +44,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <div className="container-page py-12 space-y-8">
+      <div className="container-page py-12 space-y-10">
 
         {/* What this is */}
         <section className="card p-8">
@@ -83,81 +61,96 @@ export default function AboutPage() {
             from FollowTheMoney.org (2020–2024 cycles) to show each candidate&apos;s donor alignment with
             Chamber priorities.
           </p>
-        </section>
-
-        {/* How it works */}
-        <section className="card p-8">
-          <h2 className="text-heading-3 mb-6">How Scores Are Calculated</h2>
-          <div className="space-y-5">
-            {HOW_IT_WORKS.map(({ step, title, body }) => (
-              <div key={step} className="flex gap-5">
-                <div
-                  className="flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm"
-                  style={{ background: '#0a1628', color: '#c9a84c' }}
-                >
-                  {step}
-                </div>
-                <div>
-                  <p className="font-semibold text-primary-950 text-body-sm mb-1">{title}</p>
-                  <p className="text-body-sm text-primary-500 leading-relaxed">{body}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="mt-6 rounded-xl p-4" style={{ background: 'rgba(201,168,76,0.06)', border: '1px solid rgba(201,168,76,0.2)' }}>
+          <div className="mt-5 rounded-xl p-4" style={{ background: 'rgba(201,168,76,0.06)', border: '1px solid rgba(201,168,76,0.2)' }}>
             <p className="text-caption text-primary-600 leading-relaxed">
               <strong className="text-primary-950">Score interpretation:</strong> A score of 100% means a candidate&apos;s
               entire legislative record aligns with Chamber priorities. 0% means full opposition. Most incumbents
-              fall between 40–80%. Confidence reflects how much evidence exists — low confidence scores (under 40%)
+              fall between 40–80%. Confidence reflects how much evidence exists — scores below 40% confidence
               should be read carefully.
             </p>
           </div>
         </section>
 
-        {/* Scoring criteria — the 9 principles */}
+        {/* Scoring pipeline */}
         <section>
-          <div className="mb-5">
-            <h2 className="text-heading-3 mb-1">The 9 Scoring Dimensions</h2>
+          <div className="mb-6">
+            <h2 className="text-heading-3 mb-1">How Scores Are Calculated</h2>
             <p className="text-body-sm text-primary-500">
-              Derived from the PA Chamber&apos;s 2025 Legislative Agenda. Every score is broken down across these nine priorities.
+              Click any step to see details on how evidence is collected, weighted, and turned into a score.
             </p>
           </div>
-          <div className="space-y-3">
+          <ScoringPipeline />
+        </section>
+
+        {/* The 9 scoring dimensions */}
+        <section>
+          <div className="mb-6">
+            <h2 className="text-heading-3 mb-1">The 9 Scoring Dimensions</h2>
+            <p className="text-body-sm text-primary-500">
+              Derived from the PA Chamber&apos;s 2025 Legislative Agenda. Every candidate score is broken down across these nine priorities.
+            </p>
+          </div>
+
+          <div className="space-y-4">
             {principleEntries.map(([key, principle], index) => {
               const color = PRINCIPLE_COLORS[index % PRINCIPLE_COLORS.length];
               return (
                 <div
                   key={key}
-                  className="rounded-xl p-5 bg-white"
+                  className="rounded-2xl p-6 bg-white"
                   style={{ border: '1px solid #e5e7eb', borderLeft: `4px solid ${color}` }}
                 >
-                  <div className="flex items-start gap-4">
+                  <div className="flex items-start gap-5">
                     <div
-                      className="flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center font-bold text-sm"
+                      className="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center text-base font-bold"
                       style={{ background: color, color: index === 0 ? '#0a1628' : '#fff' }}
                     >
                       {index + 1}
                     </div>
                     <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-body-sm font-bold text-primary-950">{principle.name}</h3>
-                        <span className="text-caption font-bold px-1.5 py-0.5 rounded" style={{ background: `${color}18`, color }}>{key}</span>
+                      <div className="flex items-center gap-3 mb-1.5">
+                        <h3 className="text-heading-4">{principle.name}</h3>
+                        <span
+                          className="text-caption font-bold px-2 py-0.5 rounded-full"
+                          style={{ background: `${color}18`, color }}
+                        >
+                          {key}
+                        </span>
                       </div>
-                      <p className="text-caption text-primary-500 leading-relaxed">{principle.description}</p>
+                      <p className="text-body-sm text-primary-500 mb-3">{principle.description}</p>
+                      <div>
+                        <p className="text-caption font-semibold uppercase tracking-widest mb-2" style={{ color }}>
+                          Key Indicators
+                        </p>
+                        <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-1">
+                          {principle.indicators.map((indicator: string, i: number) => (
+                            <li key={i} className="flex items-start gap-1.5 text-body-sm text-primary-500">
+                              <span style={{ color, marginTop: '0.2rem', flexShrink: 0 }}>▸</span>
+                              {indicator}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
                   </div>
                 </div>
               );
             })}
           </div>
-          <div className="mt-4">
-            <Link
-              href="/principles"
-              className="text-body-sm font-medium hover:underline"
-              style={{ color: '#c9a84c' }}
-            >
-              View full scoring criteria with key indicators →
-            </Link>
+
+          <div
+            className="mt-6 rounded-xl p-6"
+            style={{ background: '#0a1628', color: 'rgba(255,255,255,0.7)' }}
+          >
+            <p className="text-caption font-semibold uppercase tracking-widest mb-2" style={{ color: '#c9a84c' }}>
+              Evidence Weighting
+            </p>
+            <p className="text-body-sm leading-relaxed">
+              Bill sponsorships carry the highest weight, followed by floor and committee votes,
+              co-sponsorships, and questionnaire responses. Sponsorships tied to Chamber priority bills
+              receive an additional 3× multiplier. Public statements, press releases, and social media
+              carry lower weight but provide crucial context for challengers without a voting record.
+            </p>
           </div>
         </section>
 

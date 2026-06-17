@@ -133,8 +133,8 @@ export default function CompareClient({ allPoliticians, initialA, initialB }: Co
                 <thead>
                   <tr style={{ background: '#f8f7f5', borderBottom: '1px solid #e5e7eb' }}>
                     <th className="text-left py-3 px-6 font-semibold text-primary-950">Principle</th>
-                    <th className="text-center py-3 px-4 font-semibold" style={{ color: PARTY_COLORS[candidateA.party] || '#0a1628' }}>{candidateA.last_name}</th>
-                    <th className="text-center py-3 px-4 font-semibold" style={{ color: PARTY_COLORS[candidateB.party] || '#6b7280' }}>{candidateB.last_name}</th>
+                    <th className="text-center py-3 px-4 font-semibold text-primary-950">{candidateA.last_name}</th>
+                    <th className="text-center py-3 px-4 font-semibold text-primary-950">{candidateB.last_name}</th>
                     <th className="text-center py-3 px-6 font-semibold text-primary-950">Leader</th>
                   </tr>
                 </thead>
@@ -147,7 +147,7 @@ export default function CompareClient({ allPoliticians, initialA, initialB }: Co
                     const absDiff = Math.abs(Math.round(diff * 100));
                     const tied = absDiff < 2;
                     const leaderName = diff > 0 ? candidateA.last_name : candidateB.last_name;
-                    const leaderColor = diff > 0 ? (PARTY_COLORS[candidateA.party] || '#0a1628') : (PARTY_COLORS[candidateB.party] || '#6b7280');
+                    const leaderColor = diff > 0 ? '#16a34a' : '#dc2626';
 
                     return (
                       <tr key={key} style={{ borderBottom: '1px solid #f3f4f6', background: idx % 2 === 0 ? '#fff' : '#fafafa' }}>
@@ -199,7 +199,7 @@ export default function CompareClient({ allPoliticians, initialA, initialB }: Co
                           <span className="font-bold text-base px-2 py-0.5 rounded-full" style={{ background: 'rgba(107,114,128,0.12)', color: '#6b7280' }}>Tied</span>
                         );
                         const name = d > 0 ? candidateA.last_name : candidateB.last_name;
-                        const col = d > 0 ? (PARTY_COLORS[candidateA.party] || '#0a1628') : (PARTY_COLORS[candidateB.party] || '#6b7280');
+                        const col = d > 0 ? '#16a34a' : '#dc2626';
                         return (
                           <span className="font-bold text-base px-2 py-0.5 rounded-full whitespace-nowrap" style={{ background: `${col}18`, color: col }}>
                             {name} +{abd}%
