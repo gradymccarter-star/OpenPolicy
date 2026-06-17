@@ -122,8 +122,11 @@ export default function CompareClient({ allPoliticians, initialA, initialB }: Co
 
           {/* Principle-by-Principle Comparison */}
           <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid #e5e7eb' }}>
-            <div className="px-8 py-5" style={{ background: '#0a1628' }}>
+            <div className="px-8 py-5 flex items-center justify-between flex-wrap gap-3" style={{ background: '#0a1628' }}>
               <h2 className="text-base font-bold text-white">Principle-by-Principle Breakdown</h2>
+              <p className="text-caption" style={{ color: 'rgba(255,255,255,0.45)' }}>
+                Scores = % alignment with PA Chamber priorities (0% opposed · 100% fully aligned)
+              </p>
             </div>
             <div className="overflow-x-auto bg-white">
               <table className="w-full text-body-sm">
@@ -132,7 +135,7 @@ export default function CompareClient({ allPoliticians, initialA, initialB }: Co
                     <th className="text-left py-3 px-6 font-semibold text-primary-950">Principle</th>
                     <th className="text-center py-3 px-4 font-semibold" style={{ color: PARTY_COLORS[candidateA.party] || '#0a1628' }}>{candidateA.last_name}</th>
                     <th className="text-center py-3 px-4 font-semibold" style={{ color: PARTY_COLORS[candidateB.party] || '#6b7280' }}>{candidateB.last_name}</th>
-                    <th className="text-center py-3 px-6 font-semibold text-primary-950">Δ</th>
+                    <th className="text-center py-3 px-6 font-semibold text-primary-950">Leader</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -141,6 +144,10 @@ export default function CompareClient({ allPoliticians, initialA, initialB }: Co
                     const scoreA = (candidateA.overall_score as any)?.[`${key.toLowerCase()}_score`] ?? 0;
                     const scoreB = (candidateB.overall_score as any)?.[`${key.toLowerCase()}_score`] ?? 0;
                     const diff = scoreA - scoreB;
+                    const absDiff = Math.abs(Math.round(diff * 100));
+                    const tied = absDiff < 2;
+                    const leaderName = diff > 0 ? candidateA.last_name : candidateB.last_name;
+                    const leaderColor = diff > 0 ? (PARTY_COLORS[candidateA.party] || '#0a1628') : (PARTY_COLORS[candidateB.party] || '#6b7280');
 
                     return (
                       <tr key={key} style={{ borderBottom: '1px solid #f3f4f6', background: idx % 2 === 0 ? '#fff' : '#fafafa' }}>
@@ -159,12 +166,15 @@ export default function CompareClient({ allPoliticians, initialA, initialB }: Co
                           </span>
                         </td>
                         <td className="text-center py-3 px-6">
-                          <span className="text-caption font-bold px-2 py-0.5 rounded-full" style={{
-                            background: diff > 0.02 ? 'rgba(16,185,129,0.1)' : diff < -0.02 ? 'rgba(239,68,68,0.1)' : 'rgba(107,114,128,0.1)',
-                            color: diff > 0.02 ? '#059669' : diff < -0.02 ? '#dc2626' : '#6b7280',
-                          }}>
-                            {diff > 0 ? '+' : ''}{Math.round(diff * 100)}%
-                          </span>
+                          {tied ? (
+                            <span className="text-caption font-semibold px-2 py-0.5 rounded-full" style={{ background: 'rgba(107,114,128,0.1)', color: '#6b7280' }}>
+                              Tied
+                            </span>
+                          ) : (
+                            <span className="text-caption font-bold px-2 py-0.5 rounded-full whitespace-nowrap" style={{ background: `${leaderColor}18`, color: leaderColor }}>
+                              {leaderName} +{absDiff}%
+                            </span>
+                          )}
                         </td>
                       </tr>
                     );
@@ -184,12 +194,15 @@ export default function CompareClient({ allPoliticians, initialA, initialB }: Co
                     <td className="text-center py-4 px-6">
                       {(() => {
                         const d = (candidateA.overall_score?.overall_score ?? 0) - (candidateB.overall_score?.overall_score ?? 0);
+                        const abd = Math.abs(Math.round(d * 100));
+                        if (abd < 2) return (
+                          <span className="font-bold text-base px-2 py-0.5 rounded-full" style={{ background: 'rgba(107,114,128,0.12)', color: '#6b7280' }}>Tied</span>
+                        );
+                        const name = d > 0 ? candidateA.last_name : candidateB.last_name;
+                        const col = d > 0 ? (PARTY_COLORS[candidateA.party] || '#0a1628') : (PARTY_COLORS[candidateB.party] || '#6b7280');
                         return (
-                          <span className="font-bold text-lg px-2 py-0.5 rounded-full" style={{
-                            background: d > 0.02 ? 'rgba(16,185,129,0.12)' : d < -0.02 ? 'rgba(239,68,68,0.12)' : 'rgba(107,114,128,0.12)',
-                            color: d > 0.02 ? '#059669' : d < -0.02 ? '#dc2626' : '#6b7280',
-                          }}>
-                            {d > 0 ? '+' : ''}{Math.round(d * 100)}%
+                          <span className="font-bold text-base px-2 py-0.5 rounded-full whitespace-nowrap" style={{ background: `${col}18`, color: col }}>
+                            {name} +{abd}%
                           </span>
                         );
                       })()}
