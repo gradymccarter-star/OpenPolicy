@@ -1,0 +1,1062 @@
+{
+  "source": "ACLU of Pennsylvania",
+  "source_url": "https://aclupalegislativescorecard.org/",
+  "session": "2025-2026",
+  "generated_at": "2026-07-03T03:14:26.539Z",
+  "notes": "Score is the vote_index (0–100 scale) from the ACLU-PA Legislative Scorecard. 100 = always voted with ACLU-PA positions (pro-civil-liberties); 50 = voted equally for and against; 0 = never voted with ACLU-PA positions. Scores are calculated from the raw vote tally: each pro-ACLU-PA vote = +1, each anti-ACLU-PA vote = −1; vote_index = ((raw_score + possible_votes) / (2 × possible_votes)) × 100. For the PA Chamber tool this provides a labor/civil-liberties left-right axis counterpoint to the Chamber score. Data sourced from aclupalegislativescorecard.org WordPress REST API (BillTrack50 plugin).",
+  "stats": {
+    "total_members": 209,
+    "dem_members": 104,
+    "rep_members": 105,
+    "avg_score": 52.2,
+    "avg_dem_score": 69.2,
+    "avg_rep_score": 35.2
+  },
+  "members": {
+    "Chris Rabb": {
+      "district": "200",
+      "score": 83,
+      "party": "D"
+    },
+    "Emily Kinkead": {
+      "district": "020",
+      "score": 78,
+      "party": "D"
+    },
+    "Andre Carroll": {
+      "district": "201",
+      "score": 78,
+      "party": "D"
+    },
+    "Malcolm Kenyatta": {
+      "district": "181",
+      "score": 77,
+      "party": "D"
+    },
+    "Ben Sanchez": {
+      "district": "153",
+      "score": 75,
+      "party": "D"
+    },
+    "Kristine Howard": {
+      "district": "167",
+      "score": 75,
+      "party": "D"
+    },
+    "La'Tasha Mayes": {
+      "district": "024",
+      "score": 75,
+      "party": "D"
+    },
+    "Kyle Donahue": {
+      "district": "113",
+      "score": 75,
+      "party": "D"
+    },
+    "Melissa Shusterman": {
+      "district": "157",
+      "score": 74,
+      "party": "D"
+    },
+    "Tim Briggs": {
+      "district": "149",
+      "score": 74,
+      "party": "D"
+    },
+    "Liz Hanbidge": {
+      "district": "061",
+      "score": 74,
+      "party": "D"
+    },
+    "Chris Pielli": {
+      "district": "156",
+      "score": 74,
+      "party": "D"
+    },
+    "Aerion Abney": {
+      "district": "019",
+      "score": 75,
+      "party": "D"
+    },
+    "Joe Hohenstein": {
+      "district": "177",
+      "score": 73,
+      "party": "D"
+    },
+    "Rick Krajewski": {
+      "district": "188",
+      "score": 86,
+      "party": "D"
+    },
+    "Ben Waxman": {
+      "district": "182",
+      "score": 80,
+      "party": "D"
+    },
+    "Danilo Burgos": {
+      "district": "197",
+      "score": 81,
+      "party": "D"
+    },
+    "Roni Green": {
+      "district": "190",
+      "score": 75,
+      "party": "D"
+    },
+    "Greg Vitali": {
+      "district": "166",
+      "score": 76,
+      "party": "D"
+    },
+    "Heather Boyd": {
+      "district": "163",
+      "score": 71,
+      "party": "D"
+    },
+    "Tim Brennan": {
+      "district": "029",
+      "score": 71,
+      "party": "D"
+    },
+    "Tarik Khan": {
+      "district": "194",
+      "score": 73,
+      "party": "D"
+    },
+    "Dan Miller": {
+      "district": "042",
+      "score": 81,
+      "party": "D"
+    },
+    "Tarah Probst": {
+      "district": "189",
+      "score": 71,
+      "party": "D"
+    },
+    "Abigail Salisbury": {
+      "district": "034",
+      "score": 73,
+      "party": "D"
+    },
+    "Joseph Webster": {
+      "district": "150",
+      "score": 71,
+      "party": "D"
+    },
+    "Anthony Bellmon": {
+      "district": "203",
+      "score": 70,
+      "party": "D"
+    },
+    "Nathan Davidson": {
+      "district": "103",
+      "score": 70,
+      "party": "D"
+    },
+    "Dave Delloso": {
+      "district": "162",
+      "score": 71,
+      "party": "D"
+    },
+    "Elizabeth Fiedler": {
+      "district": "184",
+      "score": 71,
+      "party": "D"
+    },
+    "Nancy Guenst": {
+      "district": "152",
+      "score": 70,
+      "party": "D"
+    },
+    "Manny Guzman": {
+      "district": "127",
+      "score": 70,
+      "party": "D"
+    },
+    "Keith Harris": {
+      "district": "195",
+      "score": 71,
+      "party": "D"
+    },
+    "Carol Hill-Evans": {
+      "district": "095",
+      "score": 70,
+      "party": "D"
+    },
+    "John Inglis": {
+      "district": "038",
+      "score": 70,
+      "party": "D"
+    },
+    "Carol Kazeem": {
+      "district": "159",
+      "score": 71,
+      "party": "D"
+    },
+    "Darisha Parker": {
+      "district": "198",
+      "score": 71,
+      "party": "D"
+    },
+    "Gregory Scott": {
+      "district": "054",
+      "score": 71,
+      "party": "D"
+    },
+    "Amen Brown": {
+      "district": "010",
+      "score": 68,
+      "party": "D"
+    },
+    "Morgan Cephas": {
+      "district": "192",
+      "score": 68,
+      "party": "D"
+    },
+    "Justin Fleming": {
+      "district": "105",
+      "score": 68,
+      "party": "D"
+    },
+    "Paul Friel": {
+      "district": "026",
+      "score": 68,
+      "party": "D"
+    },
+    "Pat Gallagher": {
+      "district": "173",
+      "score": 68,
+      "party": "D"
+    },
+    "Jordan Harris": {
+      "district": "186",
+      "score": 68,
+      "party": "D"
+    },
+    "Mary Isaacson": {
+      "district": "175",
+      "score": 68,
+      "party": "D"
+    },
+    "Bridget Kosierowski": {
+      "district": "114",
+      "score": 68,
+      "party": "D"
+    },
+    "Dave Madsen": {
+      "district": "104",
+      "score": 67,
+      "party": "D"
+    },
+    "Steve Malagari": {
+      "district": "053",
+      "score": 68,
+      "party": "D"
+    },
+    "Brandon Markosek": {
+      "district": "025",
+      "score": 68,
+      "party": "D"
+    },
+    "Izzy Smith-Wade-El": {
+      "district": "049",
+      "score": 68,
+      "party": "D"
+    },
+    "Regina Young": {
+      "district": "185",
+      "score": 68,
+      "party": "D"
+    },
+    "Jessica Benham": {
+      "district": "036",
+      "score": 67,
+      "party": "D"
+    },
+    "Ryan Bizzarro": {
+      "district": "003",
+      "score": 67,
+      "party": "D"
+    },
+    "Lisa Borowski": {
+      "district": "168",
+      "score": 67,
+      "party": "D"
+    },
+    "Matt Bradford": {
+      "district": "070",
+      "score": 67,
+      "party": "D"
+    },
+    "Johanny Cepeda-Freytiz": {
+      "district": "129",
+      "score": 67,
+      "party": "D"
+    },
+    "Missy Cerrato": {
+      "district": "151",
+      "score": 67,
+      "party": "D"
+    },
+    "Joe Ciresi": {
+      "district": "146",
+      "score": 67,
+      "party": "D"
+    },
+    "Scott Conklin": {
+      "district": "077",
+      "score": 67,
+      "party": "D"
+    },
+    "Gina Curry": {
+      "district": "164",
+      "score": 65,
+      "party": "D"
+    },
+    "Mary Jo Daley": {
+      "district": "148",
+      "score": 67,
+      "party": "D"
+    },
+    "Tina Davis": {
+      "district": "141",
+      "score": 67,
+      "party": "D"
+    },
+    "Jason Dawkins": {
+      "district": "179",
+      "score": 67,
+      "party": "D"
+    },
+    "Dan Deasy": {
+      "district": "027",
+      "score": 67,
+      "party": "D"
+    },
+    "Sean Dougherty": {
+      "district": "172",
+      "score": 67,
+      "party": "D"
+    },
+    "Dan Frankel": {
+      "district": "023",
+      "score": 67,
+      "party": "D"
+    },
+    "Bob Freeman": {
+      "district": "136",
+      "score": 67,
+      "party": "D"
+    },
+    "José Giral": {
+      "district": "180",
+      "score": 67,
+      "party": "D"
+    },
+    "Jim Haddock": {
+      "district": "118",
+      "score": 67,
+      "party": "D"
+    },
+    "Pat Harkins": {
+      "district": "001",
+      "score": 67,
+      "party": "D"
+    },
+    "Leanne Krueger": {
+      "district": "161",
+      "score": 67,
+      "party": "D"
+    },
+    "Maureen Madden": {
+      "district": "115",
+      "score": 67,
+      "party": "D"
+    },
+    "Rob Matzie": {
+      "district": "016",
+      "score": 67,
+      "party": "D"
+    },
+    "Joanna McClinton": {
+      "district": "191",
+      "score": 67,
+      "party": "D"
+    },
+    "Jeanne McNeill": {
+      "district": "133",
+      "score": 67,
+      "party": "D"
+    },
+    "Bob Merski": {
+      "district": "002",
+      "score": 67,
+      "party": "D"
+    },
+    "Kyle Mullins": {
+      "district": "112",
+      "score": 65,
+      "party": "D"
+    },
+    "Napoleon Nelson": {
+      "district": "154",
+      "score": 67,
+      "party": "D"
+    },
+    "Danielle Otten": {
+      "district": "155",
+      "score": 67,
+      "party": "D"
+    },
+    "Eddie Pashinski": {
+      "district": "121",
+      "score": 67,
+      "party": "D"
+    },
+    "Lindsay Powell": {
+      "district": "021",
+      "score": 65,
+      "party": "D"
+    },
+    "James Prokopiak": {
+      "district": "140",
+      "score": 67,
+      "party": "D"
+    },
+    "Nikki Rivera": {
+      "district": "096",
+      "score": 67,
+      "party": "D"
+    },
+    "Jacklyn Rusnock": {
+      "district": "126",
+      "score": 67,
+      "party": "D"
+    },
+    "Steve Samuelson": {
+      "district": "135",
+      "score": 67,
+      "party": "D"
+    },
+    "Mike Schlossberg": {
+      "district": "132",
+      "score": 67,
+      "party": "D"
+    },
+    "Pete Schweyer": {
+      "district": "134",
+      "score": 67,
+      "party": "D"
+    },
+    "Jared Solomon": {
+      "district": "202",
+      "score": 67,
+      "party": "D"
+    },
+    "Mandy Steele": {
+      "district": "033",
+      "score": 67,
+      "party": "D"
+    },
+    "Paul Takac": {
+      "district": "082",
+      "score": 67,
+      "party": "D"
+    },
+    "Arvind Venkat": {
+      "district": "030",
+      "score": 67,
+      "party": "D"
+    },
+    "Perry Warren": {
+      "district": "031",
+      "score": 67,
+      "party": "D"
+    },
+    "Dan Williams": {
+      "district": "074",
+      "score": 67,
+      "party": "D"
+    },
+    "Dan Goughnour": {
+      "district": "035",
+      "score": 65,
+      "party": "D"
+    },
+    "Ed Neilson": {
+      "district": "174",
+      "score": 64,
+      "party": "D"
+    },
+    "Jenn O'Mara": {
+      "district": "165",
+      "score": 64,
+      "party": "D"
+    },
+    "Christina Sappey": {
+      "district": "158",
+      "score": 64,
+      "party": "D"
+    },
+    "Brian Munroe": {
+      "district": "144",
+      "score": 62,
+      "party": "D"
+    },
+    "Josh Siegel": {
+      "district": "022",
+      "score": 69,
+      "party": "D"
+    },
+    "Joe McAndrew": {
+      "district": "032",
+      "score": 59,
+      "party": "D"
+    },
+    "Anita Kulik": {
+      "district": "045",
+      "score": 57,
+      "party": "D"
+    },
+    "Jennifer Mazzocco": {
+      "district": "042",
+      "score": 71,
+      "party": "D"
+    },
+    "Ana Tiburcio": {
+      "district": "022",
+      "score": 71,
+      "party": "D"
+    },
+    "Ryan Mackenzie": {
+      "district": "007",
+      "score": 67,
+      "party": "R"
+    },
+    "Abby Major": {
+      "district": "060",
+      "score": 55,
+      "party": "R"
+    },
+    "Joe Hogan": {
+      "district": "142",
+      "score": 52,
+      "party": "R"
+    },
+    "Tom Mehaffie": {
+      "district": "106",
+      "score": 52,
+      "party": "R"
+    },
+    "Frank Burns": {
+      "district": "072",
+      "score": 48,
+      "party": "D"
+    },
+    "Sheryl Delozier": {
+      "district": "088",
+      "score": 48,
+      "party": "R"
+    },
+    "Joe Emrick": {
+      "district": "137",
+      "score": 48,
+      "party": "R"
+    },
+    "Doyle Heffley": {
+      "district": "122",
+      "score": 48,
+      "party": "R"
+    },
+    "George Margetas": {
+      "district": "196",
+      "score": 40,
+      "party": "R"
+    },
+    "Craig Williams": {
+      "district": "160",
+      "score": 48,
+      "party": "R"
+    },
+    "Jamie Barton": {
+      "district": "124",
+      "score": 46,
+      "party": "R"
+    },
+    "Joshua Bashline": {
+      "district": "063",
+      "score": 46,
+      "party": "R"
+    },
+    "Dallas Kephart": {
+      "district": "073",
+      "score": 46,
+      "party": "R"
+    },
+    "K.C. Tomlinson": {
+      "district": "018",
+      "score": 46,
+      "party": "R"
+    },
+    "Catherine Wallen": {
+      "district": "193",
+      "score": 33,
+      "party": "R"
+    },
+    "Mike Armanini": {
+      "district": "075",
+      "score": 43,
+      "party": "R"
+    },
+    "Jill Cooper": {
+      "district": "055",
+      "score": 43,
+      "party": "R"
+    },
+    "Joe D'Orsie": {
+      "district": "047",
+      "score": 43,
+      "party": "R"
+    },
+    "Seth Grove": {
+      "district": "196",
+      "score": 36,
+      "party": "R"
+    },
+    "Mike Jones": {
+      "district": "093",
+      "score": 43,
+      "party": "R"
+    },
+    "Natalie Mihalek": {
+      "district": "040",
+      "score": 43,
+      "party": "R"
+    },
+    "Kathy Rapp": {
+      "district": "065",
+      "score": 43,
+      "party": "R"
+    },
+    "Andrea Verobish": {
+      "district": "079",
+      "score": 20,
+      "party": "R"
+    },
+    "Rich Irvin": {
+      "district": "081",
+      "score": 41,
+      "party": "R"
+    },
+    "Shelby Labs": {
+      "district": "143",
+      "score": 41,
+      "party": "R"
+    },
+    "Milou Mackenzie": {
+      "district": "131",
+      "score": 38,
+      "party": "R"
+    },
+    "Zach Mako": {
+      "district": "183",
+      "score": 41,
+      "party": "R"
+    },
+    "Kristin Marcell": {
+      "district": "178",
+      "score": 41,
+      "party": "R"
+    },
+    "Alec Ryncavage": {
+      "district": "119",
+      "score": 41,
+      "party": "R"
+    },
+    "Lou Schmitt": {
+      "district": "079",
+      "score": 33,
+      "party": "R"
+    },
+    "Brian Smith": {
+      "district": "066",
+      "score": 41,
+      "party": "R"
+    },
+    "Marty Causer": {
+      "district": "067",
+      "score": 38,
+      "party": "R"
+    },
+    "Bud Cook": {
+      "district": "050",
+      "score": 38,
+      "party": "R"
+    },
+    "Wendy Fink": {
+      "district": "094",
+      "score": 39,
+      "party": "R"
+    },
+    "Jamie Flick": {
+      "district": "083",
+      "score": 38,
+      "party": "R"
+    },
+    "Valerie Gaydos": {
+      "district": "044",
+      "score": 38,
+      "party": "R"
+    },
+    "Lee James": {
+      "district": "064",
+      "score": 38,
+      "party": "R"
+    },
+    "Roman Kozak": {
+      "district": "014",
+      "score": 39,
+      "party": "R"
+    },
+    "David Rowe": {
+      "district": "085",
+      "score": 38,
+      "party": "R"
+    },
+    "Joanne Stehr": {
+      "district": "107",
+      "score": 38,
+      "party": "R"
+    },
+    "Ryan Warner": {
+      "district": "052",
+      "score": 38,
+      "party": "R"
+    },
+    "Kerry Benninghoff": {
+      "district": "171",
+      "score": 36,
+      "party": "R"
+    },
+    "Thomas Kutz": {
+      "district": "087",
+      "score": 36,
+      "party": "R"
+    },
+    "John Lawrence": {
+      "district": "013",
+      "score": 35,
+      "party": "R"
+    },
+    "Eric Nelson": {
+      "district": "057",
+      "score": 36,
+      "party": "R"
+    },
+    "Chad Reichard": {
+      "district": "090",
+      "score": 36,
+      "party": "R"
+    },
+    "Leslie Rossi": {
+      "district": "059",
+      "score": 36,
+      "party": "R"
+    },
+    "Jeremy Shaffer": {
+      "district": "028",
+      "score": 38,
+      "party": "R"
+    },
+    "Tim Twardzik": {
+      "district": "123",
+      "score": 36,
+      "party": "R"
+    },
+    "Marc Anderson": {
+      "district": "092",
+      "score": 33,
+      "party": "R"
+    },
+    "Scott Barger": {
+      "district": "080",
+      "score": 35,
+      "party": "R"
+    },
+    "Bryan Cutler": {
+      "district": "100",
+      "score": 33,
+      "party": "R"
+    },
+    "Gary Day": {
+      "district": "187",
+      "score": 33,
+      "party": "R"
+    },
+    "Russ Diamond": {
+      "district": "102",
+      "score": 35,
+      "party": "R"
+    },
+    "Mindy Fee": {
+      "district": "037",
+      "score": 33,
+      "party": "R"
+    },
+    "Ann Flood": {
+      "district": "138",
+      "score": 35,
+      "party": "R"
+    },
+    "Jonathan Fritz": {
+      "district": "111",
+      "score": 33,
+      "party": "R"
+    },
+    "Mark Gillen": {
+      "district": "128",
+      "score": 33,
+      "party": "R"
+    },
+    "David Maloney": {
+      "district": "130",
+      "score": 33,
+      "party": "R"
+    },
+    "Steve Mentzer": {
+      "district": "097",
+      "score": 33,
+      "party": "R"
+    },
+    "Carl Metzgar": {
+      "district": "069",
+      "score": 33,
+      "party": "R"
+    },
+    "Brett Miller": {
+      "district": "041",
+      "score": 33,
+      "party": "R"
+    },
+    "Dan Moul": {
+      "district": "091",
+      "score": 33,
+      "party": "R"
+    },
+    "Jason Ortitay": {
+      "district": "046",
+      "score": 33,
+      "party": "R"
+    },
+    "Clint Owlett": {
+      "district": "068",
+      "score": 33,
+      "party": "R"
+    },
+    "Tina Pickett": {
+      "district": "110",
+      "score": 33,
+      "party": "R"
+    },
+    "Jack Rader": {
+      "district": "176",
+      "score": 33,
+      "party": "R"
+    },
+    "John Schlegel": {
+      "district": "101",
+      "score": 33,
+      "party": "R"
+    },
+    "Parke Wentling": {
+      "district": "007",
+      "score": 33,
+      "party": "R"
+    },
+    "Martina White": {
+      "district": "170",
+      "score": 32,
+      "party": "R"
+    },
+    "Dave Zimmerman": {
+      "district": "099",
+      "score": 33,
+      "party": "R"
+    },
+    "Marla Gallo Brown": {
+      "district": "009",
+      "score": 33,
+      "party": "R"
+    },
+    "Tom Jones": {
+      "district": "098",
+      "score": 32,
+      "party": "R"
+    },
+    "Marci Mustello": {
+      "district": "011",
+      "score": 32,
+      "party": "R"
+    },
+    "Jeffrey Olsommer": {
+      "district": "139",
+      "score": 32,
+      "party": "R"
+    },
+    "Brian Rasel": {
+      "district": "056",
+      "score": 32,
+      "party": "R"
+    },
+    "Donna Scheuren": {
+      "district": "147",
+      "score": 32,
+      "party": "R"
+    },
+    "Eric Davanzo": {
+      "district": "058",
+      "score": 30,
+      "party": "R"
+    },
+    "Torren Ecker": {
+      "district": "193",
+      "score": 32,
+      "party": "R"
+    },
+    "Tim O'Neal": {
+      "district": "048",
+      "score": 29,
+      "party": "R"
+    },
+    "Craig Staats": {
+      "district": "145",
+      "score": 29,
+      "party": "R"
+    },
+    "Michael Stender": {
+      "district": "108",
+      "score": 29,
+      "party": "R"
+    },
+    "Jesse Topper": {
+      "district": "078",
+      "score": 29,
+      "party": "R"
+    },
+    "Dane Watro": {
+      "district": "116",
+      "score": 29,
+      "party": "R"
+    },
+    "Aaron Bernstine": {
+      "district": "008",
+      "score": 27,
+      "party": "R"
+    },
+    "Perry Stambaugh": {
+      "district": "086",
+      "score": 27,
+      "party": "R"
+    },
+    "Jim Struzzi": {
+      "district": "062",
+      "score": 27,
+      "party": "R"
+    },
+    "James Walsh": {
+      "district": "117",
+      "score": 29,
+      "party": "R"
+    },
+    "Eric Weaknecht": {
+      "district": "005",
+      "score": 29,
+      "party": "R"
+    },
+    "Keith Greiner": {
+      "district": "043",
+      "score": 24,
+      "party": "R"
+    },
+    "Brad Roae": {
+      "district": "006",
+      "score": 26,
+      "party": "R"
+    },
+    "Barb Gleim": {
+      "district": "199",
+      "score": 20,
+      "party": "R"
+    },
+    "Brenda Pugh": {
+      "district": "120",
+      "score": 35,
+      "party": "R"
+    },
+    "Jake Banta": {
+      "district": "004",
+      "score": 22,
+      "party": "R"
+    },
+    "Charity Grimm Krupa": {
+      "district": "051",
+      "score": 31,
+      "party": "R"
+    },
+    "Rob Kauffman": {
+      "district": "089",
+      "score": 30,
+      "party": "R"
+    },
+    "Kate Klunk": {
+      "district": "169",
+      "score": 30,
+      "party": "R"
+    },
+    "Robert Leadbeter": {
+      "district": "109",
+      "score": 30,
+      "party": "R"
+    },
+    "Stephenie Scialabba": {
+      "district": "012",
+      "score": 19,
+      "party": "R"
+    },
+    "Joe Hamm": {
+      "district": "084",
+      "score": 29,
+      "party": "R"
+    },
+    "Jim Rigby": {
+      "district": "071",
+      "score": 29,
+      "party": "R"
+    },
+    "Josh Kail": {
+      "district": "015",
+      "score": 27,
+      "party": "R"
+    },
+    "Stephanie Borowicz": {
+      "district": "076",
+      "score": 26,
+      "party": "R"
+    },
+    "Joe Kerwin": {
+      "district": "125",
+      "score": 26,
+      "party": "R"
+    },
+    "Andrew Kuzma": {
+      "district": "039",
+      "score": 26,
+      "party": "R"
+    },
+    "Tim Bonner": {
+      "district": "017",
+      "score": 23,
+      "party": "R"
+    }
+  }
+}

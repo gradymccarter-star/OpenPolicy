@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import Link from 'next/link';
 import ScoreGauge from '@/components/scores/ScoreGauge';
 import PrincipleScoreBar from '@/components/scores/PrincipleScoreBar';
@@ -7,8 +9,18 @@ import { CandidacyBadge, PartyBadge } from '@/components/ui/Badge';
 import { getSupabase, extractOverallScore } from '@/lib/db/client';
 import { getCandidacyStatus } from '@/lib/utils/helpers';
 import { getContactInfoForDistrict } from '@/lib/data/contact-info';
+import { getBillStatusMap, getCandidateResults, getVoterRegistration, getVoterRegistrationAsOf, getPAChamberScore, getPAChamberStats, getPAChamberSession, getACLUPAScore, getACLUPAStats, getACLUPASession } from '@/lib/data/static-data';
 import { PA_CHAMBER_PRINCIPLES, EVIDENCE_TYPE_LABELS, EVIDENCE_WEIGHTS } from '@/lib/utils/constants';
+import type { ElectionHistoryFile } from '@/lib/utils/types';
 import Image from 'next/image';
+
+let _electionHistory: ElectionHistoryFile | null | undefined;
+function getElectionHistory(): ElectionHistoryFile | null {
+  if (_electionHistory !== undefined) return _electionHistory;
+  const p = path.join(process.cwd(), 'public', 'data', 'pa-house-election-history.json');
+  _electionHistory = fs.existsSync(p) ? (JSON.parse(fs.readFileSync(p, 'utf-8')) as ElectionHistoryFile) : null;
+  return _electionHistory;
+}
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -65,6 +77,21 @@ export default async function CandidateDetailPage({
   const contactInfo = getCandidacyStatus(politician) === 'incumbent'
     ? getContactInfoForDistrict(politicianRow.district)
     : null;
+
+  const districtHistory = politicianRow.district
+    ? (getElectionHistory()?.districts[politicianRow.district] ?? null)
+    : null;
+
+  const billStatusMap = getBillStatusMap();
+  const candidateResults = politicianRow.district ? getCandidateResults(politicianRow.district) : null;
+  const voterRegistration = politicianRow.district ? getVoterRegistration(politicianRow.district) : null;
+  const voterRegAsOf = getVoterRegistrationAsOf();
+  const pachamberScore = politicianRow.district ? getPAChamberScore(politicianRow.district) : null;
+  const pachamberStats = getPAChamberStats();
+  const pachamberSession = getPAChamberSession();
+  const aclupaScore = politicianRow.district ? getACLUPAScore(politicianRow.district) : null;
+  const aclupaStats = getACLUPAStats();
+  const aclupaSession = getACLUPASession();
 
   const overallData = extractOverallScore(politicianRow);
   const overallScore = overallData?.overall_score ?? 0;
@@ -223,6 +250,17 @@ export default async function CandidateDetailPage({
         methodologySection={methodologySection}
         politician={politician}
         contactInfo={contactInfo}
+        districtHistory={districtHistory}
+        billStatusMap={billStatusMap}
+        candidateResults={candidateResults}
+        voterRegistration={voterRegistration}
+        voterRegAsOf={voterRegAsOf}
+        pachamberScore={pachamberScore}
+        pachamberStats={pachamberStats}
+        pachamberSession={pachamberSession}
+        aclupaScore={aclupaScore}
+        aclupaStats={aclupaStats}
+        aclupaSession={aclupaSession}
       />
     </main>
   );

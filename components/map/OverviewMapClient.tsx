@@ -457,11 +457,13 @@ function DistrictTable({
   fundingTotals,
   electionHistory,
   historyYears,
+  committeeRoleById,
 }: {
   readonly politiciansByDistrict: Record<string, PoliticianWithScores[]>;
   readonly fundingTotals: Record<string, number>;
   readonly electionHistory: ElectionHistoryFile | null;
   readonly historyYears: string[];
+  readonly committeeRoleById?: Record<string, string>;
 }) {
   const [sortKey, setSortKey] = useState<SortKey>('district');
   const [sortDir, setSortDir] = useState<1 | -1>(1);

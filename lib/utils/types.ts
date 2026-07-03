@@ -91,6 +91,52 @@ export interface ElectionHistoryFile {
   districts: Record<string, Record<string, ElectionYearResult>>;
 }
 
+// Shape of public/data/pa-house-bill-status.json (see scripts/jobs/fetch-bill-status.js)
+export interface BillStatus {
+  bill_id: string;
+  title: string | null;
+  source_url: string | null;
+  bill_number: string | null;
+  session: string | null;
+  status: number; // 1=Introduced 2=PassedCommittee 3=Enrolled 4=SignedIntoLaw 5=Vetoed 6=Failed
+  status_label: string;
+  last_action: string | null;
+  last_action_date: string | null;
+  fetched_at: string;
+}
+
+export interface BillStatusFile {
+  generated_at: string;
+  total_bills: number;
+  bills: Record<string, BillStatus>;
+}
+
+// Shape of public/data/pa-house-candidate-results.json (see scripts/jobs/fetch-candidate-results.js)
+export interface CandidateYearResult {
+  candidate: string;
+  party: string;
+  votes: number;
+  pct: number;
+}
+
+export interface CandidateResultsFile {
+  generated_at: string;
+  districts: Record<string, Record<string, CandidateYearResult[]>>;
+}
+
+// Shape of public/data/pa-house-voter-registration.json (see scripts/jobs/fetch-voter-registration.js)
+export interface DistrictVoterRegistration {
+  republican: number;
+  democrat: number;
+  other: number;
+  total: number;
+}
+
+export interface VoterRegistrationFile {
+  as_of: string;
+  districts: Record<string, DistrictVoterRegistration>;
+}
+
 // Shape of public/data/pa-house-contact-info.json (static, see scripts/jobs/fetch-contact-info.js)
 export interface ContactCommitteeAssignment {
   committee: string;
@@ -380,4 +426,30 @@ export interface PoliticianFilters {
 export interface PoliticianSortOptions {
   field: 'name' | 'score' | 'party' | 'state';
   direction: 'asc' | 'desc';
+}
+
+// Shape of public/data/pa-house-pachamber-scorecard.json (see scripts/jobs/fetch-pachamber-scorecard.js)
+export interface PAChamberMemberScore {
+  district: string; // zero-padded 3-digit string, e.g. "001", "042", "100"
+  score: number;    // 0-100 voting percentage on PA Chamber priority bills
+  party: 'D' | 'R' | 'I';
+}
+
+export interface PAChamberScorecardStats {
+  total_members: number;
+  dem_members: number;
+  rep_members: number;
+  avg_score: number;
+  avg_dem_score: number;
+  avg_rep_score: number;
+}
+
+export interface PAChamberScorecardFile {
+  source: string;           // 'PA Chamber of Commerce'
+  source_url: string;
+  session: string;          // e.g. '2025-2026'
+  generated_at: string;     // ISO timestamp
+  notes: string;
+  stats: PAChamberScorecardStats;
+  members: Record<string, PAChamberMemberScore>; // keyed by full name
 }

@@ -8,7 +8,7 @@ import Keystone from './Keystone';
 const NAV_LINKS = [
   { href: '/', label: 'Home' },
   { href: '/politicians', label: 'Candidates' },
-  { href: '/overview', label: 'Overall' },
+  { href: '/overview', label: 'Map' },
   { href: '/compare', label: 'Compare' },
   { href: '/funding-intelligence', label: 'Funding Intel' },
   { href: '/about', label: 'About' },
