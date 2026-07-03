@@ -112,7 +112,7 @@ export default async function HomePage() {
             className="hero-fade-up text-lg md:text-xl mb-10 max-w-xl mx-auto"
             style={{ color: 'rgba(255,255,255,0.5)', animationDelay: '0.3s' }}
           >
-            Evidence-based scoring for all 209 PA House members — ranked against the Chamber&apos;s nine business priorities.
+            Evidence-based scoring for all {stats.politicians} PA House candidates — ranked against the Chamber&apos;s nine business priorities.
           </p>
 
           <div className="hero-fade-up flex flex-col sm:flex-row items-center justify-center gap-4" style={{ animationDelay: '0.45s' }}>
@@ -121,7 +121,7 @@ export default async function HomePage() {
               className="group inline-flex items-center gap-3 px-8 py-4 rounded-2xl text-lg font-bold transition-all duration-200 hover:scale-105 hover:shadow-2xl"
               style={{ background: '#c9a84c', color: '#07111f' }}
             >
-              Explore All {stats.politicians || 209} Candidates
+              Explore All {stats.politicians} Candidates
               <span className="text-xl transition-transform group-hover:translate-x-1">→</span>
             </Link>
             <Link
@@ -139,7 +139,7 @@ export default async function HomePage() {
       <section style={{ background: '#0a1628', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
         <div className="container-page py-5 grid grid-cols-3 gap-4 text-center">
           <div>
-            <p className="text-2xl font-bold text-white">{stats.politicians || 209}</p>
+            <p className="text-2xl font-bold text-white">{stats.politicians}</p>
             <p className="text-caption font-medium mt-0.5" style={{ color: 'rgba(255,255,255,0.4)' }}>PA House Members</p>
           </div>
           <div style={{ borderLeft: '1px solid rgba(255,255,255,0.08)', borderRight: '1px solid rgba(255,255,255,0.08)' }}>
@@ -171,7 +171,7 @@ export default async function HomePage() {
               {
                 num: '01',
                 title: 'Collect Evidence',
-                desc: 'Floor votes, bill sponsorships, and press coverage for all 209 PA House members — pulled from public legislative records.',
+                desc: `Floor votes, bill sponsorships, and press coverage for all ${stats.politicians} PA House candidates — pulled from public legislative records.`,
               },
               {
                 num: '02',
@@ -215,7 +215,7 @@ export default async function HomePage() {
               className="text-caption font-semibold transition-colors hover:opacity-80"
               style={{ color: '#0a1628', border: '1px solid #0a1628', padding: '6px 16px', borderRadius: '8px' }}
             >
-              View all 209 &rarr;
+              View all {stats.politicians} &rarr;
             </Link>
           </div>
 
