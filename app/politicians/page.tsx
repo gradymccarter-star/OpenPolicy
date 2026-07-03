@@ -1,7 +1,19 @@
 import PoliticiansClient from '@/components/politicians/PoliticiansClient';
 import { getSupabase, extractOverallScore } from '@/lib/db/client';
+import { getCandidacyStatus } from '@/lib/utils/helpers';
+import { getContactInfoForDistrict, getCommitteeChairLabel } from '@/lib/data/contact-info';
 import { EXAMPLE_POLITICIANS } from '@/lib/utils/constants';
 import type { PoliticianWithScores } from '@/lib/utils/types';
+
+function buildCommitteeRoleMap(politicians: PoliticianWithScores[]): Record<string, string> {
+  const map: Record<string, string> = {};
+  for (const p of politicians) {
+    if (getCandidacyStatus(p) !== 'incumbent') continue;
+    const label = getCommitteeChairLabel(getContactInfoForDistrict(p.district));
+    if (label) map[p.id] = label;
+  }
+  return map;
+}
 
 async function getPoliticianIdsWithFunding() {
   const supabase = getSupabase();
@@ -65,6 +77,7 @@ export default async function PoliticiansPage({ searchParams }: Props) {
   const displayPoliticians = showExamples
     ? (EXAMPLE_POLITICIANS as unknown as PoliticianWithScores[])
     : politicians;
+  const committeeRoleById = showExamples ? {} : buildCommitteeRoleMap(displayPoliticians);
 
   return (
     <main className="container-page py-10">
@@ -78,7 +91,7 @@ export default async function PoliticiansPage({ searchParams }: Props) {
         </p>
       </div>
 
-      <PoliticiansClient politicians={displayPoliticians} showExamples={showExamples} initialQuery={q ?? ''} politicianIdsWithFunding={politicianIdsWithFunding} />
+      <PoliticiansClient politicians={displayPoliticians} showExamples={showExamples} initialQuery={q ?? ''} politicianIdsWithFunding={politicianIdsWithFunding} committeeRoleById={committeeRoleById} />
     </main>
   );
 }

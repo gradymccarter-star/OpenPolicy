@@ -1,4 +1,4 @@
-import type { PartyType } from '@/lib/utils/types';
+import type { CandidacyStatus, PartyType } from '@/lib/utils/types';
 import { getPartyName } from '@/lib/utils/helpers';
 
 const PARTY_STYLES: Record<string, { bg: string; text: string; border: string }> = {
@@ -21,6 +21,17 @@ export function PartyBadge({ party, className = '' }: BadgeProps) {
       className={`inline-flex items-center px-2 py-0.5 rounded-full text-caption font-medium border ${styles.bg} ${styles.text} ${styles.border} ${className}`}
     >
       {name}
+    </span>
+  );
+}
+
+export function CandidacyBadge({ status, className = '' }: { readonly status: CandidacyStatus; readonly className?: string }) {
+  if (status !== 'challenger') return null;
+  return (
+    <span
+      className={`inline-flex items-center px-2 py-0.5 rounded-full text-caption font-medium border border-amber-200 bg-amber-50 text-amber-700 ${className}`}
+    >
+      Challenger
     </span>
   );
 }

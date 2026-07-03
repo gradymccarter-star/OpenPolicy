@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { getScoreColor, formatScore, getConfidenceColor } from '@/lib/utils/helpers';
 
 interface PrincipleScoreBarProps {
@@ -8,6 +9,7 @@ interface PrincipleScoreBarProps {
   numVotes?: number;
   numSponsorships?: number;
   numStatements?: number;
+  principleKey?: string;
 }
 
 export default function PrincipleScoreBar({
@@ -18,6 +20,7 @@ export default function PrincipleScoreBar({
   numVotes,
   numSponsorships,
   numStatements,
+  principleKey,
 }: PrincipleScoreBarProps) {
   const color = getScoreColor(score);
   const percentage = score * 100;
@@ -28,8 +31,9 @@ export default function PrincipleScoreBar({
   if (numSponsorships && numSponsorships > 0) parts.push(`${numSponsorships} sponsorship${numSponsorships > 1 ? 's' : ''}`);
   if (numStatements && numStatements > 0) parts.push(`${numStatements} statement${numStatements > 1 ? 's' : ''}`);
   const evidenceSummary = parts.length > 0 ? parts.join(', ') : undefined;
+  const hasEvidence = (numEvidenceItems ?? 0) > 0;
 
-  return (
+  const body = (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <h4 className="text-body-sm font-medium text-primary-950">
@@ -56,8 +60,17 @@ export default function PrincipleScoreBar({
       {evidenceSummary && numEvidenceItems !== undefined && (
         <p className="text-caption text-primary-400">
           Based on {numEvidenceItems} item{numEvidenceItems !== 1 ? 's' : ''}: {evidenceSummary}
+          {principleKey && hasEvidence && <span className="ml-1 font-medium text-primary-700">— view evidence &rarr;</span>}
         </p>
       )}
     </div>
+  );
+
+  if (!principleKey || !hasEvidence) return body;
+
+  return (
+    <Link href={`?principle=${principleKey}#evidence-trail`} scroll={false} className="block -m-2 p-2 rounded-lg transition-colors hover:bg-slate-50">
+      {body}
+    </Link>
   );
 }

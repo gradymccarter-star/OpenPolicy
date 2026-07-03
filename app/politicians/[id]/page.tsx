@@ -3,8 +3,10 @@ import ScoreGauge from '@/components/scores/ScoreGauge';
 import PrincipleScoreBar from '@/components/scores/PrincipleScoreBar';
 import RadarChart from '@/components/scores/RadarChart';
 import ProfileTabs from '@/components/politicians/ProfileTabs';
-import { PartyBadge } from '@/components/ui/Badge';
+import { CandidacyBadge, PartyBadge } from '@/components/ui/Badge';
 import { getSupabase, extractOverallScore } from '@/lib/db/client';
+import { getCandidacyStatus } from '@/lib/utils/helpers';
+import { getContactInfoForDistrict } from '@/lib/data/contact-info';
 import { PA_CHAMBER_PRINCIPLES, EVIDENCE_TYPE_LABELS, EVIDENCE_WEIGHTS } from '@/lib/utils/constants';
 import Image from 'next/image';
 
@@ -58,11 +60,21 @@ export default async function CandidateDetailPage({
     claims: item.extracted_claims ?? [],
   }));
   const contributions = (contributionData ?? []) as any[];
+  // Contact records come from the official member directory, which only lists the sitting
+  // incumbent — a challenger sharing the same district must not inherit the incumbent's info.
+  const contactInfo = getCandidacyStatus(politician) === 'incumbent'
+    ? getContactInfoForDistrict(politicianRow.district)
+    : null;
 
   const overallData = extractOverallScore(politicianRow);
   const overallScore = overallData?.overall_score ?? 0;
   const overallConfidence = overallData?.overall_confidence ?? 0;
   const totalEvidence = overallData?.total_evidence_items ?? 0;
+  let evidenceSummary = 'Declared candidate — no voting or sponsorship record yet';
+  if (totalEvidence > 0) {
+    const itemWord = totalEvidence === 1 ? 'item' : 'items';
+    evidenceSummary = `Score based on ${totalEvidence} evidence ${itemWord}`;
+  }
 
   const radarScores = Object.entries(PA_CHAMBER_PRINCIPLES).map(([key]) => {
     const ps = principleScores.find((s: any) => s.principle === key);
@@ -89,6 +101,7 @@ export default async function CandidateDetailPage({
                 numVotes={ps.num_votes}
                 numSponsorships={ps.num_sponsorships}
                 numStatements={ps.num_statements}
+                principleKey={ps.principle}
               />
             );
           })}
@@ -163,19 +176,20 @@ export default async function CandidateDetailPage({
           )}
           <div className="flex-1">
             <h1 className="text-heading-1 mb-2">{politician.full_name}</h1>
-            <div className="flex items-center space-x-3 mb-2">
+            <div className="flex items-center space-x-3 mb-2 flex-wrap gap-y-1">
               <PartyBadge party={politician.party} />
+              <CandidacyBadge status={getCandidacyStatus(politician)} />
               {politician.district && (
-                <span className="text-primary-500 text-body-sm">District {politician.district}</span>
+                <Link href={`/overview?district=${politician.district}`} className="text-primary-500 text-body-sm hover:text-primary-950 hover:underline">
+                  District {politician.district}
+                </Link>
               )}
               {politician.county && (
                 <span className="text-primary-400 text-caption">{politician.county} County</span>
               )}
               <span className="text-primary-500 text-body-sm">{politician.title}</span>
             </div>
-            <p className="text-caption text-primary-400 mb-3">
-              Score based on {totalEvidence} evidence item{totalEvidence === 1 ? '' : 's'}
-            </p>
+            <p className="text-caption text-primary-400 mb-3">{evidenceSummary}</p>
             <div className="flex gap-3">
               <Link
                 href={`/politicians/${params.id}/brief`}
@@ -196,16 +210,19 @@ export default async function CandidateDetailPage({
             confidence={overallConfidence}
             size="large"
             label="Chamber Alignment"
+            hasRecord={totalEvidence > 0}
           />
         </div>
       </div>
 
-      {/* Tabbed content: Analysis | Funding */}
+      {/* Tabbed content: Analysis | Funding | Contact */}
       <ProfileTabs
         evidenceItems={evidenceItems}
         contributions={contributions}
         principleScoresSection={principleScoresSection}
         methodologySection={methodologySection}
+        politician={politician}
+        contactInfo={contactInfo}
       />
     </main>
   );

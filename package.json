@@ -24,8 +24,10 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.20.0",
     "@supabase/supabase-js": "^2.107.0",
+    "@types/d3-geo": "^3.1.0",
     "axios": "^1.6.5",
     "cheerio": "^1.0.0-rc.12",
+    "d3-geo": "^3.1.1",
     "date-fns": "^3.3.0",
     "fast-xml-parser": "^5.8.0",
     "ioredis": "^5.3.2",

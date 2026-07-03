@@ -1,0 +1,644 @@
+'use client';
+
+import Link from 'next/link';
+import { useMemo, useState } from 'react';
+import PoliticianCard from '@/components/politicians/PoliticianCard';
+import { CandidacyBadge, PartyBadge } from '@/components/ui/Badge';
+import type { LeadershipTier } from '@/lib/data/contact-info';
+import { PARTY_COLORS, SCORE_COLORS } from '@/lib/utils/constants';
+import { getCandidacyStatus, getScoreColor } from '@/lib/utils/helpers';
+import type { ElectionHistoryFile, ElectionYearResult, PoliticianWithScores } from '@/lib/utils/types';
+import PADistrictMap, { type DistrictGeoJSON } from './PADistrictMap';
+
+const TOTAL_DISTRICTS = 203;
+
+type ColorMode = 'party' | 'score' | 'funding' | 'contested' | 'leadership' | `year:${string}`;
+
+interface Props {
+  readonly geojson: DistrictGeoJSON;
+  readonly politiciansByDistrict: Record<string, PoliticianWithScores[]>;
+  readonly fundingIds: string[];
+  readonly fundingTotals: Record<string, number>;
+  readonly electionHistory: ElectionHistoryFile | null;
+  readonly initialDistrict: string | null;
+  readonly committeeRoleById?: Record<string, string>;
+  readonly leadershipTierById?: Record<string, LeadershipTier>;
+}
+
+const LEADERSHIP_LABELS: Record<LeadershipTier, string> = {
+  chair: 'Committee Chair',
+  'subcommittee-chair': 'Subcommittee Chair',
+  officer: 'Vice Chair / Secretary',
+  member: 'Committee Member',
+};
+
+function fmtMoney(n: number): string {
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(n);
+}
+
+const NEUTRAL_FILL = '#e5e7eb';
+
+function hexToRgb(hex: string): [number, number, number] {
+  const m = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(hex);
+  if (!m) return [229, 231, 235];
+  return [Number.parseInt(m[1], 16), Number.parseInt(m[2], 16), Number.parseInt(m[3], 16)];
+}
+
+/** Blend a party color toward white as margin narrows, so close races read lighter than blowouts. */
+function fillForMargin(winner: string | null, marginPct: number | null): string {
+  if (!winner || marginPct === null) return NEUTRAL_FILL;
+  const base = PARTY_COLORS[winner] ?? NEUTRAL_FILL;
+  const [r, g, b] = hexToRgb(base);
+  // Saturate fully by a 30-point margin; a near-tie (0pt) is ~60% washed toward white.
+  const intensity = Math.min(1, 0.4 + marginPct / 30);
+  const blend = (channel: number) => Math.round(channel + (255 - channel) * (1 - intensity));
+  return `rgb(${blend(r)}, ${blend(g)}, ${blend(b)})`;
+}
+
+export default function OverviewMapClient({ geojson, politiciansByDistrict, fundingIds, fundingTotals, electionHistory, initialDistrict, committeeRoleById = {}, leadershipTierById = {} }: Props) {
+  const [view, setView] = useState<'map' | 'table'>('map');
+  const [selectedDistrict, setSelectedDistrict] = useState<string | null>(initialDistrict);
+  const [hoveredDistrict, setHoveredDistrict] = useState<string | null>(null);
+  const [colorMode, setColorMode] = useState<ColorMode>('party');
+  const [search, setSearch] = useState('');
+
+  const fundingSet = useMemo(() => new Set(fundingIds), [fundingIds]);
+  const historyYears = useMemo(
+    () => Object.keys(electionHistory?.sources ?? {}).sort((a, b) => Number(b) - Number(a)),
+    [electionHistory],
+  );
+
+  const districtFunding = useMemo(() => {
+    const totals: Record<string, number> = {};
+    for (const [district, reps] of Object.entries(politiciansByDistrict)) {
+      totals[district] = reps.reduce((s, r) => s + (fundingTotals[r.id] ?? 0), 0);
+    }
+    return totals;
+  }, [politiciansByDistrict, fundingTotals]);
+  const maxDistrictFunding = useMemo(
+    () => Math.max(1, ...Object.values(districtFunding)),
+    [districtFunding],
+  );
+
+  const GOLD = '#c9a84c';
+  const CONTESTED_COLOR = '#7c3aed';
+  const UNCONTESTED_COLOR = '#94a3b8';
+
+  /** Gold heatmap, intensity scaled relative to the highest-funded district on the board. */
+  function fillForFunding(amount: number): string {
+    if (amount <= 0) return NEUTRAL_FILL;
+    const [r, g, b] = hexToRgb(GOLD);
+    const intensity = Math.min(1, 0.25 + 0.75 * (amount / maxDistrictFunding));
+    const blend = (channel: number) => Math.round(channel + (255 - channel) * (1 - intensity));
+    return `rgb(${blend(r)}, ${blend(g)}, ${blend(b)})`;
+  }
+
+  const LEADERSHIP_INTENSITY: Record<LeadershipTier, number> = {
+    chair: 1,
+    'subcommittee-chair': 0.7,
+    officer: 0.45,
+    member: 0.22,
+  };
+
+  /** Gold heatmap by committee leadership tier — full chairs darkest, plain members lightest. */
+  function fillForLeadership(tier: LeadershipTier | null): string {
+    if (!tier) return NEUTRAL_FILL;
+    const [r, g, b] = hexToRgb(GOLD);
+    const blend = (channel: number) => Math.round(channel + (255 - channel) * (1 - LEADERSHIP_INTENSITY[tier]));
+    return `rgb(${blend(r)}, ${blend(g)}, ${blend(b)})`;
+  }
+
+  function districtLeadershipTier(district: string): LeadershipTier | null {
+    const reps = politiciansByDistrict[district];
+    if (!reps) return null;
+    let best: LeadershipTier | null = null;
+    const RANK: Record<LeadershipTier, number> = { chair: 4, 'subcommittee-chair': 3, officer: 2, member: 1 };
+    for (const r of reps) {
+      const tier = leadershipTierById[r.id];
+      if (tier && (!best || RANK[tier] > RANK[best])) best = tier;
+    }
+    return best;
+  }
+
+  const getFill = (district: string): string => {
+    if (colorMode.startsWith('year:')) {
+      const year = colorMode.slice(5);
+      const result = electionHistory?.districts[district]?.[year];
+      if (!result) return NEUTRAL_FILL;
+      return fillForMargin(result.winner_party, result.margin_pct);
+    }
+    if (colorMode === 'funding') {
+      return fillForFunding(districtFunding[district] ?? 0);
+    }
+    if (colorMode === 'leadership') {
+      return fillForLeadership(districtLeadershipTier(district));
+    }
+    const reps = politiciansByDistrict[district];
+    if (colorMode === 'contested') {
+      if (!reps || reps.length === 0) return NEUTRAL_FILL;
+      return reps.length > 1 ? CONTESTED_COLOR : UNCONTESTED_COLOR;
+    }
+    if (!reps || reps.length === 0) return NEUTRAL_FILL;
+    if (colorMode === 'party') {
+      // Mixed-party districts (rare overlap rows) fall back to neutral rather than picking arbitrarily
+      const parties = new Set(reps.map((r) => r.party));
+      if (parties.size > 1) return NEUTRAL_FILL;
+      return PARTY_COLORS[reps[0].party] || NEUTRAL_FILL;
+    }
+    const avgScore =
+      reps.reduce((s, r) => s + (r.overall_score?.overall_score ?? 0), 0) / reps.length;
+    return getScoreColor(avgScore);
+  };
+
+  const selectedReps = selectedDistrict ? politiciansByDistrict[selectedDistrict] ?? [] : [];
+  const hoveredName = hoveredDistrict
+    ? (politiciansByDistrict[hoveredDistrict]?.[0]?.full_name ?? null)
+    : null;
+  const hoveredLeadershipTier = hoveredDistrict && colorMode === 'leadership' ? districtLeadershipTier(hoveredDistrict) : null;
+  const selectedHistory = selectedDistrict ? electionHistory?.districts[selectedDistrict] : undefined;
+
+  const searchMatches = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (q.length < 2) return [];
+    const results: { district: string; label: string }[] = [];
+    for (const [district, reps] of Object.entries(politiciansByDistrict)) {
+      const match = reps.find((r) => r.full_name.toLowerCase().includes(q));
+      if (match) results.push({ district, label: `${match.full_name} — HD-${district}` });
+      else if (district.includes(q)) results.push({ district, label: `HD-${district}` });
+    }
+    return results.slice(0, 8);
+  }, [search, politiciansByDistrict]);
+
+  return (
+    <div>
+      <div className="flex items-center justify-between flex-wrap gap-3 mb-4">
+        <div className="flex items-center gap-1 p-1 rounded-lg w-fit" style={{ background: 'var(--surface-canvas)', border: '1px solid var(--border)' }}>
+          <button
+            onClick={() => setView('map')}
+            className="px-3 py-1.5 rounded-md text-caption font-semibold transition-colors"
+            style={view === 'map' ? { background: '#0a1628', color: '#fff' } : { color: 'var(--primary-500)' }}
+          >
+            Map View
+          </button>
+          <button
+            onClick={() => setView('table')}
+            className="px-3 py-1.5 rounded-md text-caption font-semibold transition-colors"
+            style={view === 'table' ? { background: '#0a1628', color: '#fff' } : { color: 'var(--primary-500)' }}
+          >
+            Table View
+          </button>
+        </div>
+
+        <div className="relative w-full sm:w-64">
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Jump to representative or district..."
+            className="w-full px-3 py-1.5 rounded-lg text-caption"
+            style={{ border: '1px solid var(--border)', background: 'white' }}
+          />
+          {searchMatches.length > 0 && (
+            <div
+              className="absolute z-10 mt-1 w-full rounded-lg overflow-hidden bg-white shadow-lg"
+              style={{ border: '1px solid var(--border)' }}
+            >
+              {searchMatches.map((m) => (
+                <button
+                  key={m.district}
+                  onClick={() => {
+                    setView('map');
+                    setSelectedDistrict(m.district);
+                    setSearch('');
+                  }}
+                  className="block w-full text-left px-3 py-2 text-caption text-primary-700 hover:bg-stone-50"
+                >
+                  {m.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {view === 'table' && (
+        <DistrictTable
+          politiciansByDistrict={politiciansByDistrict}
+          fundingTotals={fundingTotals}
+          electionHistory={electionHistory}
+          historyYears={historyYears}
+          committeeRoleById={committeeRoleById}
+        />
+      )}
+
+      {view === 'map' && (
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6">
+          <div>
+            {/* Legend + toggle */}
+            <div className="flex items-center justify-between flex-wrap gap-3 mb-4">
+              <div className="flex items-center gap-1 p-1 rounded-lg flex-wrap" style={{ background: 'var(--surface-canvas)', border: '1px solid var(--border)' }}>
+                <button
+                  onClick={() => setColorMode('party')}
+                  className="px-3 py-1.5 rounded-md text-caption font-semibold transition-colors"
+                  style={colorMode === 'party' ? { background: '#0a1628', color: '#fff' } : { color: 'var(--primary-500)' }}
+                >
+                  By Party
+                </button>
+                <button
+                  onClick={() => setColorMode('score')}
+                  className="px-3 py-1.5 rounded-md text-caption font-semibold transition-colors"
+                  style={colorMode === 'score' ? { background: '#0a1628', color: '#fff' } : { color: 'var(--primary-500)' }}
+                >
+                  By Chamber Score
+                </button>
+                <button
+                  onClick={() => setColorMode('funding')}
+                  className="px-3 py-1.5 rounded-md text-caption font-semibold transition-colors"
+                  style={colorMode === 'funding' ? { background: '#0a1628', color: '#fff' } : { color: 'var(--primary-500)' }}
+                >
+                  By Funding Raised
+                </button>
+                <button
+                  onClick={() => setColorMode('contested')}
+                  className="px-3 py-1.5 rounded-md text-caption font-semibold transition-colors"
+                  style={colorMode === 'contested' ? { background: '#0a1628', color: '#fff' } : { color: 'var(--primary-500)' }}
+                >
+                  Contested Races
+                </button>
+                <button
+                  onClick={() => setColorMode('leadership')}
+                  className="px-3 py-1.5 rounded-md text-caption font-semibold transition-colors"
+                  style={colorMode === 'leadership' ? { background: '#0a1628', color: '#fff' } : { color: 'var(--primary-500)' }}
+                >
+                  Committee Leadership
+                </button>
+                {historyYears.map((year) => (
+                  <button
+                    key={year}
+                    onClick={() => setColorMode(`year:${year}`)}
+                    className="px-3 py-1.5 rounded-md text-caption font-semibold transition-colors"
+                    style={colorMode === `year:${year}` ? { background: '#0a1628', color: '#fff' } : { color: 'var(--primary-500)' }}
+                  >
+                    {year} Result
+                  </button>
+                ))}
+              </div>
+
+              {colorMode === 'party' && (
+                <div className="flex items-center gap-4 text-caption text-primary-500">
+                  <LegendSwatch color={PARTY_COLORS.R} label="Republican" />
+                  <LegendSwatch color={PARTY_COLORS.D} label="Democrat" />
+                  <LegendSwatch color={NEUTRAL_FILL} label="No current data" />
+                </div>
+              )}
+              {colorMode === 'score' && (
+                <div className="flex items-center gap-4 text-caption text-primary-500">
+                  <LegendSwatch color={SCORE_COLORS.EXCELLENT.color} label="High alignment" />
+                  <LegendSwatch color={SCORE_COLORS.MODERATE.color} label="Moderate" />
+                  <LegendSwatch color={SCORE_COLORS.POOR.color} label="Low alignment" />
+                </div>
+              )}
+              {colorMode === 'funding' && (
+                <div className="flex items-center gap-4 text-caption text-primary-500">
+                  <LegendSwatch color={fillForFunding(maxDistrictFunding)} label="Highest raised" />
+                  <LegendSwatch color={fillForFunding(maxDistrictFunding * 0.15)} label="Lower" />
+                  <LegendSwatch color={NEUTRAL_FILL} label="No funding on file" />
+                </div>
+              )}
+              {colorMode === 'contested' && (
+                <div className="flex items-center gap-4 text-caption text-primary-500">
+                  <LegendSwatch color={CONTESTED_COLOR} label="Contested (2+ candidates)" />
+                  <LegendSwatch color={UNCONTESTED_COLOR} label="Uncontested so far" />
+                  <LegendSwatch color={NEUTRAL_FILL} label="No current data" />
+                </div>
+              )}
+              {colorMode === 'leadership' && (
+                <div className="flex items-center gap-4 text-caption text-primary-500">
+                  <LegendSwatch color={fillForLeadership('chair')} label="Chair" />
+                  <LegendSwatch color={fillForLeadership('subcommittee-chair')} label="Subcommittee chair" />
+                  <LegendSwatch color={fillForLeadership('officer')} label="Vice chair / secretary" />
+                  <LegendSwatch color={fillForLeadership('member')} label="Member only" />
+                </div>
+              )}
+              {colorMode.startsWith('year:') && (
+                <div className="flex items-center gap-4 text-caption text-primary-500">
+                  <LegendSwatch color={fillForMargin('R', 28)} label="Safe R" />
+                  <LegendSwatch color={fillForMargin('R', 4)} label="Lean R" />
+                  <LegendSwatch color={fillForMargin('D', 4)} label="Lean D" />
+                  <LegendSwatch color={fillForMargin('D', 28)} label="Safe D" />
+                </div>
+              )}
+            </div>
+
+            {colorMode === 'funding' && (
+              <p className="text-caption text-primary-400 mb-3">
+                Source: campaign contributions tracked via{' '}
+                <a
+                  href="https://www.followthemoney.org"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:text-primary-700"
+                >
+                  FollowTheMoney.org
+                </a>
+                . See the Funding Intel tab for full detail per donor.
+              </p>
+            )}
+            {colorMode === 'contested' && (
+              <p className="text-caption text-primary-400 mb-3">
+                &quot;Contested&quot; means 2 or more declared candidates are on file for that district in this
+                tool — it does not by itself indicate a competitive race; check the historical lean toggle
+                alongside it for that read.
+              </p>
+            )}
+            {colorMode === 'leadership' && (
+              <p className="text-caption text-primary-400 mb-3">
+                Committee assignments and leadership roles, scraped from each incumbent&apos;s official{' '}
+                <a href="https://www.palegis.us/house/members" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary-700">
+                  palegis.us
+                </a>{' '}
+                bio page. Challenger-only districts show no data until elected.
+              </p>
+            )}
+            {colorMode.startsWith('year:') && electionHistory?.sources[colorMode.slice(5)] && (
+              <p className="text-caption text-primary-400 mb-3">
+                Source: precinct-level results aggregated from{' '}
+                <a
+                  href={electionHistory.sources[colorMode.slice(5)]}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:text-primary-700"
+                >
+                  openelections-data-pa
+                </a>{' '}
+                . District lines for years before 2022 reflect the pre-redistricting map, so numbering may not
+                match today&apos;s boundaries exactly.
+              </p>
+            )}
+
+            <div className="rounded-2xl p-4 bg-white" style={{ border: '1px solid #e5e7eb' }}>
+              <PADistrictMap
+                geojson={geojson}
+                getFill={getFill}
+                selectedDistrict={selectedDistrict}
+                hoveredDistrict={hoveredDistrict}
+                onSelect={setSelectedDistrict}
+                onHover={setHoveredDistrict}
+              />
+              {hoveredDistrict && (
+                <p className="text-caption text-primary-400 mt-2 text-center">
+                  HD-{hoveredDistrict}{hoveredName ? ` · ${hoveredName}` : ''}
+                  {hoveredLeadershipTier ? ` · ${LEADERSHIP_LABELS[hoveredLeadershipTier]}` : ''}
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Side panel */}
+          <div>
+            {!selectedDistrict && (
+              <div className="rounded-2xl p-8 text-center" style={{ background: 'var(--surface-canvas)', border: '1px dashed var(--border)' }}>
+                <p className="text-body-sm text-primary-500">
+                  Click any district on the map to see its current representative, Chamber alignment score, and funding data.
+                </p>
+              </div>
+            )}
+
+            {selectedDistrict && (
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <h2 className="text-heading-4 text-primary-950">House District {selectedDistrict}</h2>
+                  <button
+                    onClick={() => setSelectedDistrict(null)}
+                    className="text-caption text-primary-400 hover:text-primary-700"
+                  >
+                    Clear
+                  </button>
+                </div>
+
+                {selectedReps.length === 0 && (
+                  <div className="rounded-xl p-5 text-center" style={{ background: 'var(--surface-canvas)', border: '1px solid var(--border)' }}>
+                    <p className="text-body-sm text-primary-500">No current candidate data for this district yet.</p>
+                  </div>
+                )}
+
+                <div className="space-y-4">
+                  {selectedReps.map((rep) => (
+                    <PoliticianCard key={rep.id} politician={rep} hasFunding={fundingSet.has(rep.id)} committeeRole={committeeRoleById[rep.id] ?? null} />
+                  ))}
+                </div>
+
+                {selectedHistory && Object.keys(selectedHistory).length > 0 && (
+                  <HistoryTrendBars history={selectedHistory} years={historyYears} />
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+type SortKey = 'district' | 'name' | 'party' | 'score' | 'funding' | 'lean';
+
+interface DistrictRow {
+  district: string;
+  county: string | null;
+  reps: PoliticianWithScores[];
+  primaryScore: number | null;
+  funding: number;
+  leanWinner: string | null;
+  leanMarginPct: number | null;
+}
+
+function DistrictTable({
+  politiciansByDistrict,
+  fundingTotals,
+  electionHistory,
+  historyYears,
+}: {
+  readonly politiciansByDistrict: Record<string, PoliticianWithScores[]>;
+  readonly fundingTotals: Record<string, number>;
+  readonly electionHistory: ElectionHistoryFile | null;
+  readonly historyYears: string[];
+}) {
+  const [sortKey, setSortKey] = useState<SortKey>('district');
+  const [sortDir, setSortDir] = useState<1 | -1>(1);
+  const mostRecentYear = historyYears[0];
+
+  const rows = useMemo<DistrictRow[]>(() => {
+    return Array.from({ length: TOTAL_DISTRICTS }, (_, i) => {
+      const district = String(i + 1).padStart(3, '0');
+      const reps = politiciansByDistrict[district] ?? [];
+      const incumbent = reps.find((r) => getCandidacyStatus(r) === 'incumbent') ?? reps[0];
+      const funding = reps.reduce((s, r) => s + (fundingTotals[r.id] ?? 0), 0);
+      const history = mostRecentYear ? electionHistory?.districts[district]?.[mostRecentYear] : undefined;
+      return {
+        district,
+        county: incumbent?.county ?? null,
+        reps,
+        primaryScore: incumbent?.overall_score?.overall_score ?? null,
+        funding,
+        leanWinner: history?.winner_party ?? null,
+        leanMarginPct: history?.margin_pct ?? null,
+      };
+    });
+  }, [politiciansByDistrict, fundingTotals, electionHistory, mostRecentYear]);
+
+  const sorted = useMemo(() => {
+    return rows.toSorted((a, b) => {
+      let cmp = 0;
+      switch (sortKey) {
+        case 'district':
+          cmp = Number(a.district) - Number(b.district);
+          break;
+        case 'name':
+          cmp = (a.reps[0]?.full_name ?? '').localeCompare(b.reps[0]?.full_name ?? '');
+          break;
+        case 'party':
+          cmp = (a.reps[0]?.party ?? '').localeCompare(b.reps[0]?.party ?? '');
+          break;
+        case 'score':
+          cmp = (a.primaryScore ?? -1) - (b.primaryScore ?? -1);
+          break;
+        case 'funding':
+          cmp = a.funding - b.funding;
+          break;
+        case 'lean': {
+          const signed = (r: DistrictRow) => (r.leanWinner === 'R' ? 1 : r.leanWinner === 'D' ? -1 : 0) * (r.leanMarginPct ?? 0);
+          cmp = signed(a) - signed(b);
+          break;
+        }
+      }
+      return cmp * sortDir;
+    });
+  }, [rows, sortKey, sortDir]);
+
+  function handleSort(key: SortKey) {
+    if (key === sortKey) {
+      setSortDir((d) => (d === 1 ? -1 : 1));
+    } else {
+      setSortKey(key);
+      setSortDir(key === 'district' || key === 'name' || key === 'party' ? 1 : -1);
+    }
+  }
+
+  function SortHeader({ sortKeyValue, label, align = 'left' }: { readonly sortKeyValue: SortKey; readonly label: string; readonly align?: 'left' | 'right' }) {
+    const active = sortKey === sortKeyValue;
+    return (
+      <th
+        className={`px-4 py-2.5 font-semibold text-primary-500 cursor-pointer select-none hover:text-primary-800 ${align === 'right' ? 'text-right' : 'text-left'}`}
+        onClick={() => handleSort(sortKeyValue)}
+      >
+        {label} {active && (sortDir === 1 ? '▲' : '▼')}
+      </th>
+    );
+  }
+
+  return (
+    <div className="rounded-2xl overflow-hidden bg-white" style={{ border: '1px solid #e5e7eb' }}>
+      <div className="overflow-x-auto">
+        <table className="w-full text-caption border-collapse">
+          <thead>
+            <tr style={{ borderBottom: '1px solid var(--border)', background: 'var(--surface-canvas)' }}>
+              <SortHeader sortKeyValue="district" label="District" />
+              <SortHeader sortKeyValue="name" label="Representative(s)" />
+              <SortHeader sortKeyValue="party" label="Party" />
+              <SortHeader sortKeyValue="score" label="Chamber Score" align="right" />
+              <SortHeader sortKeyValue="funding" label="Funding Raised" align="right" />
+              <SortHeader sortKeyValue="lean" label={mostRecentYear ? `${mostRecentYear} Lean` : 'Historical Lean'} align="right" />
+            </tr>
+          </thead>
+          <tbody>
+            {sorted.map((row) => (
+              <tr key={row.district} style={{ borderBottom: '1px solid var(--border)' }} className="hover:bg-stone-50">
+                <td className="px-4 py-2.5 text-primary-900 font-medium whitespace-nowrap">
+                  HD-{row.district}
+                  {row.county && <span className="text-primary-400"> · {row.county} Co.</span>}
+                </td>
+                <td className="px-4 py-2.5">
+                  {row.reps.length === 0 ? (
+                    <span className="text-primary-400 italic">No data yet</span>
+                  ) : (
+                    <div className="flex flex-col gap-1">
+                      {row.reps.map((r) => (
+                        <Link key={r.id} href={`/politicians/${r.id}`} className="flex items-center gap-1.5 hover:underline">
+                          <span className="text-primary-900 font-medium">{r.full_name}</span>
+                          <CandidacyBadge status={getCandidacyStatus(r)} />
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </td>
+                <td className="px-4 py-2.5">
+                  {row.reps[0] && <PartyBadge party={row.reps[0].party} />}
+                </td>
+                <td className="px-4 py-2.5 text-right font-mono text-primary-900">
+                  {row.primaryScore !== null ? `${Math.round(row.primaryScore * 100)}%` : '—'}
+                </td>
+                <td className="px-4 py-2.5 text-right font-mono text-primary-900">
+                  {row.funding > 0 ? fmtMoney(row.funding) : '—'}
+                </td>
+                <td className="px-4 py-2.5 text-right">
+                  {row.leanWinner && row.leanMarginPct !== null ? (
+                    <span className="font-semibold" style={{ color: row.leanWinner === 'R' ? PARTY_COLORS.R : PARTY_COLORS.D }}>
+                      {row.leanWinner} +{row.leanMarginPct.toFixed(1)}%
+                    </span>
+                  ) : (
+                    <span className="text-primary-400">—</span>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function HistoryTrendBars({
+  history,
+  years,
+}: {
+  readonly history: Record<string, ElectionYearResult>;
+  readonly years: string[];
+}) {
+  return (
+    <div className="mt-4 rounded-xl p-4" style={{ background: 'var(--surface-canvas)', border: '1px solid var(--border)' }}>
+      <p className="text-caption font-semibold text-primary-700 mb-3">Historical general election results</p>
+      <div className="space-y-2.5">
+        {years.map((year) => {
+          const r = history[year];
+          if (!r || r.total_votes === 0) return null;
+          const demPct = (r.dem_votes / r.total_votes) * 100;
+          const repPct = (r.rep_votes / r.total_votes) * 100;
+          return (
+            <div key={year}>
+              <div className="flex items-center justify-between text-caption text-primary-500 mb-0.5">
+                <span className="font-medium">{year}</span>
+                <span>
+                  D {Math.round(demPct)}% · R {Math.round(repPct)}%
+                </span>
+              </div>
+              <div className="flex h-2.5 rounded-full overflow-hidden" style={{ background: '#f1f1f1' }}>
+                <div style={{ width: `${demPct}%`, background: PARTY_COLORS.D }} />
+                <div style={{ width: `${repPct}%`, background: PARTY_COLORS.R }} />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function LegendSwatch({ color, label }: { readonly color: string; readonly label: string }) {
+  return (
+    <span className="inline-flex items-center gap-1.5">
+      <span className="inline-block w-3 h-3 rounded-sm" style={{ background: color }} />
+      {label}
+    </span>
+  );
+}

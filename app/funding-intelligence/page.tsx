@@ -1,5 +1,6 @@
 import { getSupabase } from '@/lib/db/client';
 import Link from 'next/link';
+import { donorProfileUrl } from '@/lib/utils/helpers';
 
 type Lean = 'pro_chamber' | 'anti_chamber' | 'neutral' | 'unknown';
 
@@ -61,11 +62,11 @@ async function getAllContributions() {
   const supabase = getSupabase();
   const PAGE = 1000;
   let from = 0;
-  const all: { donor_org_id: string | null; amount: number; cycle_year: number }[] = [];
+  const all: { donor_org_id: string | null; amount: number; cycle_year: number; followthemoney_id: string | null; politician_id: string }[] = [];
   while (true) {
     const { data } = await supabase
       .from('campaign_contributions')
-      .select('donor_org_id, amount, cycle_year')
+      .select('donor_org_id, amount, cycle_year, followthemoney_id, politician_id')
       .range(from, from + PAGE - 1);
     if (!data || data.length === 0) break;
     all.push(...(data as any[]));
@@ -78,26 +79,38 @@ async function getAllContributions() {
 export default async function FundingIntelligencePage() {
   const supabase = getSupabase();
 
-  const [{ data: orgs }, contributions] = await Promise.all([
+  const [{ data: orgs }, contributions, { data: allPoliticians }] = await Promise.all([
     supabase
       .from('donor_organizations')
       .select('id, name, normalized_name, lean, industry, lean_rationale, lean_classified_by')
       .in('lean', ['pro_chamber', 'anti_chamber', 'neutral'])
       .order('name'),
     getAllContributions(),
+    supabase.from('politicians').select('id, full_name'),
   ]);
 
-  // Build org totals and collect cycle years from all contributions
+  const politicianNameById = new Map((allPoliticians ?? []).map((p: any) => [p.id, p.full_name as string]));
+
+  // Build org totals, FollowTheMoney profile links, and recipient politicians from all contributions
   const orgTotals = new Map<string, number>();
+  const orgFtmId = new Map<string, string>();
+  const orgRecipients = new Map<string, Set<string>>();
   const cycleSet = new Set<number>();
 
   for (const row of contributions) {
     if (row.cycle_year) cycleSet.add(row.cycle_year);
     if (!row.donor_org_id) continue;
     orgTotals.set(row.donor_org_id, (orgTotals.get(row.donor_org_id) ?? 0) + (Number(row.amount) || 0));
+    if (row.followthemoney_id && !orgFtmId.has(row.donor_org_id)) {
+      orgFtmId.set(row.donor_org_id, row.followthemoney_id);
+    }
+    if (row.politician_id) {
+      if (!orgRecipients.has(row.donor_org_id)) orgRecipients.set(row.donor_org_id, new Set());
+      orgRecipients.get(row.donor_org_id)!.add(row.politician_id);
+    }
   }
 
-  const cycles = [...cycleSet].sort();
+  const cycles = Array.from(cycleSet).sort();
   const cycleRange = cycles.length > 0
     ? cycles.length === 1
       ? `${cycles[0]} election cycle`
@@ -250,21 +263,59 @@ export default async function FundingIntelligencePage() {
                   <tr style={{ borderBottom: '1px solid var(--border)', background: 'var(--surface-canvas)' }}>
                     <th className="text-left px-4 py-2 font-semibold text-primary-500">Organization</th>
                     <th className="text-left px-4 py-2 font-semibold text-primary-500">Classified By</th>
+                    <th className="text-left px-4 py-2 font-semibold text-primary-500">Received By</th>
                     <th className="text-right px-4 py-2 font-semibold text-primary-500">Total to PA House Candidates ({cycleRange})</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {orgsForLean.map((org: any) => (
-                    <tr key={org.id} style={{ borderBottom: '1px solid var(--border)' }} className="hover:bg-stone-50">
-                      <td className="px-4 py-2.5 text-primary-900 font-medium">{org.name}</td>
-                      <td className="px-4 py-2.5 text-primary-400 capitalize">
-                        {org.lean_rationale ?? (org.lean_classified_by === 'rule' ? 'Automated (keyword match)' : org.lean_classified_by)}
-                      </td>
-                      <td className="px-4 py-2.5 text-right font-mono text-primary-900">
-                        {org.total > 0 ? fmtDollars(org.total) : '—'}
-                      </td>
-                    </tr>
-                  ))}
+                  {orgsForLean.map((org: any) => {
+                    const profileUrl = donorProfileUrl(orgFtmId.get(org.id));
+                    const recipientIds = Array.from(orgRecipients.get(org.id) ?? []);
+                    return (
+                      <tr key={org.id} style={{ borderBottom: '1px solid var(--border)' }} className="hover:bg-stone-50">
+                        <td className="px-4 py-2.5 text-primary-900 font-medium">
+                          {profileUrl ? (
+                            <a
+                              href={profileUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="hover:underline"
+                              title="View this organization's profile on FollowTheMoney.org"
+                            >
+                              {org.name}
+                            </a>
+                          ) : (
+                            org.name
+                          )}
+                        </td>
+                        <td className="px-4 py-2.5 text-primary-400 capitalize">
+                          {org.lean_rationale ?? (org.lean_classified_by === 'rule' ? 'Automated (keyword match)' : org.lean_classified_by)}
+                        </td>
+                        <td className="px-4 py-2.5 text-primary-700">
+                          {recipientIds.length === 0 ? (
+                            <span className="text-primary-400">—</span>
+                          ) : (
+                            <div className="flex flex-wrap gap-x-1.5">
+                              {recipientIds.slice(0, 3).map((id, i) => (
+                                <span key={id}>
+                                  <Link href={`/politicians/${id}`} className="hover:underline">
+                                    {politicianNameById.get(id) ?? 'Unknown'}
+                                  </Link>
+                                  {i < Math.min(recipientIds.length, 3) - 1 ? ',' : ''}
+                                </span>
+                              ))}
+                              {recipientIds.length > 3 && (
+                                <span className="text-primary-400">+{recipientIds.length - 3} more</span>
+                              )}
+                            </div>
+                          )}
+                        </td>
+                        <td className="px-4 py-2.5 text-right font-mono text-primary-900">
+                          {org.total > 0 ? fmtDollars(org.total) : '—'}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

@@ -5,13 +5,26 @@ import {
   PARTY_COLORS,
   CONFIDENCE_COLORS,
 } from './constants';
-import type { PartyType } from './types';
+import type { CandidacyStatus, PartyType } from './types';
 
 /**
  * Generate content hash for deduplication
  */
 export function generateContentHash(content: string): string {
   return crypto.createHash('sha256').update(content.trim()).digest('hex');
+}
+
+/**
+ * followthemoney_id is stored as `ftm-{recipientEid}-{donorEidOrNormalizedName}-{year}`
+ * (see scripts/jobs/fetch-campaign-finance.js). The middle segment is a real FollowTheMoney
+ * entity id only when the donor itself has one on file there — otherwise it's a normalized
+ * name fallback, which can't resolve to a profile.
+ */
+export function donorProfileUrl(ftmId: string | null | undefined): string | null {
+  if (!ftmId?.startsWith('ftm-')) return null;
+  const [, , donorPart] = ftmId.split('-');
+  if (!donorPart || !/^\d+$/.test(donorPart)) return null;
+  return `https://www.followthemoney.org/entity-details?eid=${donorPart}`;
 }
 
 /**
@@ -48,6 +61,19 @@ export function getConfidenceColor(confidence: number): string {
   if (confidence >= CONFIDENCE_COLORS.HIGH.min) return CONFIDENCE_COLORS.HIGH.color;
   if (confidence >= CONFIDENCE_COLORS.MEDIUM.min) return CONFIDENCE_COLORS.MEDIUM.color;
   return CONFIDENCE_COLORS.LOW.color;
+}
+
+/**
+ * Resolve incumbent/challenger status. Falls back to the synthetic 'cand:{district}:{name}'
+ * id prefix used for candidate-filing rows when the candidacy_status column isn't populated
+ * (or doesn't exist yet) — keeps this working before/after the schema migration lands.
+ */
+export function getCandidacyStatus(politician: {
+  candidacy_status?: CandidacyStatus;
+  pa_legislator_id?: string;
+}): CandidacyStatus {
+  if (politician.candidacy_status) return politician.candidacy_status;
+  return politician.pa_legislator_id?.startsWith('cand:') ? 'challenger' : 'incumbent';
 }
 
 /**

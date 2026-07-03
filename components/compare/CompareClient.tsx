@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { ComparisonRadar } from '@/components/scores/RadarChart';
 import ScoreGauge from '@/components/scores/ScoreGauge';
 import { PartyBadge } from '@/components/ui/Badge';
@@ -133,8 +134,12 @@ export default function CompareClient({ allPoliticians, initialA, initialB }: Co
                 <thead>
                   <tr style={{ background: '#f8f7f5', borderBottom: '1px solid #e5e7eb' }}>
                     <th className="text-left py-3 px-6 font-semibold text-primary-950">Principle</th>
-                    <th className="text-center py-3 px-4 font-semibold text-primary-950">{candidateA.last_name}</th>
-                    <th className="text-center py-3 px-4 font-semibold text-primary-950">{candidateB.last_name}</th>
+                    <th className="text-center py-3 px-4 font-semibold text-primary-950">
+                      <Link href={`/politicians/${candidateA.id}`} className="hover:underline">{candidateA.last_name}</Link>
+                    </th>
+                    <th className="text-center py-3 px-4 font-semibold text-primary-950">
+                      <Link href={`/politicians/${candidateB.id}`} className="hover:underline">{candidateB.last_name}</Link>
+                    </th>
                     <th className="text-center py-3 px-6 font-semibold text-primary-950">Leader</th>
                   </tr>
                 </thead>
@@ -371,7 +376,9 @@ function CandidateSummaryCard({ politician, accentColor }: { readonly politician
           {politician.first_name[0]}{politician.last_name[0]}
         </div>
         <div>
-          <h3 className="font-bold text-primary-950">{politician.full_name}</h3>
+          <Link href={`/politicians/${politician.id}`} className="hover:underline">
+            <h3 className="font-bold text-primary-950">{politician.full_name}</h3>
+          </Link>
           <div className="flex items-center space-x-1.5 mt-0.5">
             <PartyBadge party={politician.party} />
             {politician.county && (
@@ -387,8 +394,13 @@ function CandidateSummaryCard({ politician, accentColor }: { readonly politician
           />
         </div>
       </div>
-      <div className="text-caption text-primary-400">
-        {os?.total_evidence_items ?? 0} evidence items analyzed
+      <div className="flex items-center justify-between">
+        <div className="text-caption text-primary-400">
+          {os?.total_evidence_items ?? 0} evidence items analyzed
+        </div>
+        <Link href={`/politicians/${politician.id}`} className="text-caption font-semibold hover:underline" style={{ color: accentColor }}>
+          View full profile &amp; evidence trail &rarr;
+        </Link>
       </div>
     </div>
   );

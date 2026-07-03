@@ -434,9 +434,19 @@ const FOLDER_ORDER = [
   'social_media',
 ];
 
-export default function EvidenceAccordion({ items }: { readonly items: EvidenceItem[] }) {
+export default function EvidenceAccordion({
+  items,
+  principleFilter,
+}: {
+  readonly items: EvidenceItem[];
+  readonly principleFilter?: string | null;
+}) {
+  const filteredItems = principleFilter
+    ? items.filter((item) => item.tagged_principles?.includes(principleFilter))
+    : items;
+
   const groups: Record<string, EvidenceItem[]> = {};
-  for (const item of items) {
+  for (const item of filteredItems) {
     const type = item.evidence_type;
     if (!groups[type]) groups[type] = [];
     groups[type].push(item);
@@ -450,7 +460,9 @@ export default function EvidenceAccordion({ items }: { readonly items: EvidenceI
   if (orderedTypes.length === 0) {
     return (
       <p className="text-primary-400 text-center py-10">
-        No evidence items yet. Run the pipeline to collect evidence.
+        {principleFilter
+          ? 'No evidence items tagged with this priority yet.'
+          : 'No evidence items yet. Run the pipeline to collect evidence.'}
       </p>
     );
   }
@@ -462,7 +474,7 @@ export default function EvidenceAccordion({ items }: { readonly items: EvidenceI
           key={type}
           type={type}
           items={groups[type]}
-          defaultOpen={false}
+          defaultOpen={!!principleFilter}
         />
       ))}
     </div>

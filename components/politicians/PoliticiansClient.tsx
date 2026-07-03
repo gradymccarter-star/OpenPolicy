@@ -9,9 +9,10 @@ interface PoliticiansClientProps {
   readonly showExamples: boolean;
   readonly initialQuery?: string;
   readonly politicianIdsWithFunding?: string[];
+  readonly committeeRoleById?: Record<string, string>;
 }
 
-export default function PoliticiansClient({ politicians, showExamples, initialQuery = '', politicianIdsWithFunding = [] }: PoliticiansClientProps) {
+export default function PoliticiansClient({ politicians, showExamples, initialQuery = '', politicianIdsWithFunding = [], committeeRoleById = {} }: PoliticiansClientProps) {
   const fundingSet = useMemo(() => new Set(politicianIdsWithFunding), [politicianIdsWithFunding]);
   const [search, setSearch] = useState(initialQuery);
   const [party, setParty] = useState<string>('all');
@@ -160,7 +161,7 @@ export default function PoliticiansClient({ politicians, showExamples, initialQu
       {filtered.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {filtered.map((politician) => (
-            <PoliticianCard key={politician.id} politician={politician} hasFunding={fundingSet.has(politician.id)} />
+            <PoliticianCard key={politician.id} politician={politician} hasFunding={fundingSet.has(politician.id)} committeeRole={committeeRoleById[politician.id] ?? null} />
           ))}
         </div>
       ) : (

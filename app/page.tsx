@@ -3,6 +3,8 @@ import PoliticianCard from '@/components/politicians/PoliticianCard';
 import Keystone from '@/components/ui/Keystone';
 import HeroBackground from '@/components/ui/HeroBackground';
 import { getSupabase, extractOverallScore } from '@/lib/db/client';
+import { getCandidacyStatus } from '@/lib/utils/helpers';
+import { getContactInfoForDistrict, getCommitteeChairLabel } from '@/lib/data/contact-info';
 import { EXAMPLE_POLITICIANS } from '@/lib/utils/constants';
 import type { PoliticianWithScores } from '@/lib/utils/types';
 
@@ -219,7 +221,15 @@ export default async function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {displayPoliticians.slice(0, 6).map((politician) => (
-              <PoliticianCard key={politician.id} politician={politician} />
+              <PoliticianCard
+                key={politician.id}
+                politician={politician}
+                committeeRole={
+                  getCandidacyStatus(politician) === 'incumbent'
+                    ? getCommitteeChairLabel(getContactInfoForDistrict(politician.district))
+                    : null
+                }
+              />
             ))}
           </div>
         </div>

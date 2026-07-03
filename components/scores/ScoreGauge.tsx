@@ -8,6 +8,7 @@ interface ScoreGaugeProps {
   size?: 'small' | 'medium' | 'large';
   showLabel?: boolean;
   label?: string;
+  hasRecord?: boolean;
 }
 
 export default function ScoreGauge({
@@ -16,9 +17,10 @@ export default function ScoreGauge({
   size = 'medium',
   showLabel = true,
   label,
+  hasRecord = true,
 }: ScoreGaugeProps) {
   const percentage = score * 100;
-  const color = getScoreColor(score);
+  const color = hasRecord ? getScoreColor(score) : '#9ca3af';
 
   const sizes = {
     small: { width: 80, height: 80, stroke: 6, fontSize: 'text-lg', confSize: 'text-caption' },
@@ -59,13 +61,19 @@ export default function ScoreGauge({
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className={`font-bold ${fontSize}`} style={{ color }}>
-            {Math.round(percentage)}%
-          </span>
-          {confidence !== undefined && (
-            <span className={`${confSize} font-medium`} style={{ color: confColor }}>
-              {Math.round(confidence * 100)}% conf
-            </span>
+          {hasRecord ? (
+            <>
+              <span className={`font-bold ${fontSize}`} style={{ color }}>
+                {Math.round(percentage)}%
+              </span>
+              {confidence !== undefined && (
+                <span className={`${confSize} font-medium`} style={{ color: confColor }}>
+                  {Math.round(confidence * 100)}% conf
+                </span>
+              )}
+            </>
+          ) : (
+            <span className={`font-bold text-primary-400 ${confSize}`}>No record</span>
           )}
         </div>
       </div>

@@ -1,0 +1,5057 @@
+{
+  "generated_at": "2026-06-27T05:36:29.347Z",
+  "description": "PA House general election results by district, aggregated from precinct-level data.",
+  "sources": {
+    "2018": "https://github.com/openelections/openelections-data-pa/blob/master/2018/20181106__pa__general__precinct.csv",
+    "2020": "https://github.com/openelections/openelections-data-pa/blob/master/2020/20201103__pa__general__precinct.csv",
+    "2024": "https://github.com/openelections/openelections-data-pa/blob/master/2024/20241105__pa__general__precinct.csv"
+  },
+  "districts": {
+    "100": {
+      "2018": {
+        "dem_votes": 5475,
+        "rep_votes": 14111,
+        "other_votes": 19,
+        "total_votes": 19605,
+        "winner_party": "R",
+        "margin_pct": 44
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 24254,
+        "other_votes": 677,
+        "total_votes": 24931,
+        "winner_party": "R",
+        "margin_pct": 97.3
+      }
+    },
+    "101": {
+      "2018": {
+        "dem_votes": 8553,
+        "rep_votes": 15512,
+        "other_votes": 20,
+        "total_votes": 24085,
+        "winner_party": "R",
+        "margin_pct": 28.9
+      },
+      "2020": {
+        "dem_votes": 12792,
+        "rep_votes": 21611,
+        "other_votes": 41,
+        "total_votes": 34444,
+        "winner_party": "R",
+        "margin_pct": 25.6
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 23371,
+        "other_votes": 7647,
+        "total_votes": 31018,
+        "winner_party": "R",
+        "margin_pct": 75.3
+      }
+    },
+    "102": {
+      "2018": {
+        "dem_votes": 0,
+        "rep_votes": 17966,
+        "other_votes": 523,
+        "total_votes": 18489,
+        "winner_party": "R",
+        "margin_pct": 97.2
+      },
+      "2020": {
+        "dem_votes": 9845,
+        "rep_votes": 23197,
+        "other_votes": 66,
+        "total_votes": 33108,
+        "winner_party": "R",
+        "margin_pct": 40.3
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 27886,
+        "other_votes": 7527,
+        "total_votes": 35413,
+        "winner_party": "R",
+        "margin_pct": 78.7
+      }
+    },
+    "103": {
+      "2018": {
+        "dem_votes": 15422,
+        "rep_votes": 2941,
+        "other_votes": 16,
+        "total_votes": 18379,
+        "winner_party": "D",
+        "margin_pct": 67.9
+      },
+      "2020": {
+        "dem_votes": 22384,
+        "rep_votes": 0,
+        "other_votes": 725,
+        "total_votes": 23109,
+        "winner_party": "D",
+        "margin_pct": 96.9
+      },
+      "2024": {
+        "dem_votes": 18896,
+        "rep_votes": 12308,
+        "other_votes": 101,
+        "total_votes": 31305,
+        "winner_party": "D",
+        "margin_pct": 21
+      }
+    },
+    "104": {
+      "2018": {
+        "dem_votes": 12856,
+        "rep_votes": 15385,
+        "other_votes": 17,
+        "total_votes": 28258,
+        "winner_party": "R",
+        "margin_pct": 8.9
+      },
+      "2020": {
+        "dem_votes": 16319,
+        "rep_votes": 20684,
+        "other_votes": 77,
+        "total_votes": 37080,
+        "winner_party": "R",
+        "margin_pct": 11.8
+      },
+      "2024": {
+        "dem_votes": 19066,
+        "rep_votes": 0,
+        "other_votes": 1183,
+        "total_votes": 20249,
+        "winner_party": "D",
+        "margin_pct": 94.2
+      }
+    },
+    "105": {
+      "2018": {
+        "dem_votes": 15277,
+        "rep_votes": 15789,
+        "other_votes": 13,
+        "total_votes": 31079,
+        "winner_party": "R",
+        "margin_pct": 1.6
+      },
+      "2020": {
+        "dem_votes": 19773,
+        "rep_votes": 21263,
+        "other_votes": 66,
+        "total_votes": 41102,
+        "winner_party": "R",
+        "margin_pct": 3.6
+      },
+      "2024": {
+        "dem_votes": 25941,
+        "rep_votes": 0,
+        "other_votes": 1480,
+        "total_votes": 27421,
+        "winner_party": "D",
+        "margin_pct": 94.6
+      }
+    },
+    "106": {
+      "2018": {
+        "dem_votes": 12079,
+        "rep_votes": 14513,
+        "other_votes": 8,
+        "total_votes": 26600,
+        "winner_party": "R",
+        "margin_pct": 9.2
+      },
+      "2020": {
+        "dem_votes": 16631,
+        "rep_votes": 19201,
+        "other_votes": 80,
+        "total_votes": 35912,
+        "winner_party": "R",
+        "margin_pct": 7.2
+      },
+      "2024": {
+        "dem_votes": 13855,
+        "rep_votes": 23615,
+        "other_votes": 110,
+        "total_votes": 37580,
+        "winner_party": "R",
+        "margin_pct": 26
+      }
+    },
+    "107": {
+      "2018": {
+        "dem_votes": 6577,
+        "rep_votes": 13676,
+        "other_votes": 20,
+        "total_votes": 20273,
+        "winner_party": "R",
+        "margin_pct": 35
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 23043,
+        "other_votes": 5279,
+        "total_votes": 28322,
+        "winner_party": "R",
+        "margin_pct": 81.4
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 28129,
+        "other_votes": 2130,
+        "total_votes": 30259,
+        "winner_party": "R",
+        "margin_pct": 93
+      }
+    },
+    "108": {
+      "2018": {
+        "dem_votes": 0,
+        "rep_votes": 17713,
+        "other_votes": 84,
+        "total_votes": 17797,
+        "winner_party": "R",
+        "margin_pct": 99.5
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 27352,
+        "other_votes": 1197,
+        "total_votes": 28549,
+        "winner_party": "R",
+        "margin_pct": 95.8
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 27794,
+        "other_votes": 3203,
+        "total_votes": 30997,
+        "winner_party": "R",
+        "margin_pct": 89.7
+      }
+    },
+    "109": {
+      "2018": {
+        "dem_votes": 7149,
+        "rep_votes": 14039,
+        "other_votes": 28,
+        "total_votes": 21216,
+        "winner_party": "R",
+        "margin_pct": 32.5
+      },
+      "2020": {
+        "dem_votes": 7323,
+        "rep_votes": 19104,
+        "other_votes": 2886,
+        "total_votes": 29313,
+        "winner_party": "R",
+        "margin_pct": 40.2
+      },
+      "2024": {
+        "dem_votes": 10534,
+        "rep_votes": 21586,
+        "other_votes": 76,
+        "total_votes": 32196,
+        "winner_party": "R",
+        "margin_pct": 34.3
+      }
+    },
+    "110": {
+      "2018": {
+        "dem_votes": 5929,
+        "rep_votes": 14648,
+        "other_votes": 29,
+        "total_votes": 20606,
+        "winner_party": "R",
+        "margin_pct": 42.3
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 24781,
+        "other_votes": 4048,
+        "total_votes": 28829,
+        "winner_party": "R",
+        "margin_pct": 86
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 27460,
+        "other_votes": 1815,
+        "total_votes": 29275,
+        "winner_party": "R",
+        "margin_pct": 93.8
+      }
+    },
+    "111": {
+      "2018": {
+        "dem_votes": 6412,
+        "rep_votes": 16244,
+        "other_votes": 16,
+        "total_votes": 22672,
+        "winner_party": "R",
+        "margin_pct": 43.4
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 14519,
+        "other_votes": 14663,
+        "total_votes": 29182,
+        "winner_party": null,
+        "margin_pct": 49.8
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 16779,
+        "other_votes": 559,
+        "total_votes": 17338,
+        "winner_party": "R",
+        "margin_pct": 96.8
+      }
+    },
+    "112": {
+      "2018": {
+        "dem_votes": 17081,
+        "rep_votes": 7428,
+        "other_votes": 33,
+        "total_votes": 24542,
+        "winner_party": "D",
+        "margin_pct": 39.3
+      },
+      "2020": {
+        "dem_votes": 21245,
+        "rep_votes": 11329,
+        "other_votes": 66,
+        "total_votes": 32640,
+        "winner_party": "D",
+        "margin_pct": 30.4
+      },
+      "2024": {
+        "dem_votes": 26329,
+        "rep_votes": 0,
+        "other_votes": 1467,
+        "total_votes": 27796,
+        "winner_party": "D",
+        "margin_pct": 94.7
+      }
+    },
+    "113": {
+      "2018": {
+        "dem_votes": 16661,
+        "rep_votes": 0,
+        "other_votes": 555,
+        "total_votes": 17216,
+        "winner_party": "D",
+        "margin_pct": 96.8
+      },
+      "2020": {
+        "dem_votes": 20273,
+        "rep_votes": 9363,
+        "other_votes": 119,
+        "total_votes": 29755,
+        "winner_party": "D",
+        "margin_pct": 36.7
+      },
+      "2024": {
+        "dem_votes": 19389,
+        "rep_votes": 0,
+        "other_votes": 1217,
+        "total_votes": 20606,
+        "winner_party": "D",
+        "margin_pct": 94.1
+      }
+    },
+    "114": {
+      "2018": {
+        "dem_votes": 15787,
+        "rep_votes": 0,
+        "other_votes": 1193,
+        "total_votes": 16980,
+        "winner_party": "D",
+        "margin_pct": 93
+      },
+      "2020": {
+        "dem_votes": 19860,
+        "rep_votes": 17003,
+        "other_votes": 38,
+        "total_votes": 36901,
+        "winner_party": "D",
+        "margin_pct": 7.7
+      },
+      "2024": {
+        "dem_votes": 24473,
+        "rep_votes": 0,
+        "other_votes": 1463,
+        "total_votes": 25936,
+        "winner_party": "D",
+        "margin_pct": 94.4
+      }
+    },
+    "115": {
+      "2018": {
+        "dem_votes": 11316,
+        "rep_votes": 7511,
+        "other_votes": 0,
+        "total_votes": 18827,
+        "winner_party": "D",
+        "margin_pct": 20.2
+      },
+      "2020": {
+        "dem_votes": 17525,
+        "rep_votes": 9901,
+        "other_votes": 0,
+        "total_votes": 27426,
+        "winner_party": "D",
+        "margin_pct": 27.8
+      },
+      "2024": {
+        "dem_votes": 15955,
+        "rep_votes": 13894,
+        "other_votes": 0,
+        "total_votes": 29849,
+        "winner_party": "D",
+        "margin_pct": 6.9
+      }
+    },
+    "116": {
+      "2018": {
+        "dem_votes": 0,
+        "rep_votes": 14996,
+        "other_votes": 316,
+        "total_votes": 15312,
+        "winner_party": "R",
+        "margin_pct": 97.9
+      },
+      "2020": {
+        "dem_votes": 7314,
+        "rep_votes": 19134,
+        "other_votes": 14,
+        "total_votes": 26462,
+        "winner_party": "R",
+        "margin_pct": 44.7
+      },
+      "2024": {
+        "dem_votes": 5792,
+        "rep_votes": 15237,
+        "other_votes": 408,
+        "total_votes": 21437,
+        "winner_party": "R",
+        "margin_pct": 44.1
+      }
+    },
+    "117": {
+      "2018": {
+        "dem_votes": 0,
+        "rep_votes": 18360,
+        "other_votes": 4081,
+        "total_votes": 22441,
+        "winner_party": "R",
+        "margin_pct": 81.8
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 15811,
+        "other_votes": 13337,
+        "total_votes": 29148,
+        "winner_party": "R",
+        "margin_pct": 54.2
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 28188,
+        "other_votes": 3322,
+        "total_votes": 31510,
+        "winner_party": "R",
+        "margin_pct": 89.5
+      }
+    },
+    "118": {
+      "2018": {
+        "dem_votes": 15936,
+        "rep_votes": 0,
+        "other_votes": 581,
+        "total_votes": 16517,
+        "winner_party": "D",
+        "margin_pct": 96.5
+      },
+      "2020": {
+        "dem_votes": 18733,
+        "rep_votes": 16259,
+        "other_votes": 26,
+        "total_votes": 35018,
+        "winner_party": "D",
+        "margin_pct": 7.1
+      },
+      "2024": {
+        "dem_votes": 19801,
+        "rep_votes": 15404,
+        "other_votes": 80,
+        "total_votes": 35285,
+        "winner_party": "D",
+        "margin_pct": 12.5
+      }
+    },
+    "119": {
+      "2018": {
+        "dem_votes": 10719,
+        "rep_votes": 9484,
+        "other_votes": 30,
+        "total_votes": 20233,
+        "winner_party": "D",
+        "margin_pct": 6.1
+      },
+      "2020": {
+        "dem_votes": 14943,
+        "rep_votes": 13478,
+        "other_votes": 12,
+        "total_votes": 28433,
+        "winner_party": "D",
+        "margin_pct": 5.2
+      },
+      "2024": {
+        "dem_votes": 10623,
+        "rep_votes": 18031,
+        "other_votes": 32,
+        "total_votes": 28686,
+        "winner_party": "R",
+        "margin_pct": 25.8
+      }
+    },
+    "120": {
+      "2018": {
+        "dem_votes": 0,
+        "rep_votes": 16677,
+        "other_votes": 688,
+        "total_votes": 17365,
+        "winner_party": "R",
+        "margin_pct": 96
+      },
+      "2020": {
+        "dem_votes": 11914,
+        "rep_votes": 20398,
+        "other_votes": 16,
+        "total_votes": 32328,
+        "winner_party": "R",
+        "margin_pct": 26.2
+      },
+      "2024": {
+        "dem_votes": 13740,
+        "rep_votes": 18700,
+        "other_votes": 106,
+        "total_votes": 32546,
+        "winner_party": "R",
+        "margin_pct": 15.2
+      }
+    },
+    "121": {
+      "2018": {
+        "dem_votes": 9690,
+        "rep_votes": 7222,
+        "other_votes": 18,
+        "total_votes": 16930,
+        "winner_party": "D",
+        "margin_pct": 14.6
+      },
+      "2020": {
+        "dem_votes": 18744,
+        "rep_votes": 0,
+        "other_votes": 564,
+        "total_votes": 19308,
+        "winner_party": "D",
+        "margin_pct": 97.1
+      },
+      "2024": {
+        "dem_votes": 11692,
+        "rep_votes": 9459,
+        "other_votes": 64,
+        "total_votes": 21215,
+        "winner_party": "D",
+        "margin_pct": 10.5
+      }
+    },
+    "122": {
+      "2018": {
+        "dem_votes": 14070,
+        "rep_votes": 28710,
+        "other_votes": 52,
+        "total_votes": 42832,
+        "winner_party": "R",
+        "margin_pct": 34.2
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 28339,
+        "other_votes": 906,
+        "total_votes": 29245,
+        "winner_party": "R",
+        "margin_pct": 96.9
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 27599,
+        "other_votes": 1039,
+        "total_votes": 28638,
+        "winner_party": "R",
+        "margin_pct": 96.4
+      }
+    },
+    "123": {
+      "2018": {
+        "dem_votes": 24040,
+        "rep_votes": 0,
+        "other_votes": 10148,
+        "total_votes": 34188,
+        "winner_party": "D",
+        "margin_pct": 70.3
+      },
+      "2020": {
+        "dem_votes": 8998,
+        "rep_votes": 15079,
+        "other_votes": 41,
+        "total_votes": 24118,
+        "winner_party": "R",
+        "margin_pct": 25.2
+      },
+      "2024": {
+        "dem_votes": 8686,
+        "rep_votes": 23371,
+        "other_votes": 1438,
+        "total_votes": 33495,
+        "winner_party": "R",
+        "margin_pct": 43.8
+      }
+    },
+    "124": {
+      "2018": {
+        "dem_votes": 0,
+        "rep_votes": 30102,
+        "other_votes": 5741,
+        "total_votes": 35843,
+        "winner_party": "R",
+        "margin_pct": 84
+      },
+      "2020": {
+        "dem_votes": 8949,
+        "rep_votes": 23057,
+        "other_votes": 71,
+        "total_votes": 32077,
+        "winner_party": "R",
+        "margin_pct": 44
+      },
+      "2024": {
+        "dem_votes": 9562,
+        "rep_votes": 24236,
+        "other_votes": 898,
+        "total_votes": 34696,
+        "winner_party": "R",
+        "margin_pct": 42.3
+      }
+    },
+    "125": {
+      "2018": {
+        "dem_votes": 0,
+        "rep_votes": 33148,
+        "other_votes": 6023,
+        "total_votes": 39171,
+        "winner_party": "R",
+        "margin_pct": 84.6
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 26619,
+        "other_votes": 753,
+        "total_votes": 27372,
+        "winner_party": "R",
+        "margin_pct": 97.2
+      },
+      "2024": {
+        "dem_votes": 12264,
+        "rep_votes": 26612,
+        "other_votes": 85,
+        "total_votes": 38961,
+        "winner_party": "R",
+        "margin_pct": 36.8
+      }
+    },
+    "126": {
+      "2018": {
+        "dem_votes": 15291,
+        "rep_votes": 0,
+        "other_votes": 62,
+        "total_votes": 15353,
+        "winner_party": "D",
+        "margin_pct": 99.6
+      },
+      "2020": {
+        "dem_votes": 18508,
+        "rep_votes": 8961,
+        "other_votes": 30,
+        "total_votes": 27499,
+        "winner_party": "D",
+        "margin_pct": 34.7
+      },
+      "2024": {
+        "dem_votes": 14005,
+        "rep_votes": 11052,
+        "other_votes": 31,
+        "total_votes": 25088,
+        "winner_party": "D",
+        "margin_pct": 11.8
+      }
+    },
+    "127": {
+      "2018": {
+        "dem_votes": 8333,
+        "rep_votes": 2092,
+        "other_votes": 17,
+        "total_votes": 10442,
+        "winner_party": "D",
+        "margin_pct": 59.8
+      },
+      "2020": {
+        "dem_votes": 11786,
+        "rep_votes": 4372,
+        "other_votes": 40,
+        "total_votes": 16198,
+        "winner_party": "D",
+        "margin_pct": 45.8
+      },
+      "2024": {
+        "dem_votes": 12684,
+        "rep_votes": 0,
+        "other_votes": 409,
+        "total_votes": 13093,
+        "winner_party": "D",
+        "margin_pct": 96.9
+      }
+    },
+    "128": {
+      "2018": {
+        "dem_votes": 10955,
+        "rep_votes": 16707,
+        "other_votes": 5,
+        "total_votes": 27667,
+        "winner_party": "R",
+        "margin_pct": 20.8
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 30342,
+        "other_votes": 1398,
+        "total_votes": 31740,
+        "winner_party": "R",
+        "margin_pct": 95.6
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 28117,
+        "other_votes": 1166,
+        "total_votes": 29283,
+        "winner_party": "R",
+        "margin_pct": 96
+      }
+    },
+    "129": {
+      "2018": {
+        "dem_votes": 11940,
+        "rep_votes": 14564,
+        "other_votes": 14,
+        "total_votes": 26518,
+        "winner_party": "R",
+        "margin_pct": 9.9
+      },
+      "2020": {
+        "dem_votes": 15679,
+        "rep_votes": 21060,
+        "other_votes": 28,
+        "total_votes": 36767,
+        "winner_party": "R",
+        "margin_pct": 14.6
+      },
+      "2024": {
+        "dem_votes": 14808,
+        "rep_votes": 11479,
+        "other_votes": 40,
+        "total_votes": 26327,
+        "winner_party": "D",
+        "margin_pct": 12.6
+      }
+    },
+    "130": {
+      "2018": {
+        "dem_votes": 0,
+        "rep_votes": 18369,
+        "other_votes": 296,
+        "total_votes": 18665,
+        "winner_party": "R",
+        "margin_pct": 98.4
+      },
+      "2020": {
+        "dem_votes": 13332,
+        "rep_votes": 23508,
+        "other_votes": 22,
+        "total_votes": 36862,
+        "winner_party": "R",
+        "margin_pct": 27.6
+      },
+      "2024": {
+        "dem_votes": 12751,
+        "rep_votes": 24320,
+        "other_votes": 34,
+        "total_votes": 37105,
+        "winner_party": "R",
+        "margin_pct": 31.2
+      }
+    },
+    "131": {
+      "2018": {
+        "dem_votes": 13915,
+        "rep_votes": 15579,
+        "other_votes": 2,
+        "total_votes": 29496,
+        "winner_party": "R",
+        "margin_pct": 5.6
+      },
+      "2020": {
+        "dem_votes": 18947,
+        "rep_votes": 22477,
+        "other_votes": 12,
+        "total_votes": 41436,
+        "winner_party": "R",
+        "margin_pct": 8.5
+      },
+      "2024": {
+        "dem_votes": 17570,
+        "rep_votes": 23514,
+        "other_votes": 247,
+        "total_votes": 41331,
+        "winner_party": "R",
+        "margin_pct": 14.4
+      }
+    },
+    "132": {
+      "2018": {
+        "dem_votes": 14025,
+        "rep_votes": 0,
+        "other_votes": 0,
+        "total_votes": 14025,
+        "winner_party": "D",
+        "margin_pct": 100
+      },
+      "2020": {
+        "dem_votes": 17025,
+        "rep_votes": 8051,
+        "other_votes": 0,
+        "total_votes": 25076,
+        "winner_party": "D",
+        "margin_pct": 35.8
+      },
+      "2024": {
+        "dem_votes": 26659,
+        "rep_votes": 0,
+        "other_votes": 0,
+        "total_votes": 26659,
+        "winner_party": "D",
+        "margin_pct": 100
+      }
+    },
+    "133": {
+      "2018": {
+        "dem_votes": 15366,
+        "rep_votes": 0,
+        "other_votes": 0,
+        "total_votes": 15366,
+        "winner_party": "D",
+        "margin_pct": 100
+      },
+      "2020": {
+        "dem_votes": 18844,
+        "rep_votes": 12227,
+        "other_votes": 0,
+        "total_votes": 31071,
+        "winner_party": "D",
+        "margin_pct": 21.3
+      },
+      "2024": {
+        "dem_votes": 24035,
+        "rep_votes": 0,
+        "other_votes": 0,
+        "total_votes": 24035,
+        "winner_party": "D",
+        "margin_pct": 100
+      }
+    },
+    "134": {
+      "2018": {
+        "dem_votes": 12107,
+        "rep_votes": 16237,
+        "other_votes": 1,
+        "total_votes": 28345,
+        "winner_party": "R",
+        "margin_pct": 14.6
+      },
+      "2020": {
+        "dem_votes": 15618,
+        "rep_votes": 23485,
+        "other_votes": 5,
+        "total_votes": 39108,
+        "winner_party": "R",
+        "margin_pct": 20.1
+      },
+      "2024": {
+        "dem_votes": 19124,
+        "rep_votes": 0,
+        "other_votes": 0,
+        "total_votes": 19124,
+        "winner_party": "D",
+        "margin_pct": 100
+      }
+    },
+    "135": {
+      "2018": {
+        "dem_votes": 15872,
+        "rep_votes": 0,
+        "other_votes": 82,
+        "total_votes": 15954,
+        "winner_party": "D",
+        "margin_pct": 99.5
+      },
+      "2020": {
+        "dem_votes": 19855,
+        "rep_votes": 10410,
+        "other_votes": 46,
+        "total_votes": 30311,
+        "winner_party": "D",
+        "margin_pct": 31.2
+      },
+      "2024": {
+        "dem_votes": 22656,
+        "rep_votes": 0,
+        "other_votes": 11187,
+        "total_votes": 33843,
+        "winner_party": "D",
+        "margin_pct": 66.9
+      }
+    },
+    "136": {
+      "2018": {
+        "dem_votes": 14516,
+        "rep_votes": 0,
+        "other_votes": 119,
+        "total_votes": 14635,
+        "winner_party": "D",
+        "margin_pct": 99.2
+      },
+      "2020": {
+        "dem_votes": 21379,
+        "rep_votes": 0,
+        "other_votes": 383,
+        "total_votes": 21762,
+        "winner_party": "D",
+        "margin_pct": 98.2
+      },
+      "2024": {
+        "dem_votes": 19607,
+        "rep_votes": 0,
+        "other_votes": 11634,
+        "total_votes": 31241,
+        "winner_party": "D",
+        "margin_pct": 62.8
+      }
+    },
+    "137": {
+      "2018": {
+        "dem_votes": 11203,
+        "rep_votes": 14200,
+        "other_votes": 299,
+        "total_votes": 25702,
+        "winner_party": "R",
+        "margin_pct": 11.7
+      },
+      "2020": {
+        "dem_votes": 13795,
+        "rep_votes": 23807,
+        "other_votes": 25,
+        "total_votes": 37627,
+        "winner_party": "R",
+        "margin_pct": 26.6
+      },
+      "2024": {
+        "dem_votes": 19169,
+        "rep_votes": 20485,
+        "other_votes": 1376,
+        "total_votes": 41030,
+        "winner_party": "R",
+        "margin_pct": 3.2
+      }
+    },
+    "138": {
+      "2018": {
+        "dem_votes": 11741,
+        "rep_votes": 16705,
+        "other_votes": 480,
+        "total_votes": 28926,
+        "winner_party": "R",
+        "margin_pct": 17.2
+      },
+      "2020": {
+        "dem_votes": 18355,
+        "rep_votes": 23518,
+        "other_votes": 43,
+        "total_votes": 41916,
+        "winner_party": "R",
+        "margin_pct": 12.3
+      },
+      "2024": {
+        "dem_votes": 13747,
+        "rep_votes": 25791,
+        "other_votes": 1635,
+        "total_votes": 41173,
+        "winner_party": "R",
+        "margin_pct": 29.3
+      }
+    },
+    "139": {
+      "2018": {
+        "dem_votes": 7853,
+        "rep_votes": 17048,
+        "other_votes": 0,
+        "total_votes": 24901,
+        "winner_party": "R",
+        "margin_pct": 36.9
+      },
+      "2020": {
+        "dem_votes": 7494,
+        "rep_votes": 14700,
+        "other_votes": 14072,
+        "total_votes": 36266,
+        "winner_party": "R",
+        "margin_pct": 19.9
+      },
+      "2024": {
+        "dem_votes": 8511,
+        "rep_votes": 16143,
+        "other_votes": 67,
+        "total_votes": 24721,
+        "winner_party": "R",
+        "margin_pct": 30.9
+      }
+    },
+    "140": {
+      "2018": {
+        "dem_votes": 17490,
+        "rep_votes": 0,
+        "other_votes": 0,
+        "total_votes": 17490,
+        "winner_party": "D",
+        "margin_pct": 100
+      },
+      "2020": {
+        "dem_votes": 19822,
+        "rep_votes": 13217,
+        "other_votes": 49,
+        "total_votes": 33088,
+        "winner_party": "D",
+        "margin_pct": 20
+      },
+      "2024": {
+        "dem_votes": 17587,
+        "rep_votes": 14959,
+        "other_votes": 84,
+        "total_votes": 32630,
+        "winner_party": "D",
+        "margin_pct": 8.1
+      }
+    },
+    "141": {
+      "2018": {
+        "dem_votes": 13347,
+        "rep_votes": 8137,
+        "other_votes": 0,
+        "total_votes": 21484,
+        "winner_party": "D",
+        "margin_pct": 24.3
+      },
+      "2020": {
+        "dem_votes": 19348,
+        "rep_votes": 11522,
+        "other_votes": 51,
+        "total_votes": 30921,
+        "winner_party": "D",
+        "margin_pct": 25.3
+      },
+      "2024": {
+        "dem_votes": 20960,
+        "rep_votes": 11345,
+        "other_votes": 58,
+        "total_votes": 32363,
+        "winner_party": "D",
+        "margin_pct": 29.7
+      }
+    },
+    "142": {
+      "2018": {
+        "dem_votes": 14241,
+        "rep_votes": 18177,
+        "other_votes": 0,
+        "total_votes": 32418,
+        "winner_party": "R",
+        "margin_pct": 12.1
+      },
+      "2020": {
+        "dem_votes": 16419,
+        "rep_votes": 25894,
+        "other_votes": 59,
+        "total_votes": 42372,
+        "winner_party": "R",
+        "margin_pct": 22.4
+      },
+      "2024": {
+        "dem_votes": 17493,
+        "rep_votes": 21226,
+        "other_votes": 59,
+        "total_votes": 38778,
+        "winner_party": "R",
+        "margin_pct": 9.6
+      }
+    },
+    "143": {
+      "2018": {
+        "dem_votes": 17339,
+        "rep_votes": 16763,
+        "other_votes": 0,
+        "total_votes": 34102,
+        "winner_party": "D",
+        "margin_pct": 1.7
+      },
+      "2020": {
+        "dem_votes": 21172,
+        "rep_votes": 22517,
+        "other_votes": 52,
+        "total_votes": 43741,
+        "winner_party": "R",
+        "margin_pct": 3.1
+      },
+      "2024": {
+        "dem_votes": 18866,
+        "rep_votes": 24370,
+        "other_votes": 61,
+        "total_votes": 43297,
+        "winner_party": "R",
+        "margin_pct": 12.7
+      }
+    },
+    "144": {
+      "2018": {
+        "dem_votes": 14867,
+        "rep_votes": 15457,
+        "other_votes": 0,
+        "total_votes": 30324,
+        "winner_party": "R",
+        "margin_pct": 1.9
+      },
+      "2020": {
+        "dem_votes": 18342,
+        "rep_votes": 22881,
+        "other_votes": 37,
+        "total_votes": 41260,
+        "winner_party": "R",
+        "margin_pct": 11
+      },
+      "2024": {
+        "dem_votes": 20553,
+        "rep_votes": 19488,
+        "other_votes": 80,
+        "total_votes": 40121,
+        "winner_party": "D",
+        "margin_pct": 2.7
+      }
+    },
+    "145": {
+      "2018": {
+        "dem_votes": 11997,
+        "rep_votes": 15598,
+        "other_votes": 0,
+        "total_votes": 27595,
+        "winner_party": "R",
+        "margin_pct": 13
+      },
+      "2020": {
+        "dem_votes": 15172,
+        "rep_votes": 22461,
+        "other_votes": 41,
+        "total_votes": 37674,
+        "winner_party": "R",
+        "margin_pct": 19.3
+      },
+      "2024": {
+        "dem_votes": 15821,
+        "rep_votes": 22678,
+        "other_votes": 47,
+        "total_votes": 38546,
+        "winner_party": "R",
+        "margin_pct": 17.8
+      }
+    },
+    "146": {
+      "2018": {
+        "dem_votes": 14093,
+        "rep_votes": 11286,
+        "other_votes": 7,
+        "total_votes": 25386,
+        "winner_party": "D",
+        "margin_pct": 11.1
+      },
+      "2020": {
+        "dem_votes": 20681,
+        "rep_votes": 15706,
+        "other_votes": 61,
+        "total_votes": 36448,
+        "winner_party": "D",
+        "margin_pct": 13.6
+      },
+      "2024": {
+        "dem_votes": 20726,
+        "rep_votes": 14233,
+        "other_votes": 52,
+        "total_votes": 35011,
+        "winner_party": "D",
+        "margin_pct": 18.5
+      }
+    },
+    "147": {
+      "2018": {
+        "dem_votes": 12056,
+        "rep_votes": 15766,
+        "other_votes": 5,
+        "total_votes": 27827,
+        "winner_party": "R",
+        "margin_pct": 13.3
+      },
+      "2020": {
+        "dem_votes": 16494,
+        "rep_votes": 21361,
+        "other_votes": 1223,
+        "total_votes": 39078,
+        "winner_party": "R",
+        "margin_pct": 12.5
+      },
+      "2024": {
+        "dem_votes": 16835,
+        "rep_votes": 23792,
+        "other_votes": 62,
+        "total_votes": 40689,
+        "winner_party": "R",
+        "margin_pct": 17.1
+      }
+    },
+    "148": {
+      "2018": {
+        "dem_votes": 28244,
+        "rep_votes": 0,
+        "other_votes": 218,
+        "total_votes": 28462,
+        "winner_party": "D",
+        "margin_pct": 99.2
+      },
+      "2020": {
+        "dem_votes": 31506,
+        "rep_votes": 13463,
+        "other_votes": 53,
+        "total_votes": 45022,
+        "winner_party": "D",
+        "margin_pct": 40.1
+      },
+      "2024": {
+        "dem_votes": 34119,
+        "rep_votes": 0,
+        "other_votes": 1695,
+        "total_votes": 35814,
+        "winner_party": "D",
+        "margin_pct": 95.3
+      }
+    },
+    "149": {
+      "2018": {
+        "dem_votes": 21883,
+        "rep_votes": 0,
+        "other_votes": 143,
+        "total_votes": 22026,
+        "winner_party": "D",
+        "margin_pct": 99.4
+      },
+      "2020": {
+        "dem_votes": 28650,
+        "rep_votes": 12248,
+        "other_votes": 63,
+        "total_votes": 40961,
+        "winner_party": "D",
+        "margin_pct": 40
+      },
+      "2024": {
+        "dem_votes": 30339,
+        "rep_votes": 0,
+        "other_votes": 1840,
+        "total_votes": 32179,
+        "winner_party": "D",
+        "margin_pct": 94.3
+      }
+    },
+    "150": {
+      "2018": {
+        "dem_votes": 15485,
+        "rep_votes": 12260,
+        "other_votes": 6,
+        "total_votes": 27751,
+        "winner_party": "D",
+        "margin_pct": 11.6
+      },
+      "2020": {
+        "dem_votes": 20538,
+        "rep_votes": 17189,
+        "other_votes": 38,
+        "total_votes": 37765,
+        "winner_party": "D",
+        "margin_pct": 8.9
+      },
+      "2024": {
+        "dem_votes": 22359,
+        "rep_votes": 15624,
+        "other_votes": 87,
+        "total_votes": 38070,
+        "winner_party": "D",
+        "margin_pct": 17.7
+      }
+    },
+    "151": {
+      "2018": {
+        "dem_votes": 13804,
+        "rep_votes": 14597,
+        "other_votes": 15,
+        "total_votes": 28416,
+        "winner_party": "R",
+        "margin_pct": 2.8
+      },
+      "2020": {
+        "dem_votes": 18566,
+        "rep_votes": 21020,
+        "other_votes": 44,
+        "total_votes": 39630,
+        "winner_party": "R",
+        "margin_pct": 6.2
+      },
+      "2024": {
+        "dem_votes": 24975,
+        "rep_votes": 15672,
+        "other_votes": 68,
+        "total_votes": 40715,
+        "winner_party": "D",
+        "margin_pct": 22.8
+      }
+    },
+    "152": {
+      "2018": {
+        "dem_votes": 13488,
+        "rep_votes": 16469,
+        "other_votes": 11,
+        "total_votes": 29968,
+        "winner_party": "R",
+        "margin_pct": 9.9
+      },
+      "2020": {
+        "dem_votes": 18907,
+        "rep_votes": 14987,
+        "other_votes": 8748,
+        "total_votes": 42642,
+        "winner_party": "D",
+        "margin_pct": 9.2
+      },
+      "2024": {
+        "dem_votes": 21583,
+        "rep_votes": 13699,
+        "other_votes": 70,
+        "total_votes": 35352,
+        "winner_party": "D",
+        "margin_pct": 22.3
+      }
+    },
+    "153": {
+      "2018": {
+        "dem_votes": 23694,
+        "rep_votes": 9437,
+        "other_votes": 366,
+        "total_votes": 33497,
+        "winner_party": "D",
+        "margin_pct": 42.6
+      },
+      "2020": {
+        "dem_votes": 30393,
+        "rep_votes": 0,
+        "other_votes": 9378,
+        "total_votes": 39771,
+        "winner_party": "D",
+        "margin_pct": 76.4
+      },
+      "2024": {
+        "dem_votes": 25739,
+        "rep_votes": 13427,
+        "other_votes": 81,
+        "total_votes": 39247,
+        "winner_party": "D",
+        "margin_pct": 31.4
+      }
+    },
+    "154": {
+      "2018": {
+        "dem_votes": 26592,
+        "rep_votes": 6047,
+        "other_votes": 12,
+        "total_votes": 32651,
+        "winner_party": "D",
+        "margin_pct": 62.9
+      },
+      "2020": {
+        "dem_votes": 30566,
+        "rep_votes": 8760,
+        "other_votes": 55,
+        "total_votes": 39381,
+        "winner_party": "D",
+        "margin_pct": 55.4
+      },
+      "2024": {
+        "dem_votes": 31179,
+        "rep_votes": 7648,
+        "other_votes": 91,
+        "total_votes": 38918,
+        "winner_party": "D",
+        "margin_pct": 60.5
+      }
+    },
+    "155": {
+      "2018": {
+        "dem_votes": 18434,
+        "rep_votes": 15300,
+        "other_votes": 30,
+        "total_votes": 33764,
+        "winner_party": "D",
+        "margin_pct": 9.3
+      },
+      "2024": {
+        "dem_votes": 23362,
+        "rep_votes": 17396,
+        "other_votes": 59,
+        "total_votes": 40817,
+        "winner_party": "D",
+        "margin_pct": 14.6
+      }
+    },
+    "156": {
+      "2018": {
+        "dem_votes": 17923,
+        "rep_votes": 13792,
+        "other_votes": 17,
+        "total_votes": 31732,
+        "winner_party": "D",
+        "margin_pct": 13
+      },
+      "2024": {
+        "dem_votes": 22786,
+        "rep_votes": 16059,
+        "other_votes": 41,
+        "total_votes": 38886,
+        "winner_party": "D",
+        "margin_pct": 17.3
+      }
+    },
+    "157": {
+      "2018": {
+        "dem_votes": 17681,
+        "rep_votes": 13567,
+        "other_votes": 21,
+        "total_votes": 31269,
+        "winner_party": "D",
+        "margin_pct": 13.2
+      },
+      "2020": {
+        "dem_votes": 4870,
+        "rep_votes": 3288,
+        "other_votes": 5,
+        "total_votes": 8163,
+        "winner_party": "D",
+        "margin_pct": 19.4
+      },
+      "2024": {
+        "dem_votes": 25141,
+        "rep_votes": 16408,
+        "other_votes": 61,
+        "total_votes": 41610,
+        "winner_party": "D",
+        "margin_pct": 21
+      }
+    },
+    "158": {
+      "2018": {
+        "dem_votes": 15641,
+        "rep_votes": 13628,
+        "other_votes": 24,
+        "total_votes": 29293,
+        "winner_party": "D",
+        "margin_pct": 6.9
+      },
+      "2024": {
+        "dem_votes": 22052,
+        "rep_votes": 15983,
+        "other_votes": 48,
+        "total_votes": 38083,
+        "winner_party": "D",
+        "margin_pct": 15.9
+      }
+    },
+    "159": {
+      "2018": {
+        "dem_votes": 27064,
+        "rep_votes": 8338,
+        "other_votes": 66,
+        "total_votes": 35468,
+        "winner_party": "D",
+        "margin_pct": 52.8
+      },
+      "2020": {
+        "dem_votes": 17558,
+        "rep_votes": 6972,
+        "other_votes": 91,
+        "total_votes": 24621,
+        "winner_party": "D",
+        "margin_pct": 43
+      },
+      "2024": {
+        "dem_votes": 20161,
+        "rep_votes": 0,
+        "other_votes": 0,
+        "total_votes": 20161,
+        "winner_party": "D",
+        "margin_pct": 100
+      }
+    },
+    "160": {
+      "2018": {
+        "dem_votes": 22077,
+        "rep_votes": 24633,
+        "other_votes": 37,
+        "total_votes": 46747,
+        "winner_party": "R",
+        "margin_pct": 5.5
+      },
+      "2020": {
+        "dem_votes": 12248,
+        "rep_votes": 14976,
+        "other_votes": 28,
+        "total_votes": 27252,
+        "winner_party": "R",
+        "margin_pct": 10
+      },
+      "2024": {
+        "dem_votes": 20313,
+        "rep_votes": 21834,
+        "other_votes": 13,
+        "total_votes": 42160,
+        "winner_party": "R",
+        "margin_pct": 3.6
+      }
+    },
+    "161": {
+      "2018": {
+        "dem_votes": 25430,
+        "rep_votes": 20919,
+        "other_votes": 38,
+        "total_votes": 46387,
+        "winner_party": "D",
+        "margin_pct": 9.7
+      },
+      "2020": {
+        "dem_votes": 22764,
+        "rep_votes": 17169,
+        "other_votes": 30,
+        "total_votes": 39963,
+        "winner_party": "D",
+        "margin_pct": 14
+      },
+      "2024": {
+        "dem_votes": 22393,
+        "rep_votes": 16084,
+        "other_votes": 0,
+        "total_votes": 38477,
+        "winner_party": "D",
+        "margin_pct": 16.4
+      }
+    },
+    "162": {
+      "2018": {
+        "dem_votes": 26146,
+        "rep_votes": 24556,
+        "other_votes": 62,
+        "total_votes": 50764,
+        "winner_party": "D",
+        "margin_pct": 3.1
+      },
+      "2020": {
+        "dem_votes": 18693,
+        "rep_votes": 15731,
+        "other_votes": 61,
+        "total_votes": 34485,
+        "winner_party": "D",
+        "margin_pct": 8.6
+      },
+      "2024": {
+        "dem_votes": 19815,
+        "rep_votes": 15143,
+        "other_votes": 0,
+        "total_votes": 34958,
+        "winner_party": "D",
+        "margin_pct": 13.4
+      }
+    },
+    "163": {
+      "2018": {
+        "dem_votes": 29629,
+        "rep_votes": 26160,
+        "other_votes": 46,
+        "total_votes": 55835,
+        "winner_party": "D",
+        "margin_pct": 6.2
+      },
+      "2020": {
+        "dem_votes": 22259,
+        "rep_votes": 14680,
+        "other_votes": 80,
+        "total_votes": 37019,
+        "winner_party": "D",
+        "margin_pct": 20.5
+      },
+      "2024": {
+        "dem_votes": 21022,
+        "rep_votes": 12238,
+        "other_votes": 0,
+        "total_votes": 33260,
+        "winner_party": "D",
+        "margin_pct": 26.4
+      }
+    },
+    "164": {
+      "2018": {
+        "dem_votes": 35570,
+        "rep_votes": 7296,
+        "other_votes": 78,
+        "total_votes": 42944,
+        "winner_party": "D",
+        "margin_pct": 65.8
+      },
+      "2020": {
+        "dem_votes": 24398,
+        "rep_votes": 0,
+        "other_votes": 1439,
+        "total_votes": 25837,
+        "winner_party": "D",
+        "margin_pct": 94.4
+      },
+      "2024": {
+        "dem_votes": 21017,
+        "rep_votes": 0,
+        "other_votes": 0,
+        "total_votes": 21017,
+        "winner_party": "D",
+        "margin_pct": 100
+      }
+    },
+    "165": {
+      "2018": {
+        "dem_votes": 31216,
+        "rep_votes": 32192,
+        "other_votes": 36,
+        "total_votes": 63444,
+        "winner_party": "R",
+        "margin_pct": 1.5
+      },
+      "2020": {
+        "dem_votes": 21529,
+        "rep_votes": 20222,
+        "other_votes": 43,
+        "total_votes": 41794,
+        "winner_party": "D",
+        "margin_pct": 3.1
+      },
+      "2024": {
+        "dem_votes": 24659,
+        "rep_votes": 16730,
+        "other_votes": 0,
+        "total_votes": 41389,
+        "winner_party": "D",
+        "margin_pct": 19.2
+      }
+    },
+    "166": {
+      "2018": {
+        "dem_votes": 42159,
+        "rep_votes": 16929,
+        "other_votes": 55,
+        "total_votes": 59143,
+        "winner_party": "D",
+        "margin_pct": 42.7
+      },
+      "2020": {
+        "dem_votes": 28791,
+        "rep_votes": 11826,
+        "other_votes": 59,
+        "total_votes": 40676,
+        "winner_party": "D",
+        "margin_pct": 41.7
+      },
+      "2024": {
+        "dem_votes": 25233,
+        "rep_votes": 16565,
+        "other_votes": 0,
+        "total_votes": 41798,
+        "winner_party": "D",
+        "margin_pct": 20.7
+      }
+    },
+    "167": {
+      "2018": {
+        "dem_votes": 17109,
+        "rep_votes": 15700,
+        "other_votes": 36,
+        "total_votes": 32845,
+        "winner_party": "D",
+        "margin_pct": 4.3
+      },
+      "2024": {
+        "dem_votes": 23301,
+        "rep_votes": 16484,
+        "other_votes": 60,
+        "total_votes": 39845,
+        "winner_party": "D",
+        "margin_pct": 17.1
+      }
+    },
+    "168": {
+      "2018": {
+        "dem_votes": 33838,
+        "rep_votes": 34738,
+        "other_votes": 62,
+        "total_votes": 68638,
+        "winner_party": "R",
+        "margin_pct": 1.3
+      },
+      "2020": {
+        "dem_votes": 21526,
+        "rep_votes": 22399,
+        "other_votes": 51,
+        "total_votes": 43976,
+        "winner_party": "R",
+        "margin_pct": 2
+      },
+      "2024": {
+        "dem_votes": 22634,
+        "rep_votes": 16326,
+        "other_votes": 0,
+        "total_votes": 38960,
+        "winner_party": "D",
+        "margin_pct": 16.2
+      }
+    },
+    "169": {
+      "2018": {
+        "dem_votes": 7378,
+        "rep_votes": 17688,
+        "other_votes": 20,
+        "total_votes": 25086,
+        "winner_party": "R",
+        "margin_pct": 41.1
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 29927,
+        "other_votes": 1623,
+        "total_votes": 31550,
+        "winner_party": "R",
+        "margin_pct": 94.9
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 30234,
+        "other_votes": 1542,
+        "total_votes": 31776,
+        "winner_party": "R",
+        "margin_pct": 95.1
+      }
+    },
+    "170": {
+      "2018": {
+        "dem_votes": 8650,
+        "rep_votes": 11754,
+        "other_votes": 2,
+        "total_votes": 20406,
+        "winner_party": "R",
+        "margin_pct": 15.2
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 0,
+        "other_votes": 58592,
+        "total_votes": 58592,
+        "winner_party": null,
+        "margin_pct": 0
+      }
+    },
+    "171": {
+      "2018": {
+        "dem_votes": 12232,
+        "rep_votes": 17892,
+        "other_votes": 22,
+        "total_votes": 30146,
+        "winner_party": "R",
+        "margin_pct": 18.8
+      },
+      "2020": {
+        "dem_votes": 15283,
+        "rep_votes": 24305,
+        "other_votes": 571,
+        "total_votes": 40159,
+        "winner_party": "R",
+        "margin_pct": 22.5
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 28501,
+        "other_votes": 2908,
+        "total_votes": 31409,
+        "winner_party": "R",
+        "margin_pct": 90.7
+      }
+    },
+    "172": {
+      "2018": {
+        "dem_votes": 14598,
+        "rep_votes": 0,
+        "other_votes": 58,
+        "total_votes": 14656,
+        "winner_party": "D",
+        "margin_pct": 99.6
+      },
+      "2020": {
+        "dem_votes": 911,
+        "rep_votes": 634,
+        "other_votes": 50659,
+        "total_votes": 52204,
+        "winner_party": null,
+        "margin_pct": 0.5
+      }
+    },
+    "173": {
+      "2018": {
+        "dem_votes": 13757,
+        "rep_votes": 0,
+        "other_votes": 31,
+        "total_votes": 13788,
+        "winner_party": "D",
+        "margin_pct": 99.8
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 0,
+        "other_votes": 35528,
+        "total_votes": 35528,
+        "winner_party": null,
+        "margin_pct": 0
+      }
+    },
+    "174": {
+      "2018": {
+        "dem_votes": 14213,
+        "rep_votes": 0,
+        "other_votes": 36,
+        "total_votes": 14249,
+        "winner_party": "D",
+        "margin_pct": 99.7
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 0,
+        "other_votes": 37068,
+        "total_votes": 37068,
+        "winner_party": null,
+        "margin_pct": 0
+      }
+    },
+    "175": {
+      "2018": {
+        "dem_votes": 24538,
+        "rep_votes": 0,
+        "other_votes": 99,
+        "total_votes": 24637,
+        "winner_party": "D",
+        "margin_pct": 99.6
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 0,
+        "other_votes": 61048,
+        "total_votes": 61048,
+        "winner_party": null,
+        "margin_pct": 0
+      }
+    },
+    "176": {
+      "2018": {
+        "dem_votes": 9621,
+        "rep_votes": 11635,
+        "other_votes": 0,
+        "total_votes": 21256,
+        "winner_party": "R",
+        "margin_pct": 9.5
+      },
+      "2020": {
+        "dem_votes": 14385,
+        "rep_votes": 17683,
+        "other_votes": 0,
+        "total_votes": 32068,
+        "winner_party": "R",
+        "margin_pct": 10.3
+      },
+      "2024": {
+        "dem_votes": 12576,
+        "rep_votes": 21429,
+        "other_votes": 0,
+        "total_votes": 34005,
+        "winner_party": "R",
+        "margin_pct": 26
+      }
+    },
+    "177": {
+      "2018": {
+        "dem_votes": 11436,
+        "rep_votes": 7808,
+        "other_votes": 5,
+        "total_votes": 19249,
+        "winner_party": "D",
+        "margin_pct": 18.8
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 0,
+        "other_votes": 52260,
+        "total_votes": 52260,
+        "winner_party": null,
+        "margin_pct": 0
+      }
+    },
+    "178": {
+      "2018": {
+        "dem_votes": 17036,
+        "rep_votes": 17608,
+        "other_votes": 0,
+        "total_votes": 34644,
+        "winner_party": "R",
+        "margin_pct": 1.7
+      },
+      "2020": {
+        "dem_votes": 19879,
+        "rep_votes": 24749,
+        "other_votes": 51,
+        "total_votes": 44679,
+        "winner_party": "R",
+        "margin_pct": 10.9
+      },
+      "2024": {
+        "dem_votes": 16939,
+        "rep_votes": 26864,
+        "other_votes": 74,
+        "total_votes": 43877,
+        "winner_party": "R",
+        "margin_pct": 22.6
+      }
+    },
+    "179": {
+      "2018": {
+        "dem_votes": 14735,
+        "rep_votes": 0,
+        "other_votes": 9,
+        "total_votes": 14744,
+        "winner_party": "D",
+        "margin_pct": 99.9
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 0,
+        "other_votes": 38084,
+        "total_votes": 38084,
+        "winner_party": null,
+        "margin_pct": 0
+      }
+    },
+    "180": {
+      "2018": {
+        "dem_votes": 10434,
+        "rep_votes": 0,
+        "other_votes": 0,
+        "total_votes": 10434,
+        "winner_party": "D",
+        "margin_pct": 100
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 0,
+        "other_votes": 27308,
+        "total_votes": 27308,
+        "winner_party": null,
+        "margin_pct": 0
+      }
+    },
+    "181": {
+      "2018": {
+        "dem_votes": 21382,
+        "rep_votes": 1050,
+        "other_votes": 13,
+        "total_votes": 22445,
+        "winner_party": "D",
+        "margin_pct": 90.6
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 0,
+        "other_votes": 50820,
+        "total_votes": 50820,
+        "winner_party": null,
+        "margin_pct": 0
+      }
+    },
+    "182": {
+      "2018": {
+        "dem_votes": 28234,
+        "rep_votes": 0,
+        "other_votes": 2982,
+        "total_votes": 31216,
+        "winner_party": "D",
+        "margin_pct": 90.4
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 0,
+        "other_votes": 82542,
+        "total_votes": 82542,
+        "winner_party": null,
+        "margin_pct": 0
+      }
+    },
+    "183": {
+      "2018": {
+        "dem_votes": 10731,
+        "rep_votes": 14020,
+        "other_votes": 8,
+        "total_votes": 24759,
+        "winner_party": "R",
+        "margin_pct": 13.3
+      },
+      "2020": {
+        "dem_votes": 14217,
+        "rep_votes": 22270,
+        "other_votes": 17,
+        "total_votes": 36504,
+        "winner_party": "R",
+        "margin_pct": 22.1
+      },
+      "2024": {
+        "dem_votes": 13503,
+        "rep_votes": 25688,
+        "other_votes": 1107,
+        "total_votes": 40298,
+        "winner_party": "R",
+        "margin_pct": 30.2
+      }
+    },
+    "184": {
+      "2018": {
+        "dem_votes": 17441,
+        "rep_votes": 0,
+        "other_votes": 47,
+        "total_votes": 17488,
+        "winner_party": "D",
+        "margin_pct": 99.7
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 0,
+        "other_votes": 57012,
+        "total_votes": 57012,
+        "winner_party": null,
+        "margin_pct": 0
+      }
+    },
+    "185": {
+      "2018": {
+        "dem_votes": 24192,
+        "rep_votes": 0,
+        "other_votes": 34,
+        "total_votes": 24226,
+        "winner_party": "D",
+        "margin_pct": 99.9
+      },
+      "2020": {
+        "dem_votes": 5240,
+        "rep_votes": 0,
+        "other_votes": 37518,
+        "total_votes": 42758,
+        "winner_party": null,
+        "margin_pct": 12.3
+      },
+      "2024": {
+        "dem_votes": 1987,
+        "rep_votes": 0,
+        "other_votes": 0,
+        "total_votes": 1987,
+        "winner_party": "D",
+        "margin_pct": 100
+      }
+    },
+    "186": {
+      "2018": {
+        "dem_votes": 25775,
+        "rep_votes": 0,
+        "other_votes": 50,
+        "total_votes": 25825,
+        "winner_party": "D",
+        "margin_pct": 99.8
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 0,
+        "other_votes": 64440,
+        "total_votes": 64440,
+        "winner_party": null,
+        "margin_pct": 0
+      }
+    },
+    "187": {
+      "2018": {
+        "dem_votes": 10972,
+        "rep_votes": 16018,
+        "other_votes": 2,
+        "total_votes": 26992,
+        "winner_party": "R",
+        "margin_pct": 18.7
+      },
+      "2020": {
+        "dem_votes": 14602,
+        "rep_votes": 23335,
+        "other_votes": 15,
+        "total_votes": 37952,
+        "winner_party": "R",
+        "margin_pct": 23
+      },
+      "2024": {
+        "dem_votes": 17738,
+        "rep_votes": 21994,
+        "other_votes": 0,
+        "total_votes": 39732,
+        "winner_party": "R",
+        "margin_pct": 10.7
+      }
+    },
+    "188": {
+      "2018": {
+        "dem_votes": 22868,
+        "rep_votes": 0,
+        "other_votes": 49,
+        "total_votes": 22917,
+        "winner_party": "D",
+        "margin_pct": 99.8
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 0,
+        "other_votes": 50904,
+        "total_votes": 50904,
+        "winner_party": null,
+        "margin_pct": 0
+      }
+    },
+    "189": {
+      "2018": {
+        "dem_votes": 8557,
+        "rep_votes": 12085,
+        "other_votes": 0,
+        "total_votes": 20642,
+        "winner_party": "R",
+        "margin_pct": 17.1
+      },
+      "2020": {
+        "dem_votes": 12468,
+        "rep_votes": 18359,
+        "other_votes": 0,
+        "total_votes": 30827,
+        "winner_party": "R",
+        "margin_pct": 19.1
+      },
+      "2024": {
+        "dem_votes": 16970,
+        "rep_votes": 12542,
+        "other_votes": 29,
+        "total_votes": 29541,
+        "winner_party": "D",
+        "margin_pct": 15
+      }
+    },
+    "190": {
+      "2018": {
+        "dem_votes": 22644,
+        "rep_votes": 0,
+        "other_votes": 325,
+        "total_votes": 22969,
+        "winner_party": "D",
+        "margin_pct": 98.6
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 0,
+        "other_votes": 58932,
+        "total_votes": 58932,
+        "winner_party": null,
+        "margin_pct": 0
+      }
+    },
+    "191": {
+      "2018": {
+        "dem_votes": 26152,
+        "rep_votes": 0,
+        "other_votes": 21,
+        "total_votes": 26173,
+        "winner_party": "D",
+        "margin_pct": 99.9
+      },
+      "2020": {
+        "dem_votes": 7403,
+        "rep_votes": 0,
+        "other_votes": 35515,
+        "total_votes": 42918,
+        "winner_party": null,
+        "margin_pct": 17.2
+      },
+      "2024": {
+        "dem_votes": 9093,
+        "rep_votes": 0,
+        "other_votes": 0,
+        "total_votes": 9093,
+        "winner_party": "D",
+        "margin_pct": 100
+      }
+    },
+    "192": {
+      "2018": {
+        "dem_votes": 25070,
+        "rep_votes": 0,
+        "other_votes": 15,
+        "total_votes": 25085,
+        "winner_party": "D",
+        "margin_pct": 99.9
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 0,
+        "other_votes": 58602,
+        "total_votes": 58602,
+        "winner_party": null,
+        "margin_pct": 0
+      }
+    },
+    "193": {
+      "2018": {
+        "dem_votes": 7208,
+        "rep_votes": 13522,
+        "other_votes": 13816,
+        "total_votes": 34546,
+        "winner_party": null,
+        "margin_pct": 18.3
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 28519,
+        "other_votes": 1015,
+        "total_votes": 29534,
+        "winner_party": "R",
+        "margin_pct": 96.6
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 27826,
+        "other_votes": 4740,
+        "total_votes": 32566,
+        "winner_party": "R",
+        "margin_pct": 85.4
+      }
+    },
+    "194": {
+      "2018": {
+        "dem_votes": 22745,
+        "rep_votes": 5648,
+        "other_votes": 765,
+        "total_votes": 29158,
+        "winner_party": "D",
+        "margin_pct": 58.6
+      },
+      "2020": {
+        "dem_votes": 5135,
+        "rep_votes": 1638,
+        "other_votes": 61729,
+        "total_votes": 68502,
+        "winner_party": null,
+        "margin_pct": 5.1
+      }
+    },
+    "195": {
+      "2018": {
+        "dem_votes": 25525,
+        "rep_votes": 0,
+        "other_votes": 44,
+        "total_votes": 25569,
+        "winner_party": "D",
+        "margin_pct": 99.8
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 0,
+        "other_votes": 60390,
+        "total_votes": 60390,
+        "winner_party": null,
+        "margin_pct": 0
+      }
+    },
+    "196": {
+      "2018": {
+        "dem_votes": 0,
+        "rep_votes": 19632,
+        "other_votes": 512,
+        "total_votes": 20144,
+        "winner_party": "R",
+        "margin_pct": 97.5
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 28797,
+        "other_votes": 1428,
+        "total_votes": 30225,
+        "winner_party": "R",
+        "margin_pct": 95.3
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 30637,
+        "other_votes": 1523,
+        "total_votes": 32160,
+        "winner_party": "R",
+        "margin_pct": 95.3
+      }
+    },
+    "197": {
+      "2018": {
+        "dem_votes": 15473,
+        "rep_votes": 0,
+        "other_votes": 7,
+        "total_votes": 15480,
+        "winner_party": "D",
+        "margin_pct": 100
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 0,
+        "other_votes": 37874,
+        "total_votes": 37874,
+        "winner_party": null,
+        "margin_pct": 0
+      }
+    },
+    "198": {
+      "2018": {
+        "dem_votes": 22164,
+        "rep_votes": 0,
+        "other_votes": 21,
+        "total_votes": 22185,
+        "winner_party": "D",
+        "margin_pct": 99.9
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 0,
+        "other_votes": 51078,
+        "total_votes": 51078,
+        "winner_party": null,
+        "margin_pct": 0
+      }
+    },
+    "199": {
+      "2018": {
+        "dem_votes": 19766,
+        "rep_votes": 29494,
+        "other_votes": 924,
+        "total_votes": 50184,
+        "winner_party": "R",
+        "margin_pct": 19.4
+      },
+      "2020": {
+        "dem_votes": 12399,
+        "rep_votes": 21654,
+        "other_votes": 43,
+        "total_votes": 34096,
+        "winner_party": "R",
+        "margin_pct": 27.1
+      },
+      "2024": {
+        "dem_votes": 13447,
+        "rep_votes": 20935,
+        "other_votes": 61,
+        "total_votes": 34443,
+        "winner_party": "R",
+        "margin_pct": 21.7
+      }
+    },
+    "200": {
+      "2018": {
+        "dem_votes": 32558,
+        "rep_votes": 0,
+        "other_votes": 20,
+        "total_votes": 32578,
+        "winner_party": "D",
+        "margin_pct": 99.9
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 0,
+        "other_votes": 73158,
+        "total_votes": 73158,
+        "winner_party": null,
+        "margin_pct": 0
+      }
+    },
+    "201": {
+      "2018": {
+        "dem_votes": 22903,
+        "rep_votes": 0,
+        "other_votes": 8,
+        "total_votes": 22911,
+        "winner_party": "D",
+        "margin_pct": 100
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 0,
+        "other_votes": 53514,
+        "total_votes": 53514,
+        "winner_party": null,
+        "margin_pct": 0
+      }
+    },
+    "202": {
+      "2018": {
+        "dem_votes": 14153,
+        "rep_votes": 0,
+        "other_votes": 17,
+        "total_votes": 14170,
+        "winner_party": "D",
+        "margin_pct": 99.9
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 0,
+        "other_votes": 36456,
+        "total_votes": 36456,
+        "winner_party": null,
+        "margin_pct": 0
+      }
+    },
+    "203": {
+      "2018": {
+        "dem_votes": 22825,
+        "rep_votes": 0,
+        "other_votes": 11,
+        "total_votes": 22836,
+        "winner_party": "D",
+        "margin_pct": 100
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 0,
+        "other_votes": 54384,
+        "total_votes": 54384,
+        "winner_party": null,
+        "margin_pct": 0
+      }
+    },
+    "092": {
+      "2018": {
+        "dem_votes": 9649,
+        "rep_votes": 21520,
+        "other_votes": 37,
+        "total_votes": 31206,
+        "winner_party": "R",
+        "margin_pct": 38
+      },
+      "2020": {
+        "dem_votes": 10515,
+        "rep_votes": 27020,
+        "other_votes": 34,
+        "total_votes": 37569,
+        "winner_party": "R",
+        "margin_pct": 43.9
+      },
+      "2024": {
+        "dem_votes": 11710,
+        "rep_votes": 27938,
+        "other_votes": 77,
+        "total_votes": 39725,
+        "winner_party": "R",
+        "margin_pct": 40.9
+      }
+    },
+    "094": {
+      "2018": {
+        "dem_votes": 8027,
+        "rep_votes": 15799,
+        "other_votes": 32,
+        "total_votes": 23858,
+        "winner_party": "R",
+        "margin_pct": 32.6
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 26243,
+        "other_votes": 1748,
+        "total_votes": 27991,
+        "winner_party": "R",
+        "margin_pct": 93.8
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 27766,
+        "other_votes": 1890,
+        "total_votes": 29656,
+        "winner_party": "R",
+        "margin_pct": 93.6
+      }
+    },
+    "047": {
+      "2018": {
+        "dem_votes": 9044,
+        "rep_votes": 16286,
+        "other_votes": 32,
+        "total_votes": 25362,
+        "winner_party": "R",
+        "margin_pct": 28.6
+      },
+      "2020": {
+        "dem_votes": 11663,
+        "rep_votes": 22043,
+        "other_votes": 62,
+        "total_votes": 33768,
+        "winner_party": "R",
+        "margin_pct": 30.7
+      },
+      "2024": {
+        "dem_votes": 13201,
+        "rep_votes": 22322,
+        "other_votes": 66,
+        "total_votes": 35589,
+        "winner_party": "R",
+        "margin_pct": 25.6
+      }
+    },
+    "093": {
+      "2018": {
+        "dem_votes": 9341,
+        "rep_votes": 18036,
+        "other_votes": 2350,
+        "total_votes": 29727,
+        "winner_party": "R",
+        "margin_pct": 29.2
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 27807,
+        "other_votes": 2502,
+        "total_votes": 30309,
+        "winner_party": "R",
+        "margin_pct": 91.7
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 29780,
+        "other_votes": 2311,
+        "total_votes": 32091,
+        "winner_party": "R",
+        "margin_pct": 92.8
+      }
+    },
+    "095": {
+      "2018": {
+        "dem_votes": 12297,
+        "rep_votes": 0,
+        "other_votes": 336,
+        "total_votes": 12633,
+        "winner_party": "D",
+        "margin_pct": 97.3
+      },
+      "2020": {
+        "dem_votes": 14102,
+        "rep_votes": 7943,
+        "other_votes": 50,
+        "total_votes": 22095,
+        "winner_party": "D",
+        "margin_pct": 27.9
+      },
+      "2024": {
+        "dem_votes": 12812,
+        "rep_votes": 8852,
+        "other_votes": 50,
+        "total_votes": 21714,
+        "winner_party": "D",
+        "margin_pct": 18.2
+      }
+    },
+    "016": {
+      "2018": {
+        "dem_votes": 19301,
+        "rep_votes": 0,
+        "other_votes": 889,
+        "total_votes": 20190,
+        "winner_party": "D",
+        "margin_pct": 95.6
+      },
+      "2020": {
+        "dem_votes": 19093,
+        "rep_votes": 14884,
+        "other_votes": 54,
+        "total_votes": 34031,
+        "winner_party": "D",
+        "margin_pct": 12.4
+      },
+      "2024": {
+        "dem_votes": 18198,
+        "rep_votes": 16584,
+        "other_votes": 77,
+        "total_votes": 34859,
+        "winner_party": "D",
+        "margin_pct": 4.6
+      }
+    },
+    "019": {
+      "2018": {
+        "dem_votes": 17930,
+        "rep_votes": 0,
+        "other_votes": 309,
+        "total_votes": 18239,
+        "winner_party": "D",
+        "margin_pct": 98.3
+      },
+      "2020": {
+        "dem_votes": 71434,
+        "rep_votes": 45898,
+        "other_votes": 621,
+        "total_votes": 117953,
+        "winner_party": "D",
+        "margin_pct": 21.6
+      },
+      "2024": {
+        "dem_votes": 22645,
+        "rep_votes": 0,
+        "other_votes": 647,
+        "total_votes": 23292,
+        "winner_party": "D",
+        "margin_pct": 97.2
+      }
+    },
+    "020": {
+      "2018": {
+        "dem_votes": 22011,
+        "rep_votes": 0,
+        "other_votes": 711,
+        "total_votes": 22722,
+        "winner_party": "D",
+        "margin_pct": 96.9
+      },
+      "2020": {
+        "dem_votes": 27657,
+        "rep_votes": 0,
+        "other_votes": 1594,
+        "total_votes": 29251,
+        "winner_party": "D",
+        "margin_pct": 94.6
+      },
+      "2024": {
+        "dem_votes": 21322,
+        "rep_votes": 14678,
+        "other_votes": 66,
+        "total_votes": 36066,
+        "winner_party": "D",
+        "margin_pct": 18.4
+      }
+    },
+    "021": {
+      "2018": {
+        "dem_votes": 19985,
+        "rep_votes": 0,
+        "other_votes": 3584,
+        "total_votes": 23569,
+        "winner_party": "D",
+        "margin_pct": 84.8
+      },
+      "2020": {
+        "dem_votes": 24035,
+        "rep_votes": 12170,
+        "other_votes": 79,
+        "total_votes": 36284,
+        "winner_party": "D",
+        "margin_pct": 32.7
+      },
+      "2024": {
+        "dem_votes": 29301,
+        "rep_votes": 0,
+        "other_votes": 1722,
+        "total_votes": 31023,
+        "winner_party": "D",
+        "margin_pct": 94.4
+      }
+    },
+    "023": {
+      "2018": {
+        "dem_votes": 22626,
+        "rep_votes": 0,
+        "other_votes": 2655,
+        "total_votes": 25281,
+        "winner_party": "D",
+        "margin_pct": 89.5
+      },
+      "2020": {
+        "dem_votes": 24642,
+        "rep_votes": 0,
+        "other_votes": 4511,
+        "total_votes": 29153,
+        "winner_party": "D",
+        "margin_pct": 84.5
+      },
+      "2024": {
+        "dem_votes": 29844,
+        "rep_votes": 0,
+        "other_votes": 699,
+        "total_votes": 30543,
+        "winner_party": "D",
+        "margin_pct": 97.7
+      }
+    },
+    "024": {
+      "2018": {
+        "dem_votes": 25322,
+        "rep_votes": 0,
+        "other_votes": 230,
+        "total_votes": 25552,
+        "winner_party": "D",
+        "margin_pct": 99.1
+      },
+      "2020": {
+        "dem_votes": 29894,
+        "rep_votes": 0,
+        "other_votes": 353,
+        "total_votes": 30247,
+        "winner_party": "D",
+        "margin_pct": 98.8
+      },
+      "2024": {
+        "dem_votes": 27962,
+        "rep_votes": 0,
+        "other_votes": 563,
+        "total_votes": 28525,
+        "winner_party": "D",
+        "margin_pct": 98
+      }
+    },
+    "025": {
+      "2018": {
+        "dem_votes": 14046,
+        "rep_votes": 10314,
+        "other_votes": 30,
+        "total_votes": 24390,
+        "winner_party": "D",
+        "margin_pct": 15.3
+      },
+      "2020": {
+        "dem_votes": 19445,
+        "rep_votes": 13896,
+        "other_votes": 64,
+        "total_votes": 33405,
+        "winner_party": "D",
+        "margin_pct": 16.6
+      },
+      "2024": {
+        "dem_votes": 20865,
+        "rep_votes": 14140,
+        "other_votes": 62,
+        "total_votes": 35067,
+        "winner_party": "D",
+        "margin_pct": 19.2
+      }
+    },
+    "027": {
+      "2018": {
+        "dem_votes": 19540,
+        "rep_votes": 0,
+        "other_votes": 460,
+        "total_votes": 20000,
+        "winner_party": "D",
+        "margin_pct": 97.7
+      },
+      "2020": {
+        "dem_votes": 26094,
+        "rep_votes": 0,
+        "other_votes": 1064,
+        "total_votes": 27158,
+        "winner_party": "D",
+        "margin_pct": 96.1
+      },
+      "2024": {
+        "dem_votes": 26101,
+        "rep_votes": 0,
+        "other_votes": 1317,
+        "total_votes": 27418,
+        "winner_party": "D",
+        "margin_pct": 95.2
+      }
+    },
+    "028": {
+      "2018": {
+        "dem_votes": 15330,
+        "rep_votes": 18322,
+        "other_votes": 22,
+        "total_votes": 33674,
+        "winner_party": "R",
+        "margin_pct": 8.9
+      },
+      "2020": {
+        "dem_votes": 20477,
+        "rep_votes": 23770,
+        "other_votes": 40,
+        "total_votes": 44287,
+        "winner_party": "R",
+        "margin_pct": 7.4
+      },
+      "2024": {
+        "dem_votes": 17514,
+        "rep_votes": 23228,
+        "other_votes": 41,
+        "total_votes": 40783,
+        "winner_party": "R",
+        "margin_pct": 14
+      }
+    },
+    "030": {
+      "2018": {
+        "dem_votes": 15736,
+        "rep_votes": 17244,
+        "other_votes": 75,
+        "total_votes": 33055,
+        "winner_party": "R",
+        "margin_pct": 4.6
+      },
+      "2020": {
+        "dem_votes": 19217,
+        "rep_votes": 23309,
+        "other_votes": 44,
+        "total_votes": 42570,
+        "winner_party": "R",
+        "margin_pct": 9.6
+      },
+      "2024": {
+        "dem_votes": 21896,
+        "rep_votes": 17748,
+        "other_votes": 710,
+        "total_votes": 40354,
+        "winner_party": "D",
+        "margin_pct": 10.3
+      }
+    },
+    "032": {
+      "2018": {
+        "dem_votes": 22864,
+        "rep_votes": 0,
+        "other_votes": 737,
+        "total_votes": 23601,
+        "winner_party": "D",
+        "margin_pct": 96.9
+      },
+      "2020": {
+        "dem_votes": 30311,
+        "rep_votes": 0,
+        "other_votes": 1214,
+        "total_votes": 31525,
+        "winner_party": "D",
+        "margin_pct": 96.1
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 0,
+        "other_votes": 32086,
+        "total_votes": 32086,
+        "winner_party": null,
+        "margin_pct": 0
+      }
+    },
+    "033": {
+      "2018": {
+        "dem_votes": 12979,
+        "rep_votes": 10321,
+        "other_votes": 22,
+        "total_votes": 23322,
+        "winner_party": "D",
+        "margin_pct": 11.4
+      },
+      "2020": {
+        "dem_votes": 15471,
+        "rep_votes": 16359,
+        "other_votes": 51,
+        "total_votes": 31881,
+        "winner_party": "R",
+        "margin_pct": 2.8
+      },
+      "2024": {
+        "dem_votes": 20030,
+        "rep_votes": 15867,
+        "other_votes": 63,
+        "total_votes": 35960,
+        "winner_party": "D",
+        "margin_pct": 11.6
+      }
+    },
+    "034": {
+      "2018": {
+        "dem_votes": 21240,
+        "rep_votes": 0,
+        "other_votes": 1045,
+        "total_votes": 22285,
+        "winner_party": "D",
+        "margin_pct": 95.3
+      },
+      "2020": {
+        "dem_votes": 27112,
+        "rep_votes": 0,
+        "other_votes": 1258,
+        "total_votes": 28370,
+        "winner_party": "D",
+        "margin_pct": 95.6
+      },
+      "2024": {
+        "dem_votes": 30209,
+        "rep_votes": 0,
+        "other_votes": 789,
+        "total_votes": 30998,
+        "winner_party": "D",
+        "margin_pct": 97.5
+      }
+    },
+    "035": {
+      "2018": {
+        "dem_votes": 15165,
+        "rep_votes": 0,
+        "other_votes": 513,
+        "total_votes": 15678,
+        "winner_party": "D",
+        "margin_pct": 96.7
+      },
+      "2020": {
+        "dem_votes": 21327,
+        "rep_votes": 0,
+        "other_votes": 1725,
+        "total_votes": 23052,
+        "winner_party": "D",
+        "margin_pct": 92.5
+      },
+      "2024": {
+        "dem_votes": 23550,
+        "rep_votes": 0,
+        "other_votes": 1128,
+        "total_votes": 24678,
+        "winner_party": "D",
+        "margin_pct": 95.4
+      }
+    },
+    "036": {
+      "2018": {
+        "dem_votes": 19173,
+        "rep_votes": 0,
+        "other_votes": 572,
+        "total_votes": 19745,
+        "winner_party": "D",
+        "margin_pct": 97.1
+      },
+      "2020": {
+        "dem_votes": 20064,
+        "rep_votes": 11980,
+        "other_votes": 58,
+        "total_votes": 32102,
+        "winner_party": "D",
+        "margin_pct": 25.2
+      },
+      "2024": {
+        "dem_votes": 22253,
+        "rep_votes": 0,
+        "other_votes": 6340,
+        "total_votes": 28593,
+        "winner_party": "D",
+        "margin_pct": 77.8
+      }
+    },
+    "038": {
+      "2018": {
+        "dem_votes": 20039,
+        "rep_votes": 0,
+        "other_votes": 729,
+        "total_votes": 20768,
+        "winner_party": "D",
+        "margin_pct": 96.5
+      },
+      "2020": {
+        "dem_votes": 20352,
+        "rep_votes": 15930,
+        "other_votes": 75,
+        "total_votes": 36357,
+        "winner_party": "D",
+        "margin_pct": 12.2
+      },
+      "2024": {
+        "dem_votes": 19559,
+        "rep_votes": 15675,
+        "other_votes": 57,
+        "total_votes": 35291,
+        "winner_party": "D",
+        "margin_pct": 11
+      }
+    },
+    "039": {
+      "2018": {
+        "dem_votes": 11778,
+        "rep_votes": 14870,
+        "other_votes": 46,
+        "total_votes": 26694,
+        "winner_party": "R",
+        "margin_pct": 11.6
+      },
+      "2020": {
+        "dem_votes": 13657,
+        "rep_votes": 23072,
+        "other_votes": 40,
+        "total_votes": 36769,
+        "winner_party": "R",
+        "margin_pct": 25.6
+      },
+      "2024": {
+        "dem_votes": 14546,
+        "rep_votes": 23808,
+        "other_votes": 58,
+        "total_votes": 38412,
+        "winner_party": "R",
+        "margin_pct": 24.1
+      }
+    },
+    "040": {
+      "2018": {
+        "dem_votes": 14674,
+        "rep_votes": 18730,
+        "other_votes": 26,
+        "total_votes": 33430,
+        "winner_party": "R",
+        "margin_pct": 12.1
+      },
+      "2020": {
+        "dem_votes": 16968,
+        "rep_votes": 22678,
+        "other_votes": 16,
+        "total_votes": 39662,
+        "winner_party": "R",
+        "margin_pct": 14.4
+      },
+      "2024": {
+        "dem_votes": 16518,
+        "rep_votes": 25165,
+        "other_votes": 64,
+        "total_votes": 41747,
+        "winner_party": "R",
+        "margin_pct": 20.7
+      }
+    },
+    "042": {
+      "2018": {
+        "dem_votes": 23947,
+        "rep_votes": 0,
+        "other_votes": 661,
+        "total_votes": 24608,
+        "winner_party": "D",
+        "margin_pct": 97.3
+      },
+      "2020": {
+        "dem_votes": 25552,
+        "rep_votes": 11762,
+        "other_votes": 65,
+        "total_votes": 37379,
+        "winner_party": "D",
+        "margin_pct": 36.9
+      },
+      "2024": {
+        "dem_votes": 26932,
+        "rep_votes": 13436,
+        "other_votes": 86,
+        "total_votes": 40454,
+        "winner_party": "D",
+        "margin_pct": 33.4
+      }
+    },
+    "044": {
+      "2018": {
+        "dem_votes": 14319,
+        "rep_votes": 15338,
+        "other_votes": 31,
+        "total_votes": 29688,
+        "winner_party": "R",
+        "margin_pct": 3.4
+      },
+      "2020": {
+        "dem_votes": 18126,
+        "rep_votes": 22106,
+        "other_votes": 54,
+        "total_votes": 40286,
+        "winner_party": "R",
+        "margin_pct": 9.9
+      },
+      "2024": {
+        "dem_votes": 17872,
+        "rep_votes": 20811,
+        "other_votes": 41,
+        "total_votes": 38724,
+        "winner_party": "R",
+        "margin_pct": 7.6
+      }
+    },
+    "045": {
+      "2018": {
+        "dem_votes": 20981,
+        "rep_votes": 0,
+        "other_votes": 1003,
+        "total_votes": 21984,
+        "winner_party": "D",
+        "margin_pct": 95.4
+      },
+      "2020": {
+        "dem_votes": 22833,
+        "rep_votes": 14165,
+        "other_votes": 67,
+        "total_votes": 37065,
+        "winner_party": "D",
+        "margin_pct": 23.4
+      },
+      "2024": {
+        "dem_votes": 21045,
+        "rep_votes": 15192,
+        "other_votes": 59,
+        "total_votes": 36296,
+        "winner_party": "D",
+        "margin_pct": 16.1
+      }
+    },
+    "046": {
+      "2018": {
+        "dem_votes": 12577,
+        "rep_votes": 15786,
+        "other_votes": 20,
+        "total_votes": 28383,
+        "winner_party": "R",
+        "margin_pct": 11.3
+      },
+      "2020": {
+        "dem_votes": 15204,
+        "rep_votes": 22876,
+        "other_votes": 23,
+        "total_votes": 38103,
+        "winner_party": "R",
+        "margin_pct": 20.1
+      },
+      "2024": {
+        "dem_votes": 13931,
+        "rep_votes": 22888,
+        "other_votes": 32,
+        "total_votes": 36851,
+        "winner_party": "R",
+        "margin_pct": 24.3
+      }
+    },
+    "054": {
+      "2018": {
+        "dem_votes": 10944,
+        "rep_votes": 16301,
+        "other_votes": 32,
+        "total_votes": 27277,
+        "winner_party": "R",
+        "margin_pct": 19.6
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 30360,
+        "other_votes": 1494,
+        "total_votes": 31854,
+        "winner_party": "R",
+        "margin_pct": 95.3
+      },
+      "2024": {
+        "dem_votes": 18584,
+        "rep_votes": 8092,
+        "other_votes": 87,
+        "total_votes": 26763,
+        "winner_party": "D",
+        "margin_pct": 39.2
+      }
+    },
+    "078": {
+      "2018": {
+        "dem_votes": 4971,
+        "rep_votes": 18937,
+        "other_votes": 14009,
+        "total_votes": 37917,
+        "winner_party": "R",
+        "margin_pct": 36.8
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 31530,
+        "other_votes": 1785,
+        "total_votes": 33315,
+        "winner_party": "R",
+        "margin_pct": 94.6
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 31084,
+        "other_votes": 1175,
+        "total_votes": 32259,
+        "winner_party": "R",
+        "margin_pct": 96.4
+      }
+    },
+    "069": {
+      "2018": {
+        "dem_votes": 5008,
+        "rep_votes": 19028,
+        "other_votes": 5059,
+        "total_votes": 29095,
+        "winner_party": "R",
+        "margin_pct": 48.2
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 31065,
+        "other_votes": 648,
+        "total_votes": 31713,
+        "winner_party": "R",
+        "margin_pct": 98
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 32670,
+        "other_votes": 3650,
+        "total_votes": 36320,
+        "winner_party": "R",
+        "margin_pct": 90
+      }
+    },
+    "012": {
+      "2018": {
+        "dem_votes": 12922,
+        "rep_votes": 18086,
+        "other_votes": 74,
+        "total_votes": 31082,
+        "winner_party": "R",
+        "margin_pct": 16.6
+      },
+      "2020": {
+        "dem_votes": 16683,
+        "rep_votes": 26836,
+        "other_votes": 1440,
+        "total_votes": 44959,
+        "winner_party": "R",
+        "margin_pct": 22.6
+      },
+      "2024": {
+        "dem_votes": 15103,
+        "rep_votes": 27840,
+        "other_votes": 1311,
+        "total_votes": 44254,
+        "winner_party": "R",
+        "margin_pct": 28.8
+      }
+    },
+    "064": {
+      "2018": {
+        "dem_votes": 6652,
+        "rep_votes": 13339,
+        "other_votes": 38,
+        "total_votes": 20029,
+        "winner_party": "R",
+        "margin_pct": 33.4
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 22940,
+        "other_votes": 5763,
+        "total_votes": 28703,
+        "winner_party": "R",
+        "margin_pct": 79.9
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 25456,
+        "other_votes": 6326,
+        "total_votes": 31782,
+        "winner_party": "R",
+        "margin_pct": 80.1
+      }
+    },
+    "008": {
+      "2018": {
+        "dem_votes": 6696,
+        "rep_votes": 16221,
+        "other_votes": 25,
+        "total_votes": 22942,
+        "winner_party": "R",
+        "margin_pct": 41.5
+      },
+      "2020": {
+        "dem_votes": 7873,
+        "rep_votes": 23824,
+        "other_votes": 331,
+        "total_votes": 32028,
+        "winner_party": "R",
+        "margin_pct": 49.8
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 33825,
+        "other_votes": 8810,
+        "total_votes": 42635,
+        "winner_party": "R",
+        "margin_pct": 79.3
+      }
+    },
+    "060": {
+      "2018": {
+        "dem_votes": 0,
+        "rep_votes": 32758,
+        "other_votes": 851,
+        "total_votes": 33609,
+        "winner_party": "R",
+        "margin_pct": 97.5
+      },
+      "2020": {
+        "dem_votes": 5232,
+        "rep_votes": 34124,
+        "other_votes": 1546,
+        "total_votes": 40902,
+        "winner_party": "R",
+        "margin_pct": 70.6
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 30718,
+        "other_votes": 844,
+        "total_votes": 31562,
+        "winner_party": "R",
+        "margin_pct": 97.3
+      }
+    },
+    "011": {
+      "2018": {
+        "dem_votes": 0,
+        "rep_votes": 16079,
+        "other_votes": 4997,
+        "total_votes": 21076,
+        "winner_party": "R",
+        "margin_pct": 76.3
+      },
+      "2020": {
+        "dem_votes": 9029,
+        "rep_votes": 22932,
+        "other_votes": 684,
+        "total_votes": 32645,
+        "winner_party": "R",
+        "margin_pct": 42.6
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 29484,
+        "other_votes": 8624,
+        "total_votes": 38108,
+        "winner_party": "R",
+        "margin_pct": 77.4
+      }
+    },
+    "014": {
+      "2018": {
+        "dem_votes": 9514,
+        "rep_votes": 16260,
+        "other_votes": 41,
+        "total_votes": 25815,
+        "winner_party": "R",
+        "margin_pct": 26.1
+      },
+      "2020": {
+        "dem_votes": 10869,
+        "rep_votes": 24938,
+        "other_votes": 268,
+        "total_votes": 36075,
+        "winner_party": "R",
+        "margin_pct": 39
+      },
+      "2024": {
+        "dem_votes": 12915,
+        "rep_votes": 24270,
+        "other_votes": 97,
+        "total_votes": 37282,
+        "winner_party": "R",
+        "margin_pct": 30.5
+      }
+    },
+    "010": {
+      "2018": {
+        "dem_votes": 9663,
+        "rep_votes": 0,
+        "other_votes": 2254,
+        "total_votes": 11917,
+        "winner_party": "D",
+        "margin_pct": 81.1
+      },
+      "2020": {
+        "dem_votes": 10027,
+        "rep_votes": 15004,
+        "other_votes": 4224,
+        "total_votes": 29255,
+        "winner_party": "R",
+        "margin_pct": 17
+      }
+    },
+    "009": {
+      "2018": {
+        "dem_votes": 11959,
+        "rep_votes": 9068,
+        "other_votes": 48,
+        "total_votes": 21075,
+        "winner_party": "D",
+        "margin_pct": 13.7
+      },
+      "2020": {
+        "dem_votes": 41303,
+        "rep_votes": 35540,
+        "other_votes": 2974,
+        "total_votes": 79817,
+        "winner_party": "D",
+        "margin_pct": 7.2
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 27029,
+        "other_votes": 6992,
+        "total_votes": 34021,
+        "winner_party": "R",
+        "margin_pct": 79.4
+      }
+    },
+    "017": {
+      "2018": {
+        "dem_votes": 0,
+        "rep_votes": 19167,
+        "other_votes": 298,
+        "total_votes": 19465,
+        "winner_party": "R",
+        "margin_pct": 98.5
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 26557,
+        "other_votes": 205,
+        "total_votes": 26762,
+        "winner_party": "R",
+        "margin_pct": 99.2
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 29173,
+        "other_votes": 2404,
+        "total_votes": 31577,
+        "winner_party": "R",
+        "margin_pct": 92.4
+      }
+    },
+    "067": {
+      "2018": {
+        "dem_votes": 4270,
+        "rep_votes": 15823,
+        "other_votes": 9,
+        "total_votes": 20102,
+        "winner_party": "R",
+        "margin_pct": 57.5
+      },
+      "2020": {
+        "dem_votes": 13272,
+        "rep_votes": 39667,
+        "other_votes": 3427,
+        "total_votes": 56366,
+        "winner_party": "R",
+        "margin_pct": 46.8
+      },
+      "2024": {
+        "dem_votes": 5182,
+        "rep_votes": 23294,
+        "other_votes": 208,
+        "total_votes": 28684,
+        "winner_party": "R",
+        "margin_pct": 63.1
+      }
+    },
+    "081": {
+      "2018": {
+        "dem_votes": 8619,
+        "rep_votes": 15567,
+        "other_votes": 742,
+        "total_votes": 24928,
+        "winner_party": "R",
+        "margin_pct": 27.9
+      },
+      "2020": {
+        "dem_votes": 10600,
+        "rep_votes": 23346,
+        "other_votes": 329,
+        "total_votes": 34275,
+        "winner_party": "R",
+        "margin_pct": 37.2
+      },
+      "2024": {
+        "dem_votes": 6975,
+        "rep_votes": 26840,
+        "other_votes": 766,
+        "total_votes": 34581,
+        "winner_party": "R",
+        "margin_pct": 57.4
+      }
+    },
+    "073": {
+      "2018": {
+        "dem_votes": 4927,
+        "rep_votes": 14680,
+        "other_votes": 202,
+        "total_votes": 19809,
+        "winner_party": "R",
+        "margin_pct": 49.2
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 26926,
+        "other_votes": 786,
+        "total_votes": 27712,
+        "winner_party": "R",
+        "margin_pct": 97.2
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 28465,
+        "other_votes": 497,
+        "total_votes": 28962,
+        "winner_party": "R",
+        "margin_pct": 98.3
+      }
+    },
+    "075": {
+      "2018": {
+        "dem_votes": 0,
+        "rep_votes": 21725,
+        "other_votes": 373,
+        "total_votes": 22098,
+        "winner_party": "R",
+        "margin_pct": 98.3
+      },
+      "2020": {
+        "dem_votes": 7964,
+        "rep_votes": 25548,
+        "other_votes": 45,
+        "total_votes": 33557,
+        "winner_party": "R",
+        "margin_pct": 52.4
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 27265,
+        "other_votes": 2113,
+        "total_votes": 29378,
+        "winner_party": "R",
+        "margin_pct": 92.8
+      }
+    },
+    "013": {
+      "2018": {
+        "dem_votes": 11250,
+        "rep_votes": 13796,
+        "other_votes": 323,
+        "total_votes": 25369,
+        "winner_party": "R",
+        "margin_pct": 10
+      },
+      "2020": {
+        "dem_votes": 7960,
+        "rep_votes": 9389,
+        "other_votes": 2,
+        "total_votes": 17351,
+        "winner_party": "R",
+        "margin_pct": 8.2
+      },
+      "2024": {
+        "dem_votes": 14891,
+        "rep_votes": 20572,
+        "other_votes": 35,
+        "total_votes": 35498,
+        "winner_party": "R",
+        "margin_pct": 16
+      }
+    },
+    "037": {
+      "2018": {
+        "dem_votes": 6964,
+        "rep_votes": 18510,
+        "other_votes": 38,
+        "total_votes": 25512,
+        "winner_party": "R",
+        "margin_pct": 45.3
+      },
+      "2020": {
+        "dem_votes": 14833,
+        "rep_votes": 32016,
+        "other_votes": 58,
+        "total_votes": 46907,
+        "winner_party": "R",
+        "margin_pct": 36.6
+      },
+      "2024": {
+        "dem_votes": 13002,
+        "rep_votes": 26131,
+        "other_votes": 44,
+        "total_votes": 39177,
+        "winner_party": "R",
+        "margin_pct": 33.5
+      }
+    },
+    "041": {
+      "2018": {
+        "dem_votes": 13173,
+        "rep_votes": 16951,
+        "other_votes": 28,
+        "total_votes": 30152,
+        "winner_party": "R",
+        "margin_pct": 12.5
+      },
+      "2020": {
+        "dem_votes": 16880,
+        "rep_votes": 23185,
+        "other_votes": 63,
+        "total_votes": 40128,
+        "winner_party": "R",
+        "margin_pct": 15.7
+      },
+      "2024": {
+        "dem_votes": 15870,
+        "rep_votes": 19926,
+        "other_votes": 35,
+        "total_votes": 35831,
+        "winner_party": "R",
+        "margin_pct": 11.3
+      }
+    },
+    "043": {
+      "2018": {
+        "dem_votes": 9448,
+        "rep_votes": 15692,
+        "other_votes": 13,
+        "total_votes": 25153,
+        "winner_party": "R",
+        "margin_pct": 24.8
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 27275,
+        "other_votes": 1050,
+        "total_votes": 28325,
+        "winner_party": "R",
+        "margin_pct": 96.3
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 23834,
+        "other_votes": 656,
+        "total_votes": 24490,
+        "winner_party": "R",
+        "margin_pct": 97.3
+      }
+    },
+    "096": {
+      "2018": {
+        "dem_votes": 15318,
+        "rep_votes": 0,
+        "other_votes": 299,
+        "total_votes": 15617,
+        "winner_party": "D",
+        "margin_pct": 98.1
+      },
+      "2020": {
+        "dem_votes": 20850,
+        "rep_votes": 0,
+        "other_votes": 670,
+        "total_votes": 21520,
+        "winner_party": "D",
+        "margin_pct": 96.9
+      },
+      "2024": {
+        "dem_votes": 21244,
+        "rep_votes": 13955,
+        "other_votes": 81,
+        "total_votes": 35280,
+        "winner_party": "D",
+        "margin_pct": 20.7
+      }
+    },
+    "097": {
+      "2018": {
+        "dem_votes": 14137,
+        "rep_votes": 18469,
+        "other_votes": 30,
+        "total_votes": 32636,
+        "winner_party": "R",
+        "margin_pct": 13.3
+      },
+      "2020": {
+        "dem_votes": 18422,
+        "rep_votes": 24300,
+        "other_votes": 35,
+        "total_votes": 42757,
+        "winner_party": "R",
+        "margin_pct": 13.7
+      },
+      "2024": {
+        "dem_votes": 14732,
+        "rep_votes": 23846,
+        "other_votes": 46,
+        "total_votes": 38624,
+        "winner_party": "R",
+        "margin_pct": 23.6
+      }
+    },
+    "098": {
+      "2018": {
+        "dem_votes": 7993,
+        "rep_votes": 15577,
+        "other_votes": 602,
+        "total_votes": 24172,
+        "winner_party": "R",
+        "margin_pct": 31.4
+      },
+      "2020": {
+        "dem_votes": 11201,
+        "rep_votes": 22373,
+        "other_votes": 39,
+        "total_votes": 33613,
+        "winner_party": "R",
+        "margin_pct": 33.2
+      },
+      "2024": {
+        "dem_votes": 2711,
+        "rep_votes": 4907,
+        "other_votes": 190,
+        "total_votes": 7808,
+        "winner_party": "R",
+        "margin_pct": 28.1
+      }
+    },
+    "099": {
+      "2018": {
+        "dem_votes": 5731,
+        "rep_votes": 14328,
+        "other_votes": 37,
+        "total_votes": 20096,
+        "winner_party": "R",
+        "margin_pct": 42.8
+      },
+      "2020": {
+        "dem_votes": 7667,
+        "rep_votes": 21144,
+        "other_votes": 56,
+        "total_votes": 28867,
+        "winner_party": "R",
+        "margin_pct": 46.7
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 7382,
+        "other_votes": 215,
+        "total_votes": 7597,
+        "winner_party": "R",
+        "margin_pct": 97.2
+      }
+    },
+    "055": {
+      "2018": {
+        "dem_votes": 15779,
+        "rep_votes": 182,
+        "other_votes": 485,
+        "total_votes": 16446,
+        "winner_party": "D",
+        "margin_pct": 94.8
+      },
+      "2020": {
+        "dem_votes": 26898,
+        "rep_votes": 29999,
+        "other_votes": 37,
+        "total_votes": 56934,
+        "winner_party": "R",
+        "margin_pct": 5.4
+      },
+      "2024": {
+        "dem_votes": 12535,
+        "rep_votes": 26389,
+        "other_votes": 91,
+        "total_votes": 39015,
+        "winner_party": "R",
+        "margin_pct": 35.5
+      }
+    },
+    "063": {
+      "2018": {
+        "dem_votes": 6726,
+        "rep_votes": 19993,
+        "other_votes": 14,
+        "total_votes": 26733,
+        "winner_party": "R",
+        "margin_pct": 49.6
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 25626,
+        "other_votes": 1024,
+        "total_votes": 26650,
+        "winner_party": "R",
+        "margin_pct": 96.2
+      },
+      "2024": {
+        "dem_votes": 2808,
+        "rep_votes": 12087,
+        "other_votes": 21,
+        "total_votes": 14916,
+        "winner_party": "R",
+        "margin_pct": 62.2
+      }
+    },
+    "065": {
+      "2018": {
+        "dem_votes": 0,
+        "rep_votes": 15690,
+        "other_votes": 775,
+        "total_votes": 16465,
+        "winner_party": "R",
+        "margin_pct": 95.3
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 25318,
+        "other_votes": 64,
+        "total_votes": 25382,
+        "winner_party": "R",
+        "margin_pct": 99.7
+      },
+      "2024": {
+        "dem_votes": 2625,
+        "rep_votes": 8720,
+        "other_votes": 13,
+        "total_votes": 11358,
+        "winner_party": "R",
+        "margin_pct": 53.7
+      }
+    },
+    "006": {
+      "2018": {
+        "dem_votes": 0,
+        "rep_votes": 17735,
+        "other_votes": 1639,
+        "total_votes": 19374,
+        "winner_party": "R",
+        "margin_pct": 91.5
+      },
+      "2020": {
+        "dem_votes": 11282,
+        "rep_votes": 21278,
+        "other_votes": 0,
+        "total_votes": 32560,
+        "winner_party": "R",
+        "margin_pct": 30.7
+      },
+      "2024": {
+        "dem_votes": 9790,
+        "rep_votes": 22802,
+        "other_votes": 74,
+        "total_votes": 32666,
+        "winner_party": "R",
+        "margin_pct": 39.8
+      }
+    },
+    "051": {
+      "2018": {
+        "dem_votes": 8650,
+        "rep_votes": 10773,
+        "other_votes": 41,
+        "total_votes": 19464,
+        "winner_party": "R",
+        "margin_pct": 10.9
+      },
+      "2020": {
+        "dem_votes": 8502,
+        "rep_votes": 18324,
+        "other_votes": 10,
+        "total_votes": 26836,
+        "winner_party": "R",
+        "margin_pct": 36.6
+      },
+      "2024": {
+        "dem_votes": 10425,
+        "rep_votes": 19945,
+        "other_votes": 98,
+        "total_votes": 30468,
+        "winner_party": "R",
+        "margin_pct": 31.2
+      }
+    },
+    "059": {
+      "2018": {
+        "dem_votes": 7803,
+        "rep_votes": 18490,
+        "other_votes": 14,
+        "total_votes": 26307,
+        "winner_party": "R",
+        "margin_pct": 40.6
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 32112,
+        "other_votes": 861,
+        "total_votes": 32973,
+        "winner_party": "R",
+        "margin_pct": 97.4
+      },
+      "2024": {
+        "dem_votes": 11776,
+        "rep_votes": 27202,
+        "other_votes": 55,
+        "total_votes": 39033,
+        "winner_party": "R",
+        "margin_pct": 39.5
+      }
+    },
+    "071": {
+      "2018": {
+        "dem_votes": 10661,
+        "rep_votes": 11615,
+        "other_votes": 25,
+        "total_votes": 22301,
+        "winner_party": "R",
+        "margin_pct": 4.3
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 26229,
+        "other_votes": 1149,
+        "total_votes": 27378,
+        "winner_party": "R",
+        "margin_pct": 95.8
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 30204,
+        "other_votes": 1230,
+        "total_votes": 31434,
+        "winner_party": "R",
+        "margin_pct": 96.1
+      }
+    },
+    "066": {
+      "2018": {
+        "dem_votes": 4369,
+        "rep_votes": 17007,
+        "other_votes": 35,
+        "total_votes": 21411,
+        "winner_party": "R",
+        "margin_pct": 59
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 28085,
+        "other_votes": 1496,
+        "total_votes": 29581,
+        "winner_party": "R",
+        "margin_pct": 94.9
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 28232,
+        "other_votes": 1252,
+        "total_votes": 29484,
+        "winner_party": "R",
+        "margin_pct": 95.8
+      }
+    },
+    "022": {
+      "2018": {
+        "dem_votes": 9911,
+        "rep_votes": 0,
+        "other_votes": 0,
+        "total_votes": 9911,
+        "winner_party": "D",
+        "margin_pct": 100
+      },
+      "2020": {
+        "dem_votes": 13969,
+        "rep_votes": 0,
+        "other_votes": 0,
+        "total_votes": 13969,
+        "winner_party": "D",
+        "margin_pct": 100
+      },
+      "2024": {
+        "dem_votes": 13282,
+        "rep_votes": 0,
+        "other_votes": 0,
+        "total_votes": 13282,
+        "winner_party": "D",
+        "margin_pct": 100
+      }
+    },
+    "072": {
+      "2018": {
+        "dem_votes": 11819,
+        "rep_votes": 10726,
+        "other_votes": 57,
+        "total_votes": 22602,
+        "winner_party": "D",
+        "margin_pct": 4.8
+      },
+      "2020": {
+        "dem_votes": 16880,
+        "rep_votes": 15147,
+        "other_votes": 70,
+        "total_votes": 32097,
+        "winner_party": "D",
+        "margin_pct": 5.4
+      },
+      "2024": {
+        "dem_votes": 16780,
+        "rep_votes": 15851,
+        "other_votes": 115,
+        "total_votes": 32746,
+        "winner_party": "D",
+        "margin_pct": 2.8
+      }
+    },
+    "058": {
+      "2018": {
+        "dem_votes": 8802,
+        "rep_votes": 14189,
+        "other_votes": 23,
+        "total_votes": 23014,
+        "winner_party": "R",
+        "margin_pct": 23.4
+      },
+      "2020": {
+        "dem_votes": 23814,
+        "rep_votes": 32840,
+        "other_votes": 40,
+        "total_votes": 56694,
+        "winner_party": "R",
+        "margin_pct": 15.9
+      },
+      "2024": {
+        "dem_votes": 11258,
+        "rep_votes": 25276,
+        "other_votes": 61,
+        "total_votes": 36595,
+        "winner_party": "R",
+        "margin_pct": 38.3
+      }
+    },
+    "057": {
+      "2018": {
+        "dem_votes": 9504,
+        "rep_votes": 16057,
+        "other_votes": 25,
+        "total_votes": 25586,
+        "winner_party": "R",
+        "margin_pct": 25.6
+      },
+      "2020": {
+        "dem_votes": 14863,
+        "rep_votes": 39437,
+        "other_votes": 1306,
+        "total_votes": 55606,
+        "winner_party": "R",
+        "margin_pct": 44.2
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 29981,
+        "other_votes": 1153,
+        "total_votes": 31134,
+        "winner_party": "R",
+        "margin_pct": 96.3
+      }
+    },
+    "052": {
+      "2018": {
+        "dem_votes": 7778,
+        "rep_votes": 12252,
+        "other_votes": 24,
+        "total_votes": 20054,
+        "winner_party": "R",
+        "margin_pct": 22.3
+      },
+      "2020": {
+        "dem_votes": 8911,
+        "rep_votes": 21210,
+        "other_votes": 1,
+        "total_votes": 30122,
+        "winner_party": "R",
+        "margin_pct": 40.8
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 25794,
+        "other_votes": 1211,
+        "total_votes": 27005,
+        "winner_party": "R",
+        "margin_pct": 95.5
+      }
+    },
+    "056": {
+      "2018": {
+        "dem_votes": 10371,
+        "rep_votes": 17638,
+        "other_votes": 10,
+        "total_votes": 28019,
+        "winner_party": "R",
+        "margin_pct": 25.9
+      },
+      "2020": {
+        "dem_votes": 15444,
+        "rep_votes": 49508,
+        "other_votes": 1332,
+        "total_votes": 66284,
+        "winner_party": "R",
+        "margin_pct": 51.4
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 32092,
+        "other_votes": 978,
+        "total_votes": 33070,
+        "winner_party": "R",
+        "margin_pct": 97
+      }
+    },
+    "084": {
+      "2018": {
+        "dem_votes": 4855,
+        "rep_votes": 18192,
+        "other_votes": 25,
+        "total_votes": 23072,
+        "winner_party": "R",
+        "margin_pct": 57.8
+      },
+      "2020": {
+        "dem_votes": 6851,
+        "rep_votes": 23011,
+        "other_votes": 38,
+        "total_votes": 29900,
+        "winner_party": "R",
+        "margin_pct": 54
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 30445,
+        "other_votes": 854,
+        "total_votes": 31299,
+        "winner_party": "R",
+        "margin_pct": 97.3
+      }
+    },
+    "083": {
+      "2018": {
+        "dem_votes": 6771,
+        "rep_votes": 13108,
+        "other_votes": 28,
+        "total_votes": 19907,
+        "winner_party": "R",
+        "margin_pct": 31.8
+      },
+      "2020": {
+        "dem_votes": 9231,
+        "rep_votes": 16440,
+        "other_votes": 56,
+        "total_votes": 25727,
+        "winner_party": "R",
+        "margin_pct": 28
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 23285,
+        "other_votes": 1113,
+        "total_votes": 24398,
+        "winner_party": "R",
+        "margin_pct": 95.4
+      }
+    },
+    "015": {
+      "2018": {
+        "dem_votes": 2727,
+        "rep_votes": 6113,
+        "other_votes": 7,
+        "total_votes": 8847,
+        "winner_party": "R",
+        "margin_pct": 38.3
+      },
+      "2020": {
+        "dem_votes": 10098,
+        "rep_votes": 24550,
+        "other_votes": 43,
+        "total_votes": 34691,
+        "winner_party": "R",
+        "margin_pct": 41.7
+      },
+      "2024": {
+        "dem_votes": 11185,
+        "rep_votes": 24769,
+        "other_votes": 47,
+        "total_votes": 36001,
+        "winner_party": "R",
+        "margin_pct": 37.7
+      }
+    },
+    "048": {
+      "2018": {
+        "dem_votes": 10808,
+        "rep_votes": 13597,
+        "other_votes": 12,
+        "total_votes": 24417,
+        "winner_party": "R",
+        "margin_pct": 11.4
+      },
+      "2020": {
+        "dem_votes": 14635,
+        "rep_votes": 19484,
+        "other_votes": 0,
+        "total_votes": 34119,
+        "winner_party": "R",
+        "margin_pct": 14.2
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 24213,
+        "other_votes": 896,
+        "total_votes": 25109,
+        "winner_party": "R",
+        "margin_pct": 96.4
+      }
+    },
+    "049": {
+      "2018": {
+        "dem_votes": 9934,
+        "rep_votes": 9945,
+        "other_votes": 31,
+        "total_votes": 19910,
+        "winner_party": "R",
+        "margin_pct": 0.1
+      },
+      "2020": {
+        "dem_votes": 10275,
+        "rep_votes": 17918,
+        "other_votes": 0,
+        "total_votes": 28193,
+        "winner_party": "R",
+        "margin_pct": 27.1
+      },
+      "2024": {
+        "dem_votes": 18064,
+        "rep_votes": 0,
+        "other_votes": 634,
+        "total_votes": 18698,
+        "winner_party": "D",
+        "margin_pct": 96.6
+      }
+    },
+    "050": {
+      "2018": {
+        "dem_votes": 10906,
+        "rep_votes": 8318,
+        "other_votes": 6,
+        "total_votes": 19230,
+        "winner_party": "D",
+        "margin_pct": 13.5
+      },
+      "2020": {
+        "dem_votes": 14583,
+        "rep_votes": 12794,
+        "other_votes": 17,
+        "total_votes": 27394,
+        "winner_party": "D",
+        "margin_pct": 6.5
+      },
+      "2024": {
+        "dem_votes": 9131,
+        "rep_votes": 20424,
+        "other_votes": 79,
+        "total_votes": 29634,
+        "winner_party": "R",
+        "margin_pct": 38.1
+      }
+    },
+    "076": {
+      "2018": {
+        "dem_votes": 9669,
+        "rep_votes": 11224,
+        "other_votes": 30,
+        "total_votes": 20923,
+        "winner_party": "R",
+        "margin_pct": 7.4
+      },
+      "2020": {
+        "dem_votes": 10080,
+        "rep_votes": 19157,
+        "other_votes": 226,
+        "total_votes": 29463,
+        "winner_party": "R",
+        "margin_pct": 30.8
+      },
+      "2024": {
+        "dem_votes": 9453,
+        "rep_votes": 21393,
+        "other_votes": 111,
+        "total_votes": 30957,
+        "winner_party": "R",
+        "margin_pct": 38.6
+      }
+    },
+    "062": {
+      "2018": {
+        "dem_votes": 8858,
+        "rep_votes": 12321,
+        "other_votes": 221,
+        "total_votes": 21400,
+        "winner_party": "R",
+        "margin_pct": 16.2
+      },
+      "2020": {
+        "dem_votes": 9205,
+        "rep_votes": 19938,
+        "other_votes": 546,
+        "total_votes": 29689,
+        "winner_party": "R",
+        "margin_pct": 36.2
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 28152,
+        "other_votes": 5633,
+        "total_votes": 33785,
+        "winner_party": "R",
+        "margin_pct": 83.3
+      }
+    },
+    "018": {
+      "2018": {
+        "dem_votes": 9897,
+        "rep_votes": 12870,
+        "other_votes": 0,
+        "total_votes": 22767,
+        "winner_party": "R",
+        "margin_pct": 13.1
+      },
+      "2020": {
+        "dem_votes": 15188,
+        "rep_votes": 16687,
+        "other_votes": 53,
+        "total_votes": 31928,
+        "winner_party": "R",
+        "margin_pct": 4.7
+      },
+      "2024": {
+        "dem_votes": 14468,
+        "rep_votes": 18160,
+        "other_votes": 78,
+        "total_votes": 32706,
+        "winner_party": "R",
+        "margin_pct": 11.3
+      }
+    },
+    "029": {
+      "2018": {
+        "dem_votes": 15157,
+        "rep_votes": 16555,
+        "other_votes": 0,
+        "total_votes": 31712,
+        "winner_party": "R",
+        "margin_pct": 4.4
+      },
+      "2020": {
+        "dem_votes": 18439,
+        "rep_votes": 23191,
+        "other_votes": 385,
+        "total_votes": 42015,
+        "winner_party": "R",
+        "margin_pct": 11.3
+      },
+      "2024": {
+        "dem_votes": 25176,
+        "rep_votes": 19118,
+        "other_votes": 1018,
+        "total_votes": 45312,
+        "winner_party": "D",
+        "margin_pct": 13.4
+      }
+    },
+    "031": {
+      "2018": {
+        "dem_votes": 20583,
+        "rep_votes": 13745,
+        "other_votes": 0,
+        "total_votes": 34328,
+        "winner_party": "D",
+        "margin_pct": 19.9
+      },
+      "2020": {
+        "dem_votes": 26221,
+        "rep_votes": 17710,
+        "other_votes": 44,
+        "total_votes": 43975,
+        "winner_party": "D",
+        "margin_pct": 19.4
+      },
+      "2024": {
+        "dem_votes": 27837,
+        "rep_votes": 19477,
+        "other_votes": 68,
+        "total_votes": 47382,
+        "winner_party": "D",
+        "margin_pct": 17.6
+      }
+    },
+    "001": {
+      "2018": {
+        "dem_votes": 13019,
+        "rep_votes": 0,
+        "other_votes": 0,
+        "total_votes": 13019,
+        "winner_party": "D",
+        "margin_pct": 100
+      },
+      "2020": {
+        "dem_votes": 17897,
+        "rep_votes": 0,
+        "other_votes": 0,
+        "total_votes": 17897,
+        "winner_party": "D",
+        "margin_pct": 100
+      },
+      "2024": {
+        "dem_votes": 19327,
+        "rep_votes": 0,
+        "other_votes": 419,
+        "total_votes": 19746,
+        "winner_party": "D",
+        "margin_pct": 97.9
+      }
+    },
+    "002": {
+      "2018": {
+        "dem_votes": 13736,
+        "rep_votes": 7429,
+        "other_votes": 0,
+        "total_votes": 21165,
+        "winner_party": "D",
+        "margin_pct": 29.8
+      },
+      "2020": {
+        "dem_votes": 22322,
+        "rep_votes": 0,
+        "other_votes": 0,
+        "total_votes": 22322,
+        "winner_party": "D",
+        "margin_pct": 100
+      },
+      "2024": {
+        "dem_votes": 19803,
+        "rep_votes": 11639,
+        "other_votes": 39,
+        "total_votes": 31481,
+        "winner_party": "D",
+        "margin_pct": 25.9
+      }
+    },
+    "003": {
+      "2018": {
+        "dem_votes": 20265,
+        "rep_votes": 0,
+        "other_votes": 0,
+        "total_votes": 20265,
+        "winner_party": "D",
+        "margin_pct": 100
+      },
+      "2020": {
+        "dem_votes": 22198,
+        "rep_votes": 13967,
+        "other_votes": 0,
+        "total_votes": 36165,
+        "winner_party": "D",
+        "margin_pct": 22.8
+      },
+      "2024": {
+        "dem_votes": 22015,
+        "rep_votes": 16155,
+        "other_votes": 62,
+        "total_votes": 38232,
+        "winner_party": "D",
+        "margin_pct": 15.3
+      }
+    },
+    "004": {
+      "2018": {
+        "dem_votes": 0,
+        "rep_votes": 17389,
+        "other_votes": 0,
+        "total_votes": 17389,
+        "winner_party": "R",
+        "margin_pct": 100
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 26746,
+        "other_votes": 0,
+        "total_votes": 26746,
+        "winner_party": "R",
+        "margin_pct": 100
+      },
+      "2024": {
+        "dem_votes": 10845,
+        "rep_votes": 22686,
+        "other_votes": 56,
+        "total_votes": 33587,
+        "winner_party": "R",
+        "margin_pct": 35.3
+      }
+    },
+    "091": {
+      "2018": {
+        "dem_votes": 0,
+        "rep_votes": 0,
+        "other_votes": 25277,
+        "total_votes": 25277,
+        "winner_party": null,
+        "margin_pct": 0
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 28932,
+        "other_votes": 1839,
+        "total_votes": 30771,
+        "winner_party": "R",
+        "margin_pct": 94
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 30080,
+        "other_votes": 11249,
+        "total_votes": 41329,
+        "winner_party": "R",
+        "margin_pct": 72.8
+      }
+    },
+    "074": {
+      "2018": {
+        "dem_votes": 14826,
+        "rep_votes": 9294,
+        "other_votes": 42,
+        "total_votes": 24162,
+        "winner_party": "D",
+        "margin_pct": 22.9
+      },
+      "2020": {
+        "dem_votes": 13324,
+        "rep_votes": 9548,
+        "other_votes": 0,
+        "total_votes": 22872,
+        "winner_party": "D",
+        "margin_pct": 16.5
+      },
+      "2024": {
+        "dem_votes": 17667,
+        "rep_votes": 14428,
+        "other_votes": 52,
+        "total_votes": 32147,
+        "winner_party": "D",
+        "margin_pct": 10.1
+      }
+    },
+    "026": {
+      "2018": {
+        "dem_votes": 12778,
+        "rep_votes": 14290,
+        "other_votes": 31,
+        "total_votes": 27099,
+        "winner_party": "R",
+        "margin_pct": 5.6
+      },
+      "2020": {
+        "dem_votes": 13677,
+        "rep_votes": 12533,
+        "other_votes": 7,
+        "total_votes": 26217,
+        "winner_party": "D",
+        "margin_pct": 4.4
+      },
+      "2024": {
+        "dem_votes": 22421,
+        "rep_votes": 16675,
+        "other_votes": 68,
+        "total_votes": 39164,
+        "winner_party": "D",
+        "margin_pct": 14.7
+      }
+    },
+    "079": {
+      "2018": {
+        "dem_votes": 0,
+        "rep_votes": 15108,
+        "other_votes": 4562,
+        "total_votes": 19670,
+        "winner_party": "R",
+        "margin_pct": 76.8
+      },
+      "2020": {
+        "dem_votes": 8530,
+        "rep_votes": 20089,
+        "other_votes": 54,
+        "total_votes": 28673,
+        "winner_party": "R",
+        "margin_pct": 40.3
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 25629,
+        "other_votes": 5136,
+        "total_votes": 30765,
+        "winner_party": "R",
+        "margin_pct": 83.3
+      }
+    },
+    "080": {
+      "2018": {
+        "dem_votes": 6166,
+        "rep_votes": 17889,
+        "other_votes": 338,
+        "total_votes": 24393,
+        "winner_party": "R",
+        "margin_pct": 48.1
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 21757,
+        "other_votes": 931,
+        "total_votes": 22688,
+        "winner_party": "R",
+        "margin_pct": 95.9
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 30518,
+        "other_votes": 5596,
+        "total_votes": 36114,
+        "winner_party": "R",
+        "margin_pct": 84.5
+      }
+    },
+    "077": {
+      "2018": {
+        "dem_votes": 14996,
+        "rep_votes": 0,
+        "other_votes": 434,
+        "total_votes": 15430,
+        "winner_party": "D",
+        "margin_pct": 97.2
+      },
+      "2020": {
+        "dem_votes": 14243,
+        "rep_votes": 7399,
+        "other_votes": 716,
+        "total_votes": 22358,
+        "winner_party": "D",
+        "margin_pct": 30.6
+      },
+      "2024": {
+        "dem_votes": 18548,
+        "rep_votes": 11682,
+        "other_votes": 56,
+        "total_votes": 30286,
+        "winner_party": "D",
+        "margin_pct": 22.7
+      }
+    },
+    "085": {
+      "2018": {
+        "dem_votes": 7018,
+        "rep_votes": 14714,
+        "other_votes": 23,
+        "total_votes": 21755,
+        "winner_party": "R",
+        "margin_pct": 35.4
+      },
+      "2020": {
+        "dem_votes": 9814,
+        "rep_votes": 21188,
+        "other_votes": 291,
+        "total_votes": 31293,
+        "winner_party": "R",
+        "margin_pct": 36.3
+      },
+      "2024": {
+        "dem_votes": 9793,
+        "rep_votes": 24977,
+        "other_votes": 548,
+        "total_votes": 35318,
+        "winner_party": "R",
+        "margin_pct": 43
+      }
+    },
+    "068": {
+      "2018": {
+        "dem_votes": 4834,
+        "rep_votes": 16109,
+        "other_votes": 35,
+        "total_votes": 20978,
+        "winner_party": "R",
+        "margin_pct": 53.7
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 26038,
+        "other_votes": 3704,
+        "total_votes": 29742,
+        "winner_party": "R",
+        "margin_pct": 87.5
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 28062,
+        "other_votes": 1359,
+        "total_votes": 29421,
+        "winner_party": "R",
+        "margin_pct": 95.4
+      }
+    },
+    "086": {
+      "2018": {
+        "dem_votes": 8371,
+        "rep_votes": 19366,
+        "other_votes": 139,
+        "total_votes": 27876,
+        "winner_party": "R",
+        "margin_pct": 39.4
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 27328,
+        "other_votes": 953,
+        "total_votes": 28281,
+        "winner_party": "R",
+        "margin_pct": 96.6
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 29341,
+        "other_votes": 5825,
+        "total_votes": 35166,
+        "winner_party": "R",
+        "margin_pct": 83.4
+      }
+    },
+    "087": {
+      "2018": {
+        "dem_votes": 28428,
+        "rep_votes": 37092,
+        "other_votes": 116,
+        "total_votes": 65636,
+        "winner_party": "R",
+        "margin_pct": 13.2
+      },
+      "2020": {
+        "dem_votes": 19075,
+        "rep_votes": 24196,
+        "other_votes": 48,
+        "total_votes": 43319,
+        "winner_party": "R",
+        "margin_pct": 11.8
+      },
+      "2024": {
+        "dem_votes": 15440,
+        "rep_votes": 24861,
+        "other_votes": 72,
+        "total_votes": 40373,
+        "winner_party": "R",
+        "margin_pct": 23.3
+      }
+    },
+    "088": {
+      "2018": {
+        "dem_votes": 23302,
+        "rep_votes": 32298,
+        "other_votes": 122,
+        "total_votes": 55722,
+        "winner_party": "R",
+        "margin_pct": 16.1
+      },
+      "2020": {
+        "dem_votes": 15375,
+        "rep_votes": 21302,
+        "other_votes": 62,
+        "total_votes": 36739,
+        "winner_party": "R",
+        "margin_pct": 16.1
+      },
+      "2024": {
+        "dem_votes": 16983,
+        "rep_votes": 20882,
+        "other_votes": 71,
+        "total_votes": 37936,
+        "winner_party": "R",
+        "margin_pct": 10.3
+      }
+    },
+    "082": {
+      "2018": {
+        "dem_votes": 0,
+        "rep_votes": 15384,
+        "other_votes": 4031,
+        "total_votes": 19415,
+        "winner_party": "R",
+        "margin_pct": 79.2
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 26799,
+        "other_votes": 1233,
+        "total_votes": 28032,
+        "winner_party": "R",
+        "margin_pct": 95.6
+      },
+      "2024": {
+        "dem_votes": 16558,
+        "rep_votes": 14221,
+        "other_votes": 56,
+        "total_votes": 30835,
+        "winner_party": "D",
+        "margin_pct": 7.6
+      }
+    },
+    "053": {
+      "2018": {
+        "dem_votes": 13632,
+        "rep_votes": 12774,
+        "other_votes": 292,
+        "total_votes": 26698,
+        "winner_party": "D",
+        "margin_pct": 3.2
+      },
+      "2020": {
+        "dem_votes": 19949,
+        "rep_votes": 16511,
+        "other_votes": 43,
+        "total_votes": 36503,
+        "winner_party": "D",
+        "margin_pct": 9.4
+      },
+      "2024": {
+        "dem_votes": 21057,
+        "rep_votes": 13912,
+        "other_votes": 75,
+        "total_votes": 35044,
+        "winner_party": "D",
+        "margin_pct": 20.4
+      }
+    },
+    "070": {
+      "2018": {
+        "dem_votes": 16055,
+        "rep_votes": 7112,
+        "other_votes": 20,
+        "total_votes": 23187,
+        "winner_party": "D",
+        "margin_pct": 38.6
+      },
+      "2020": {
+        "dem_votes": 21574,
+        "rep_votes": 9634,
+        "other_votes": 39,
+        "total_votes": 31247,
+        "winner_party": "D",
+        "margin_pct": 38.2
+      },
+      "2024": {
+        "dem_votes": 24570,
+        "rep_votes": 16267,
+        "other_votes": 70,
+        "total_votes": 40907,
+        "winner_party": "D",
+        "margin_pct": 20.3
+      }
+    },
+    "061": {
+      "2018": {
+        "dem_votes": 18336,
+        "rep_votes": 15957,
+        "other_votes": 11,
+        "total_votes": 34304,
+        "winner_party": "D",
+        "margin_pct": 6.9
+      },
+      "2020": {
+        "dem_votes": 25033,
+        "rep_votes": 16800,
+        "other_votes": 66,
+        "total_votes": 41899,
+        "winner_party": "D",
+        "margin_pct": 19.6
+      },
+      "2024": {
+        "dem_votes": 25068,
+        "rep_votes": 16109,
+        "other_votes": 41,
+        "total_votes": 41218,
+        "winner_party": "D",
+        "margin_pct": 21.7
+      }
+    },
+    "005": {
+      "2018": {
+        "dem_votes": 0,
+        "rep_votes": 18082,
+        "other_votes": 149,
+        "total_votes": 18231,
+        "winner_party": "R",
+        "margin_pct": 99.2
+      },
+      "2020": {
+        "dem_votes": 10112,
+        "rep_votes": 23291,
+        "other_votes": 28,
+        "total_votes": 33431,
+        "winner_party": "R",
+        "margin_pct": 39.4
+      },
+      "2024": {
+        "dem_votes": 11801,
+        "rep_votes": 23664,
+        "other_votes": 36,
+        "total_votes": 35501,
+        "winner_party": "R",
+        "margin_pct": 33.4
+      }
+    },
+    "007": {
+      "2018": {
+        "dem_votes": 21573,
+        "rep_votes": 0,
+        "other_votes": 147,
+        "total_votes": 21720,
+        "winner_party": "D",
+        "margin_pct": 99.3
+      },
+      "2020": {
+        "dem_votes": 28282,
+        "rep_votes": 0,
+        "other_votes": 625,
+        "total_votes": 28907,
+        "winner_party": "D",
+        "margin_pct": 97.8
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 25599,
+        "other_votes": 1039,
+        "total_votes": 26638,
+        "winner_party": "R",
+        "margin_pct": 96.1
+      }
+    },
+    "090": {
+      "2018": {
+        "dem_votes": 0,
+        "rep_votes": 19096,
+        "other_votes": 604,
+        "total_votes": 19700,
+        "winner_party": "R",
+        "margin_pct": 96.9
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 30048,
+        "other_votes": 6097,
+        "total_votes": 36145,
+        "winner_party": "R",
+        "margin_pct": 83.1
+      },
+      "2024": {
+        "dem_votes": 0,
+        "rep_votes": 29817,
+        "other_votes": 7490,
+        "total_votes": 37307,
+        "winner_party": "R",
+        "margin_pct": 79.9
+      }
+    },
+    "089": {
+      "2018": {
+        "dem_votes": 0,
+        "rep_votes": 18087,
+        "other_votes": 793,
+        "total_votes": 18880,
+        "winner_party": "R",
+        "margin_pct": 95.8
+      },
+      "2020": {
+        "dem_votes": 0,
+        "rep_votes": 28271,
+        "other_votes": 7761,
+        "total_votes": 36032,
+        "winner_party": "R",
+        "margin_pct": 78.5
+      },
+      "2024": {
+        "dem_votes": 10014,
+        "rep_votes": 24531,
+        "other_votes": 858,
+        "total_votes": 35403,
+        "winner_party": "R",
+        "margin_pct": 41
+      }
+    }
+  }
+}

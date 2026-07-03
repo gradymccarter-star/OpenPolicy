@@ -1,8 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useSearchParams, usePathname } from 'next/navigation';
 import EvidenceAccordion from './EvidenceAccordion';
 import FundingTab, { type Contribution } from './FundingTab';
+import ContactTab from './ContactTab';
+import { PA_CHAMBER_PRINCIPLES } from '@/lib/utils/constants';
+import type { DistrictContactInfo, PoliticianWithScores } from '@/lib/utils/types';
 
 interface EvidenceItem {
   id: string;
@@ -21,17 +26,27 @@ interface Props {
   contributions: Contribution[];
   principleScoresSection: React.ReactNode;
   methodologySection: React.ReactNode;
+  politician: PoliticianWithScores;
+  contactInfo: DistrictContactInfo | null;
 }
 
 const TABS = [
   { id: 'analysis', label: 'Analysis' },
   { id: 'funding', label: 'Funding' },
+  { id: 'contact', label: 'Contact' },
 ] as const;
 
 type TabId = (typeof TABS)[number]['id'];
 
-export default function ProfileTabs({ evidenceItems, contributions, principleScoresSection, methodologySection }: Props) {
+export default function ProfileTabs({ evidenceItems, contributions, principleScoresSection, methodologySection, politician, contactInfo }: Props) {
   const [active, setActive] = useState<TabId>('analysis');
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const principleFilter = searchParams.get('principle');
+
+  useEffect(() => {
+    if (principleFilter) setActive('analysis');
+  }, [principleFilter]);
 
   return (
     <div>
@@ -66,18 +81,35 @@ export default function ProfileTabs({ evidenceItems, contributions, principleSco
         <div className="space-y-8">
           {principleScoresSection}
           {methodologySection}
-          <div className="card p-8">
+          <div id="evidence-trail" className="card p-8" style={{ scrollMarginTop: '2rem' }}>
             <h2 className="text-heading-3 mb-2">Evidence Trail</h2>
             <p className="text-body-sm text-primary-400 mb-6">
               Every score is traceable to the specific evidence items below, organized by source type. Click any folder to expand it.
             </p>
-            <EvidenceAccordion items={evidenceItems} />
+            {principleFilter && (
+              <div
+                className="flex items-center justify-between mb-4 px-4 py-2.5 rounded-lg"
+                style={{ background: 'rgba(201,168,76,0.1)', border: '1px solid rgba(201,168,76,0.3)' }}
+              >
+                <p className="text-body-sm font-medium text-primary-800">
+                  Filtered to evidence tagged <strong>{PA_CHAMBER_PRINCIPLES[principleFilter]?.name ?? principleFilter}</strong>
+                </p>
+                <Link href={pathname} scroll={false} className="text-caption font-semibold text-primary-500 hover:text-primary-950 hover:underline">
+                  Clear filter
+                </Link>
+              </div>
+            )}
+            <EvidenceAccordion items={evidenceItems} principleFilter={principleFilter} />
           </div>
         </div>
       )}
 
       {active === 'funding' && (
         <FundingTab contributions={contributions} />
+      )}
+
+      {active === 'contact' && (
+        <ContactTab politician={politician} contactInfo={contactInfo} />
       )}
     </div>
   );

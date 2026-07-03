@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { donorProfileUrl } from '@/lib/utils/helpers';
 
 type Lean = 'pro_chamber' | 'anti_chamber' | 'neutral' | 'unknown';
 
@@ -12,6 +13,7 @@ export interface Contribution {
   contribution_date: string | null;
   cycle_year: number;
   donor_org_id: string | null;
+  followthemoney_id?: string | null;
   donor_organizations: {
     lean: Lean;
     industry: string | null;
@@ -235,9 +237,24 @@ function CollapsibleTable({
             <tbody>
               {filtered.map(r => {
                 const lean = r.donor_organizations?.lean ?? 'unknown';
+                const profileUrl = donorProfileUrl(r.followthemoney_id);
                 return (
                   <tr key={r.id} style={{ borderBottom: '1px solid var(--border)' }} className="hover:bg-stone-50">
-                    <td className="px-5 py-2.5 text-primary-900 font-medium">{r.donor_name}</td>
+                    <td className="px-5 py-2.5 text-primary-900 font-medium">
+                      {profileUrl ? (
+                        <a
+                          href={profileUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:underline"
+                          title="View this donor's profile on FollowTheMoney.org"
+                        >
+                          {r.donor_name}
+                        </a>
+                      ) : (
+                        r.donor_name
+                      )}
+                    </td>
                     {type === 'org' && (
                       <td className="px-3 py-2.5">
                         <LeanBadge lean={lean} />
@@ -328,7 +345,14 @@ export default function FundingTab({ contributions }: Props) {
               <div className="text-caption text-primary-400 mb-0.5">Total donor contributions</div>
               <div className="text-body-sm font-bold text-primary-950">{allDonors.toLocaleString()}</div>
             </div>
-            <div className="ml-auto text-caption text-primary-400 hidden md:block">Source: FollowTheMoney.org</div>
+            <a
+              href="https://www.followthemoney.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ml-auto text-caption text-primary-400 hidden md:block hover:underline"
+            >
+              Source: FollowTheMoney.org ↗
+            </a>
           </div>
         ) : null;
       })()}

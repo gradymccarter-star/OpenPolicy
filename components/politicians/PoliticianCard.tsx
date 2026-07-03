@@ -1,17 +1,19 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { PartyBadge } from '@/components/ui/Badge';
+import { CandidacyBadge, PartyBadge } from '@/components/ui/Badge';
 import Keystone from '@/components/ui/Keystone';
-import { getScoreColor, formatScore, getConfidenceColor } from '@/lib/utils/helpers';
+import { getScoreColor, formatScore, getConfidenceColor, getCandidacyStatus } from '@/lib/utils/helpers';
 import type { PoliticianWithScores } from '@/lib/utils/types';
 
 interface PoliticianCardProps {
   readonly politician: PoliticianWithScores;
   readonly hasFunding?: boolean;
+  readonly committeeRole?: string | null;
 }
 
-export default function PoliticianCard({ politician, hasFunding = false }: PoliticianCardProps) {
+export default function PoliticianCard({ politician, hasFunding = false, committeeRole = null }: PoliticianCardProps) {
   const os = politician.overall_score;
+  const hasRecord = (os?.total_evidence_items ?? 0) > 0;
   const overallScore = os?.overall_score || 0;
   const overallConfidence = os?.overall_confidence || 0;
 
@@ -56,6 +58,7 @@ export default function PoliticianCard({ politician, hasFunding = false }: Polit
               </h3>
               <div className="flex items-center space-x-1.5 mt-1 flex-wrap gap-y-1">
                 <PartyBadge party={politician.party} />
+                <CandidacyBadge status={getCandidacyStatus(politician)} />
                 {politician.district && (
                   <span className="inline-flex items-center gap-0.5 text-caption text-primary-400">
                     <Keystone size={9} style={{ color: '#c9a84c', flexShrink: 0 }} />
@@ -75,46 +78,65 @@ export default function PoliticianCard({ politician, hasFunding = false }: Polit
                   </span>
                 )}
               </div>
+              {committeeRole && (
+                <p className="text-caption font-semibold mt-1 truncate" style={{ color: '#92722f' }} title={`Committee leadership: ${committeeRole}`}>
+                  {committeeRole}
+                </p>
+              )}
             </div>
 
             <div className="text-right">
-              <div
-                className="text-2xl font-bold"
-                style={{ color: getScoreColor(overallScore) }}
-              >
-                {formatScore(overallScore)}
-              </div>
-              <p className="text-caption font-medium" style={{ color: getConfidenceColor(overallConfidence) }}>
-                {Math.round(overallConfidence * 100)}% conf
-              </p>
+              {hasRecord ? (
+                <>
+                  <div
+                    className="text-2xl font-bold"
+                    style={{ color: getScoreColor(overallScore) }}
+                  >
+                    {formatScore(overallScore)}
+                  </div>
+                  <p className="text-caption font-medium" style={{ color: getConfidenceColor(overallConfidence) }}>
+                    {Math.round(overallConfidence * 100)}% conf
+                  </p>
+                </>
+              ) : (
+                <div className="text-caption text-primary-400 font-medium max-w-[90px]">
+                  No record yet
+                </div>
+              )}
             </div>
           </div>
 
           {/* Mini Principle Breakdown */}
-          <div className="grid grid-cols-9 gap-1">
-            {['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P8', 'P9'].map((key) => {
-              const score = principleScores[key] || 0;
-              const color = getScoreColor(score);
-              const height = score * 100;
+          {hasRecord ? (
+            <div className="grid grid-cols-9 gap-1">
+              {['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P8', 'P9'].map((key) => {
+                const score = principleScores[key] || 0;
+                const color = getScoreColor(score);
+                const height = score * 100;
 
-              return (
-                <div key={key} className="flex flex-col items-center">
-                  <div className="w-full h-10 rounded relative overflow-hidden" style={{ background: 'var(--surface-canvas)' }}>
-                    <div
-                      className="absolute bottom-0 w-full rounded transition-all duration-500"
-                      style={{
-                        height: `${height}%`,
-                        backgroundColor: color,
-                      }}
-                    />
+                return (
+                  <div key={key} className="flex flex-col items-center">
+                    <div className="w-full h-10 rounded relative overflow-hidden" style={{ background: 'var(--surface-canvas)' }}>
+                      <div
+                        className="absolute bottom-0 w-full rounded transition-all duration-500"
+                        style={{
+                          height: `${height}%`,
+                          backgroundColor: color,
+                        }}
+                      />
+                    </div>
+                    <span className="text-caption text-primary-400 mt-1 font-medium">
+                      {key}
+                    </span>
                   </div>
-                  <span className="text-caption text-primary-400 mt-1 font-medium">
-                    {key}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="text-caption text-primary-400 italic">
+              Declared candidate — no voting record yet.
+            </p>
+          )}
         </div>
       </div>
     </Link>
