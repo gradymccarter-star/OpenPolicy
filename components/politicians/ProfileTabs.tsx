@@ -441,19 +441,13 @@ export default function ProfileTabs({
         {/* ── Analysis ── */}
         {effectiveActive === 'analysis' && (
           <div className="space-y-8">
-            {(pachamberScore ?? aclupaScore) ? (
-              <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 items-start">
-                <div className="xl:col-span-2">{principleScoresSection}</div>
-                <div className="space-y-6">
-                  {pachamberScore && (
-                    <PAChamberScorecard score={pachamberScore} stats={pachamberStats} session={pachamberSession} />
-                  )}
-                  {aclupaScore && (
-                    <ACLUPAScorecard score={aclupaScore} stats={aclupaStats} session={aclupaSession} />
-                  )}
-                </div>
-              </div>
-            ) : principleScoresSection}
+            {principleScoresSection}
+            {pachamberScore && (
+              <PAChamberScorecard score={pachamberScore} stats={pachamberStats} session={pachamberSession} />
+            )}
+            {aclupaScore && (
+              <ACLUPAScorecard score={aclupaScore} stats={aclupaStats} session={aclupaSession} />
+            )}
 
             {methodologySection}
             <div id="evidence-trail" className="card p-8" style={{ scrollMarginTop: '2rem' }}>
