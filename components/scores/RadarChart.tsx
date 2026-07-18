@@ -24,7 +24,7 @@ export default function RadarChart({
   const n = scores.length;
   const angleStep = (2 * Math.PI) / n;
 
-  const chartColor = color || '#0a0e1a';
+  const chartColor = color || 'var(--ink)';
 
   function polarToCart(angle: number, r: number) {
     return {
@@ -71,7 +71,7 @@ export default function RadarChart({
             key={i}
             points={points}
             fill="none"
-            stroke="rgba(0,0,0,0.08)"
+            stroke="var(--rule)"
             strokeWidth={i === levels - 1 ? 1.5 : 0.5}
           />
         ))}
@@ -81,7 +81,7 @@ export default function RadarChart({
           <line
             key={i}
             x1={a.x1} y1={a.y1} x2={a.x2} y2={a.y2}
-            stroke="rgba(0,0,0,0.08)"
+            stroke="var(--rule)"
             strokeWidth={0.5}
           />
         ))}
@@ -90,7 +90,7 @@ export default function RadarChart({
         <polygon
           points={dataPath}
           fill={chartColor}
-          fillOpacity={0.12}
+          fillOpacity={0.08}
           stroke={chartColor}
           strokeWidth={2}
         />
@@ -111,8 +111,8 @@ export default function RadarChart({
             x={l.x} y={l.y}
             textAnchor="middle"
             dominantBaseline="middle"
-            className="text-xs font-medium"
-            fill="#9ca3af"
+            className="figure text-xs font-medium"
+            fill="var(--ink-tertiary)"
           >
             {l.label}
           </text>
@@ -126,7 +126,7 @@ export default function RadarChart({
             y={l.y + 14}
             textAnchor="middle"
             dominantBaseline="middle"
-            className="text-xs font-bold"
+            className="figure text-xs font-bold"
             fill={chartColor}
           >
             {Math.round(l.value * 100)}%
@@ -192,7 +192,7 @@ export function ComparisonRadar({ datasets, size = 300 }: ComparisonRadarProps) 
             key={i}
             points={points}
             fill="none"
-            stroke="rgba(0,0,0,0.08)"
+            stroke="var(--rule)"
             strokeWidth={i === levels - 1 ? 1.5 : 0.5}
           />
         ))}
@@ -201,7 +201,7 @@ export function ComparisonRadar({ datasets, size = 300 }: ComparisonRadarProps) 
           <line
             key={i}
             x1={a.x1} y1={a.y1} x2={a.x2} y2={a.y2}
-            stroke="rgba(0,0,0,0.08)"
+            stroke="var(--rule)"
             strokeWidth={0.5}
           />
         ))}
@@ -212,18 +212,21 @@ export function ComparisonRadar({ datasets, size = 300 }: ComparisonRadarProps) 
             return polarToCart(i * angleStep, r);
           });
           const dataPath = dataPoints.map((p) => `${p.x},${p.y}`).join(' ');
+          // First polygon reads as ink, second as brass — per the comparison spec
+          const stroke = di === 0 ? 'var(--ink)' : di === 1 ? 'var(--brass-bright)' : ds.color;
+          const fill = di === 0 ? 'rgba(19,26,38,0.08)' : di === 1 ? 'rgba(201,168,76,0.12)' : ds.color;
 
           return (
             <g key={di}>
               <polygon
                 points={dataPath}
-                fill={ds.color}
-                fillOpacity={0.1}
-                stroke={ds.color}
+                fill={fill}
+                fillOpacity={di <= 1 ? 1 : 0.1}
+                stroke={stroke}
                 strokeWidth={2}
               />
               {dataPoints.map((p, i) => (
-                <circle key={i} cx={p.x} cy={p.y} r={3} fill={ds.color} />
+                <circle key={i} cx={p.x} cy={p.y} r={3} fill={stroke} />
               ))}
             </g>
           );
@@ -235,8 +238,8 @@ export function ComparisonRadar({ datasets, size = 300 }: ComparisonRadarProps) 
             x={l.x} y={l.y}
             textAnchor="middle"
             dominantBaseline="middle"
-            className="text-xs font-medium"
-            fill="#9ca3af"
+            className="figure text-xs font-medium"
+            fill="var(--ink-tertiary)"
           >
             {l.label}
           </text>
@@ -247,7 +250,10 @@ export function ComparisonRadar({ datasets, size = 300 }: ComparisonRadarProps) 
       <div className="flex items-center space-x-6 mt-3">
         {datasets.map((ds, i) => (
           <div key={i} className="flex items-center space-x-2">
-            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: ds.color }} />
+            <div
+              className="w-3 h-3 rounded-sm"
+              style={{ backgroundColor: i === 0 ? 'var(--ink)' : i === 1 ? 'var(--brass-bright)' : ds.color }}
+            />
             <span className="text-body-sm font-medium text-primary-500">{ds.name}</span>
           </div>
         ))}

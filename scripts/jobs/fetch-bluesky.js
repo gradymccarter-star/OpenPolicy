@@ -55,7 +55,12 @@ async function bskyGet(endpoint, params) {
   return response.data;
 }
 
+// searchPosts requires auth on the public AppView as of 2026 (returns 403);
+// once we see that, stop trying — author feeds still work unauthenticated
+let searchPostsBlocked = false;
+
 async function searchPosts(query) {
+  if (searchPostsBlocked) return [];
   try {
     const data = await bskyGet('app.bsky.feed.searchPosts', {
       q: query,
@@ -64,7 +69,11 @@ async function searchPosts(query) {
     });
     return data?.posts || [];
   } catch (err) {
-    if (err?.response?.status === 429) {
+    const status = err?.response?.status;
+    if (status === 401 || status === 403) {
+      searchPostsBlocked = true;
+      console.log(`  searchPosts returned ${status} (auth now required) — falling back to author feeds only`);
+    } else if (status === 429) {
       await new Promise((r) => setTimeout(r, 60000));
     }
     return [];
@@ -144,6 +153,7 @@ async function upsertPost(supabase, politicianId, post) {
     content_hash: hash,
   }, { onConflict: 'content_hash', ignoreDuplicates: true });
 
+  if (error) console.error(`    upsert error (${uri}): ${error.message}`);
   return !error;
 }
 
@@ -171,7 +181,8 @@ function isOfficialAccount(actor, member, handleHint) {
   const displayName = (actor.displayName || '').toLowerCase();
   const description = (actor.description || '').toLowerCase();
   const handleLower = (actor.handle || '').toLowerCase();
-  const nameMatch = displayName.includes(member.last_name.toLowerCase()) || handleLower.includes(handleHint.toLowerCase());
+  const lastName = (member.last_name || '').trim().toLowerCase();
+  const nameMatch = displayName.includes(lastName) || handleLower.includes(handleHint.trim().toLowerCase());
   const officialHint =
     description.includes('representative') ||
     description.includes('rep.') ||
@@ -183,9 +194,11 @@ function isOfficialAccount(actor, member, handleHint) {
 async function scanMemberFeed(supabase, member, seenUris) {
   const handleHint = member.twitter_handle
     ? member.twitter_handle.replace('@', '').replace(/^Rep/i, '')
-    : member.last_name;
+    : (member.last_name || '').trim();
 
-  const actors = await searchActors(`${member.full_name} Pennsylvania representative`);
+  // Search by name only — extra terms like "Pennsylvania representative"
+  // dilute actor search and push the actual account out of the results
+  const actors = await searchActors(member.full_name.replace(/\s+/g, ' ').trim());
   for (const actor of actors) {
     if (!isOfficialAccount(actor, member, handleHint)) continue;
     console.log(`    Found account: @${actor.handle} (${actor.displayName})`);

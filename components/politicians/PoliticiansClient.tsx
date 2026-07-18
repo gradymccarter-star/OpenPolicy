@@ -58,12 +58,10 @@ export default function PoliticiansClient({ politicians, showExamples, initialQu
   return (
     <div>
       {/* Search header */}
-      <div className="mb-6 p-6 rounded-2xl" style={{ background: '#0a1628' }}>
-        <p className="text-caption font-semibold uppercase tracking-widest mb-3" style={{ color: '#c9a84c' }}>
-          Search 2026 PA House Members
-        </p>
-        <div className="relative mb-4">
-          <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div className="card p-6 mb-6">
+        <p className="overline">Search 2026 PA House Members</p>
+        <div className="relative mt-5 mb-4">
+          <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: 'var(--ink-tertiary)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
           <input
@@ -72,13 +70,13 @@ export default function PoliticiansClient({ politicians, showExamples, initialQu
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             autoFocus
-            className="w-full pl-12 pr-4 py-4 rounded-xl text-base font-medium text-white placeholder-white/30 outline-none focus:ring-2"
-            style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)' }}
+            className="w-full pl-12 pr-4 py-3 rounded-md text-base font-medium outline-none transition-colors border border-[color:var(--rule)] focus:border-[color:var(--ink)] placeholder:text-[color:var(--ink-tertiary)]"
+            style={{ background: 'var(--well)', color: 'var(--ink)' }}
           />
           {search && (
             <button
               onClick={() => setSearch('')}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70 transition-colors"
+              className="absolute right-4 top-1/2 -translate-y-1/2 transition-colors text-[color:var(--ink-tertiary)] hover:text-[color:var(--ink)]"
             >
               ✕
             </button>
@@ -93,10 +91,10 @@ export default function PoliticiansClient({ politicians, showExamples, initialQu
               <button
                 key={opt.value}
                 onClick={() => setParty(opt.value)}
-                className="px-3 py-1.5 rounded-lg text-caption font-semibold transition-all"
+                className="px-3 py-1.5 rounded-md text-caption font-semibold transition-colors"
                 style={party === opt.value
-                  ? { background: '#c9a84c', color: '#0a1628' }
-                  : { background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.15)' }
+                  ? { background: 'var(--ink)', color: 'var(--paper)', border: '1px solid var(--ink)' }
+                  : { background: 'var(--well)', color: 'var(--ink-secondary)', border: '1px solid var(--rule)' }
                 }
               >
                 {opt.label}
@@ -108,8 +106,11 @@ export default function PoliticiansClient({ politicians, showExamples, initialQu
           <select
             value={county}
             onChange={(e) => setCounty(e.target.value)}
-            className="px-3 py-1.5 rounded-lg text-caption font-semibold outline-none"
-            style={{ background: 'rgba(255,255,255,0.08)', color: county !== 'all' ? '#c9a84c' : 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.15)' }}
+            className="px-3 py-1.5 rounded-md text-caption font-semibold outline-none transition-colors"
+            style={county !== 'all'
+              ? { background: 'var(--ink)', color: 'var(--paper)', border: '1px solid var(--ink)' }
+              : { background: 'var(--well)', color: 'var(--ink-secondary)', border: '1px solid var(--rule)' }
+            }
           >
             <option value="all">All Counties</option>
             {allCounties.map((c) => (
@@ -121,8 +122,11 @@ export default function PoliticiansClient({ politicians, showExamples, initialQu
           <select
             value={minScore}
             onChange={(e) => setMinScore(Number(e.target.value))}
-            className="px-3 py-1.5 rounded-lg text-caption font-semibold outline-none"
-            style={{ background: 'rgba(255,255,255,0.08)', color: minScore > 0 ? '#c9a84c' : 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.15)' }}
+            className="px-3 py-1.5 rounded-md text-caption font-semibold outline-none transition-colors"
+            style={minScore > 0
+              ? { background: 'var(--ink)', color: 'var(--paper)', border: '1px solid var(--ink)' }
+              : { background: 'var(--well)', color: 'var(--ink-secondary)', border: '1px solid var(--rule)' }
+            }
           >
             <option value={0}>Any Alignment</option>
             <option value={55}>55%+ Alignment</option>
@@ -134,8 +138,8 @@ export default function PoliticiansClient({ politicians, showExamples, initialQu
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value as 'score' | 'name')}
-            className="px-3 py-1.5 rounded-lg text-caption font-semibold outline-none"
-            style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.15)' }}
+            className="px-3 py-1.5 rounded-md text-caption font-semibold outline-none"
+            style={{ background: 'var(--well)', color: 'var(--ink-secondary)', border: '1px solid var(--rule)' }}
           >
             <option value="score">Sort: Top Score</option>
             <option value="name">Sort: A–Z</option>
@@ -144,15 +148,14 @@ export default function PoliticiansClient({ politicians, showExamples, initialQu
           {hasFilters && (
             <button
               onClick={() => { setSearch(''); setParty('all'); setCounty('all'); setMinScore(0); }}
-              className="px-3 py-1.5 rounded-lg text-caption font-semibold transition-all"
-              style={{ color: 'rgba(255,255,255,0.4)', border: '1px solid rgba(255,255,255,0.1)' }}
+              className="px-3 py-1.5 rounded-md text-caption font-semibold transition-colors border border-[color:var(--rule)] text-[color:var(--ink-secondary)] hover:border-[color:var(--rule-strong)] hover:text-[color:var(--ink)]"
             >
               Clear
             </button>
           )}
 
-          <span className="ml-auto text-caption font-semibold" style={{ color: 'rgba(255,255,255,0.4)' }}>
-            {filtered.length} of {politicians.length} members
+          <span className="ml-auto text-caption font-semibold" style={{ color: 'var(--ink-tertiary)' }}>
+            <span className="figure">{filtered.length}</span> of <span className="figure">{politicians.length}</span> members
           </span>
         </div>
       </div>

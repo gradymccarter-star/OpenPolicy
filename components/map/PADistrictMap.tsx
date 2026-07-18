@@ -56,10 +56,10 @@ export default function PADistrictMap({
             key={code}
             d={pathFor(feature)}
             fill={getFill(code)}
-            stroke={isSelected ? '#0a1628' : '#ffffff'}
-            strokeWidth={isSelected ? 2 : 0.75}
+            stroke={isSelected ? 'var(--brass-bright)' : isHovered ? 'var(--ink)' : 'var(--card)'}
+            strokeWidth={isSelected ? 2 : isHovered ? 1 : 0.5}
             opacity={isHovered && !isSelected ? 0.85 : 1}
-            style={{ cursor: 'pointer', transition: 'opacity 0.15s' }}
+            style={{ cursor: 'pointer', transition: 'opacity 0.15s, stroke 0.15s' }}
             onClick={() => onSelect(code)}
             onMouseEnter={() => onHover(code)}
             onMouseLeave={() => onHover(null)}

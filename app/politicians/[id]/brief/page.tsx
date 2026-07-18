@@ -13,22 +13,22 @@ type Recommendation = {
   verdictShort: string;
   bg: string;
   text: string;
-  border: string;
   icon: string;
 };
 
+// Tinted-badge palettes only (print-clean): wash background + dark token text, no dark fills
 function getRecommendation(score: number, confidence: number, totalEvidence: number): Recommendation {
   if (totalEvidence < 5 || confidence < 0.5) {
     return {
       verdict: 'Insufficient Data — Further Research Required',
       verdictShort: 'INSUFFICIENT DATA',
-      bg: '#f3f4f6', text: '#374151', border: '#d1d5db', icon: '⚠',
+      bg: 'var(--well)', text: 'var(--ink-secondary)', icon: '⚠',
     };
   }
-  if (score >= 0.70) return { verdict: 'Recommend Endorsement', verdictShort: 'ENDORSE', bg: '#0a1628', text: '#ffffff', border: '#0a1628', icon: '✓' };
-  if (score >= 0.58) return { verdict: 'Lean Endorse — Conditional on Key Votes', verdictShort: 'LEAN ENDORSE', bg: '#1e3a5f', text: '#ffffff', border: '#1e3a5f', icon: '↑' };
-  if (score >= 0.44) return { verdict: 'Neutral — Further Review Recommended', verdictShort: 'NEUTRAL', bg: '#92400e', text: '#ffffff', border: '#92400e', icon: '–' };
-  return { verdict: 'Do Not Endorse', verdictShort: 'DO NOT ENDORSE', bg: '#7f1d1d', text: '#ffffff', border: '#7f1d1d', icon: '✗' };
+  if (score >= 0.70) return { verdict: 'Recommend Endorsement', verdictShort: 'ENDORSE', bg: 'rgba(47, 111, 82, 0.12)', text: 'var(--verdigris)', icon: '✓' };
+  if (score >= 0.58) return { verdict: 'Lean Endorse — Conditional on Key Votes', verdictShort: 'LEAN ENDORSE', bg: 'rgba(19, 26, 38, 0.08)', text: 'var(--ink)', icon: '↑' };
+  if (score >= 0.44) return { verdict: 'Neutral — Further Review Recommended', verdictShort: 'NEUTRAL', bg: 'var(--brass-wash)', text: 'var(--brass)', icon: '–' };
+  return { verdict: 'Do Not Endorse', verdictShort: 'DO NOT ENDORSE', bg: 'rgba(158, 59, 49, 0.1)', text: 'var(--oxblood)', icon: '✗' };
 }
 
 function buildSummary(
@@ -186,7 +186,7 @@ export default async function EndorsementBriefPage({
       </div>
 
       {/* Letterhead */}
-      <div className="flex items-start justify-between mb-6 pb-5" style={{ borderBottom: '3px solid #0a1628' }}>
+      <div className="flex items-start justify-between mb-6 pb-5" style={{ borderBottom: '2px solid var(--ink)' }}>
         <div>
           <p className="text-caption font-bold uppercase tracking-widest text-primary-400 mb-1">
             PA Chamber of Commerce
@@ -196,14 +196,14 @@ export default async function EndorsementBriefPage({
         </div>
         <div className="text-right">
           <p className="text-caption text-primary-400">2026 PA House Election</p>
-          <p className="text-caption text-primary-300 mt-0.5">Based on {totalEvidence} evidence items</p>
+          <p className="text-caption text-primary-300 mt-0.5">Based on <span className="figure">{totalEvidence}</span> evidence items</p>
         </div>
       </div>
 
       {/* Subject header */}
       <div className="flex items-center gap-5 mb-6">
         {politician.photo_url && (
-          <div className="relative w-20 h-20 rounded-full overflow-hidden flex-shrink-0 print:hidden" style={{ border: '2px solid #c9a84c' }}>
+          <div className="relative w-20 h-20 rounded-full overflow-hidden flex-shrink-0 print:hidden" style={{ border: '2px solid var(--brass-bright)' }}>
             <Image src={politician.photo_url} alt={politician.full_name} fill className="object-cover" style={{ objectPosition: '50% 15%' }} />
           </div>
         )}
@@ -211,7 +211,7 @@ export default async function EndorsementBriefPage({
           <h1 className="text-3xl font-bold text-primary-950">{politician.full_name}</h1>
           <p className="text-body-sm text-primary-500 mt-0.5">
             {partyLabel}
-            {politician.district && ` · District ${politician.district}`}
+            {politician.district && <> · District <span className="figure">{politician.district}</span></>}
             {politician.county && ` · ${politician.county}`}
           </p>
           {politician.official_website && (
@@ -224,25 +224,31 @@ export default async function EndorsementBriefPage({
 
       {/* VERDICT BANNER */}
       <div
-        className="rounded-2xl p-6 mb-8 print:rounded-none print:mb-6"
-        style={{ background: rec.bg, color: rec.text, border: `2px solid ${rec.border}` }}
+        className="rounded-xl p-6 mb-8 print:rounded-none print:mb-6"
+        style={{ background: 'var(--card)', border: '1px solid var(--rule-strong)' }}
       >
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div>
-            <p className="text-xs font-bold uppercase tracking-widest opacity-70 mb-1">PA Chamber Staff Recommendation</p>
-            <p className="text-3xl font-bold">{rec.icon} {rec.verdict}</p>
+            <p className="overline mb-2">PA Chamber Staff Recommendation</p>
+            <span
+              className="inline-block rounded-sm px-2.5 py-1 text-caption font-bold uppercase tracking-wide"
+              style={{ background: rec.bg, color: rec.text }}
+            >
+              {rec.icon} {rec.verdictShort}
+            </span>
+            <p className="text-2xl font-serif font-semibold text-primary-950 mt-2">{rec.verdict}</p>
           </div>
           <div className="text-right">
-            <p className="text-xs font-bold uppercase tracking-widest opacity-70 mb-1">Overall Alignment</p>
-            <p className="text-5xl font-bold">{Math.round(overallScore * 100)}%</p>
-            <p className="text-xs opacity-60 mt-0.5">Confidence: {Math.round(overallConfidence * 100)}%</p>
+            <p className="overline mb-1">Overall Alignment</p>
+            <p className="figure text-5xl font-bold text-primary-950">{Math.round(overallScore * 100)}%</p>
+            <p className="figure text-xs text-primary-400 mt-0.5">Confidence: {Math.round(overallConfidence * 100)}%</p>
           </div>
         </div>
       </div>
 
       {/* EXECUTIVE SUMMARY */}
       <section className="mb-8">
-        <h2 className="text-lg font-bold text-primary-950 mb-3 uppercase tracking-wide" style={{ borderBottom: '1px solid #e2e8f0', paddingBottom: 6 }}>
+        <h2 className="text-lg font-semibold text-primary-950 mb-3" style={{ borderBottom: '1px solid var(--rule)', paddingBottom: 6 }}>
           Executive Summary
         </h2>
         <p className="text-body-sm text-primary-700 leading-relaxed">{summary}</p>
@@ -250,7 +256,7 @@ export default async function EndorsementBriefPage({
 
       {/* ISSUE-BY-ISSUE BREAKDOWN */}
       <section className="mb-8">
-        <h2 className="text-lg font-bold text-primary-950 mb-4 uppercase tracking-wide" style={{ borderBottom: '1px solid #e2e8f0', paddingBottom: 6 }}>
+        <h2 className="text-lg font-semibold text-primary-950 mb-4" style={{ borderBottom: '1px solid var(--rule)', paddingBottom: 6 }}>
           Issue-by-Issue Breakdown
         </h2>
         <div className="space-y-4">
@@ -265,15 +271,15 @@ export default async function EndorsementBriefPage({
             const noData = numItems === 0;
             const principleEvidence = (byPrinciple[key] ?? []).slice(0, 3);
 
-            const scoreColor = score >= 0.65 ? '#166534' : score >= 0.50 ? '#92400e' : '#991b1b';
-            const scoreBg = score >= 0.65 ? '#dcfce7' : score >= 0.50 ? '#fef3c7' : '#fee2e2';
+            const scoreColor = score >= 0.65 ? 'var(--verdigris)' : score >= 0.50 ? 'var(--brass)' : 'var(--oxblood)';
+            const scoreBg = score >= 0.65 ? 'rgba(47, 111, 82, 0.12)' : score >= 0.50 ? 'var(--brass-wash)' : 'rgba(158, 59, 49, 0.1)';
 
             return (
-              <div key={key} className="rounded-xl p-4" style={{ border: '1px solid #e2e8f0' }}>
+              <div key={key} className="rounded-xl p-4" style={{ border: '1px solid var(--rule)' }}>
                 <div className="flex items-start justify-between gap-4 mb-2">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-xs font-bold px-1.5 py-0.5 rounded" style={{ background: '#f1f5f9', color: '#64748b' }}>{key}</span>
+                      <span className="figure text-xs font-bold px-1.5 py-0.5 rounded-sm" style={{ background: 'var(--well)', color: 'var(--ink-secondary)' }}>{key}</span>
                       <span className="font-bold text-primary-950 text-body-sm">{principle?.name}</span>
                     </div>
                     {principle?.description && (
@@ -282,9 +288,9 @@ export default async function EndorsementBriefPage({
                   </div>
                   <div className="text-right flex-shrink-0">
                     {noData ? (
-                      <span className="text-caption font-semibold px-2.5 py-1 rounded-full" style={{ background: '#f3f4f6', color: '#9ca3af' }}>No Data</span>
+                      <span className="text-caption font-semibold px-2.5 py-1 rounded-sm" style={{ background: 'var(--well)', color: 'var(--ink-tertiary)' }}>No Data</span>
                     ) : (
-                      <span className="text-lg font-bold px-3 py-1 rounded-full" style={{ background: scoreBg, color: scoreColor }}>{pct}%</span>
+                      <span className="figure text-lg font-bold px-3 py-1 rounded-sm" style={{ background: scoreBg, color: scoreColor }}>{pct}%</span>
                     )}
                   </div>
                 </div>
@@ -292,15 +298,15 @@ export default async function EndorsementBriefPage({
                 {!noData && (
                   <>
                     {/* Score bar */}
-                    <div className="h-1.5 rounded-full mb-2" style={{ background: '#f1f5f9' }}>
-                      <div className="h-1.5 rounded-full transition-all" style={{ width: `${pct}%`, background: scoreColor }} />
+                    <div className="h-1.5 rounded-sm mb-2" style={{ background: 'var(--well)' }}>
+                      <div className="h-1.5 rounded-sm transition-all" style={{ width: `${pct}%`, background: scoreColor }} />
                     </div>
 
                     {/* Evidence summary */}
                     <div className="flex gap-4 flex-wrap mb-2">
-                      {numVotes > 0 && <span className="text-caption text-primary-500">🗳 {numVotes} floor vote{numVotes !== 1 ? 's' : ''}</span>}
-                      {numSponsorships > 0 && <span className="text-caption text-primary-500">📋 {numSponsorships} bill{numSponsorships !== 1 ? 's' : ''} sponsored/co-sponsored</span>}
-                      {numItems - numVotes - numSponsorships > 0 && <span className="text-caption text-primary-500">📰 {numItems - numVotes - numSponsorships} news/social items</span>}
+                      {numVotes > 0 && <span className="text-caption text-primary-500"><span className="figure">{numVotes}</span> floor vote{numVotes !== 1 ? 's' : ''}</span>}
+                      {numSponsorships > 0 && <span className="text-caption text-primary-500"><span className="figure">{numSponsorships}</span> bill{numSponsorships !== 1 ? 's' : ''} sponsored/co-sponsored</span>}
+                      {numItems - numVotes - numSponsorships > 0 && <span className="text-caption text-primary-500"><span className="figure">{numItems - numVotes - numSponsorships}</span> news/social items</span>}
                     </div>
 
                     {/* Key evidence bullets */}
@@ -346,19 +352,19 @@ export default async function EndorsementBriefPage({
       {/* KEY POSITIONS */}
       {(supportClaims.length > 0 || opposeClaims.length > 0) && (
         <section className="mb-8">
-          <h2 className="text-lg font-bold text-primary-950 mb-4 uppercase tracking-wide" style={{ borderBottom: '1px solid #e2e8f0', paddingBottom: 6 }}>
+          <h2 className="text-lg font-semibold text-primary-950 mb-4" style={{ borderBottom: '1px solid var(--rule)', paddingBottom: 6 }}>
             Key Positions & Statements
           </h2>
 
           {supportClaims.length > 0 && (
             <div className="mb-4">
-              <p className="text-caption font-bold uppercase tracking-wide text-green-700 mb-2">Positions Aligned with Chamber</p>
+              <p className="text-caption font-bold uppercase tracking-wide mb-2" style={{ color: 'var(--verdigris)' }}>Positions Aligned with Chamber</p>
               <ul className="space-y-2">
                 {supportClaims.map((c: any, i: number) => (
-                  <li key={i} className="text-caption flex items-start gap-2 p-3 rounded-lg" style={{ background: '#f0fdf4', border: '1px solid #bbf7d0' }}>
-                    <span className="text-green-600 font-bold flex-shrink-0 mt-0.5">✓</span>
+                  <li key={i} className="text-caption flex items-start gap-2 p-3 rounded-md" style={{ border: '1px solid var(--rule)' }}>
+                    <span className="font-bold flex-shrink-0 mt-0.5" style={{ color: 'var(--verdigris)' }}>✓</span>
                     <span className="text-primary-700">{c.claim_text}</span>
-                    {c.principle && <span className="ml-auto flex-shrink-0 text-xs font-semibold text-green-600">{c.principle}</span>}
+                    {c.principle && <span className="figure ml-auto flex-shrink-0 text-xs font-semibold" style={{ color: 'var(--verdigris)' }}>{c.principle}</span>}
                   </li>
                 ))}
               </ul>
@@ -367,13 +373,13 @@ export default async function EndorsementBriefPage({
 
           {opposeClaims.length > 0 && (
             <div>
-              <p className="text-caption font-bold uppercase tracking-wide text-red-700 mb-2">Positions Against Chamber Priorities</p>
+              <p className="text-caption font-bold uppercase tracking-wide mb-2" style={{ color: 'var(--oxblood)' }}>Positions Against Chamber Priorities</p>
               <ul className="space-y-2">
                 {opposeClaims.map((c: any, i: number) => (
-                  <li key={i} className="text-caption flex items-start gap-2 p-3 rounded-lg" style={{ background: '#fef2f2', border: '1px solid #fecaca' }}>
-                    <span className="text-red-600 font-bold flex-shrink-0 mt-0.5">✗</span>
+                  <li key={i} className="text-caption flex items-start gap-2 p-3 rounded-md" style={{ border: '1px solid var(--rule)' }}>
+                    <span className="font-bold flex-shrink-0 mt-0.5" style={{ color: 'var(--oxblood)' }}>✗</span>
                     <span className="text-primary-700">{c.claim_text}</span>
-                    {c.principle && <span className="ml-auto flex-shrink-0 text-xs font-semibold text-red-600">{c.principle}</span>}
+                    {c.principle && <span className="figure ml-auto flex-shrink-0 text-xs font-semibold" style={{ color: 'var(--oxblood)' }}>{c.principle}</span>}
                   </li>
                 ))}
               </ul>
@@ -385,25 +391,25 @@ export default async function EndorsementBriefPage({
       {/* KEY FLOOR VOTES */}
       {keyVotes.length > 0 && (
         <section className="mb-8">
-          <h2 className="text-lg font-bold text-primary-950 mb-4 uppercase tracking-wide" style={{ borderBottom: '1px solid #e2e8f0', paddingBottom: 6 }}>
+          <h2 className="text-lg font-semibold text-primary-950 mb-4" style={{ borderBottom: '1px solid var(--rule)', paddingBottom: 6 }}>
             Floor Vote Record
           </h2>
           <div className="space-y-2">
             {keyVotes.map((v: any) => {
               const isYea = v.vote_position?.toLowerCase() === 'yea';
               return (
-                <div key={v.id} className="flex items-center gap-3 py-2.5 px-3 rounded-lg" style={{ border: '1px solid #f1f5f9' }}>
+                <div key={v.id} className="flex items-center gap-3 py-2.5 px-3 rounded-md" style={{ border: '1px solid var(--rule-soft)' }}>
                   <span
-                    className="flex-shrink-0 text-xs font-bold px-2 py-0.5 rounded"
-                    style={{ background: isYea ? '#dcfce7' : '#fee2e2', color: isYea ? '#166534' : '#991b1b', minWidth: 40, textAlign: 'center' }}
+                    className="flex-shrink-0 text-xs font-bold px-2 py-0.5 rounded-sm"
+                    style={{ background: isYea ? 'rgba(47, 111, 82, 0.12)' : 'rgba(158, 59, 49, 0.1)', color: isYea ? 'var(--verdigris)' : 'var(--oxblood)', minWidth: 40, textAlign: 'center' }}
                   >
                     {v.vote_position?.toUpperCase() ?? '—'}
                   </span>
                   <span className="flex-1 text-caption text-primary-800">{v.bill_title ?? 'Floor vote'}</span>
                   {v.tagged_principles?.length > 0 && (
-                    <span className="text-xs text-primary-400 flex-shrink-0">{v.tagged_principles.join(', ')}</span>
+                    <span className="figure text-xs text-primary-400 flex-shrink-0">{v.tagged_principles.join(', ')}</span>
                   )}
-                  <span className="text-caption text-primary-300 flex-shrink-0">
+                  <span className="figure text-caption text-primary-300 flex-shrink-0">
                     {v.source_date ? new Date(v.source_date).getFullYear() : ''}
                   </span>
                 </div>
@@ -416,31 +422,31 @@ export default async function EndorsementBriefPage({
       {/* CAMPAIGN FUNDING */}
       {hasFunding && (
         <section className="mb-8">
-          <h2 className="text-lg font-bold text-primary-950 mb-4 uppercase tracking-wide" style={{ borderBottom: '1px solid #e2e8f0', paddingBottom: 6 }}>
+          <h2 className="text-lg font-semibold text-primary-950 mb-4" style={{ borderBottom: '1px solid var(--rule)', paddingBottom: 6 }}>
             Campaign Funding — {latestCycle} Cycle
           </h2>
 
           {/* Alignment breakdown */}
-          <div className="rounded-xl p-4 mb-4" style={{ border: '1px solid #e2e8f0', background: '#f8fafc' }}>
+          <div className="rounded-xl p-4 mb-4" style={{ border: '1px solid var(--rule)' }}>
             <p className="text-caption text-primary-500 mb-3">
-              Total raised: <strong className="text-primary-950">{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(fundingTotal)}</strong>
+              Total raised: <strong className="figure text-primary-950">{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(fundingTotal)}</strong>
             </p>
             {/* Stacked bar */}
-            <div className="flex rounded-full overflow-hidden h-3 mb-3" style={{ background: '#e5e7eb' }}>
+            <div className="flex rounded-sm overflow-hidden h-3 mb-3" style={{ background: 'var(--well)' }}>
               {fundingTotal > 0 && (['pro_chamber', 'anti_chamber', 'unknown'] as const).map(lean => {
                 const pct = (fundingBuckets[lean] / fundingTotal) * 100;
                 if (pct < 1) return null;
-                const colors: Record<string, string> = { pro_chamber: '#16a34a', anti_chamber: '#dc2626', unknown: '#d1d5db' };
+                const colors: Record<string, string> = { pro_chamber: 'var(--verdigris)', anti_chamber: 'var(--oxblood)', unknown: 'var(--ink-faint)' };
                 return <div key={lean} style={{ width: `${pct}%`, background: colors[lean] }} />;
               })}
             </div>
             <div className="flex gap-4 flex-wrap text-caption">
-              {([['pro_chamber', '#166534', '#dcfce7'], ['anti_chamber', '#991b1b', '#fee2e2'], ['unknown', '#6b7280', '#f3f4f6']] as const).map(([lean, color, bg]) => {
+              {([['pro_chamber', 'var(--verdigris)', 'rgba(47, 111, 82, 0.12)'], ['anti_chamber', 'var(--oxblood)', 'rgba(158, 59, 49, 0.1)'], ['unknown', 'var(--ink-secondary)', 'var(--well)']] as const).map(([lean, color, bg]) => {
                 const pct = fundingTotal > 0 ? Math.round((fundingBuckets[lean] / fundingTotal) * 100) : 0;
                 const labels: Record<string, string> = { pro_chamber: 'Pro-Chamber', anti_chamber: 'Anti-Chamber', unknown: 'Neutral / Unknown' };
                 return (
-                  <span key={lean} className="flex items-center gap-1.5 font-semibold px-2 py-0.5 rounded" style={{ color, background: bg }}>
-                    {pct}% {labels[lean]}
+                  <span key={lean} className="flex items-center gap-1.5 font-semibold px-2 py-0.5 rounded-sm" style={{ color, background: bg }}>
+                    <span className="figure">{pct}%</span> {labels[lean]}
                   </span>
                 );
               })}
@@ -455,18 +461,18 @@ export default async function EndorsementBriefPage({
                 {topOrgDonors.map((c: any, i: number) => {
                   const lean = c.donor_organizations?.lean ?? 'unknown';
                   const leanColors: Record<string, [string, string]> = {
-                    pro_chamber: ['#166534', '#dcfce7'],
-                    anti_chamber: ['#991b1b', '#fee2e2'],
-                    neutral: ['#374151', '#f3f4f6'],
-                    unknown: ['#6b7280', '#f9fafb'],
+                    pro_chamber: ['var(--verdigris)', 'rgba(47, 111, 82, 0.12)'],
+                    anti_chamber: ['var(--oxblood)', 'rgba(158, 59, 49, 0.1)'],
+                    neutral: ['var(--ink-secondary)', 'var(--well)'],
+                    unknown: ['var(--ink-tertiary)', 'var(--well)'],
                   };
                   const leanLabels: Record<string, string> = { pro_chamber: 'Pro-Chamber', anti_chamber: 'Anti-Chamber', neutral: 'Neutral', unknown: 'Neutral / Unknown' };
                   const [color, bg] = leanColors[lean] ?? leanColors.unknown;
                   return (
-                    <div key={i} className="flex items-center justify-between gap-3 py-2 px-3 rounded-lg text-caption" style={{ border: '1px solid #f1f5f9' }}>
+                    <div key={i} className="flex items-center justify-between gap-3 py-2 px-3 rounded-md text-caption" style={{ border: '1px solid var(--rule-soft)' }}>
                       <span className="text-primary-800 font-medium flex-1">{c.donor_name}</span>
-                      <span className="font-semibold px-2 py-0.5 rounded text-xs flex-shrink-0" style={{ color, background: bg }}>{leanLabels[lean]}</span>
-                      <span className="font-mono text-primary-900 flex-shrink-0">{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(c.amount)}</span>
+                      <span className="font-semibold px-2 py-0.5 rounded-sm text-xs flex-shrink-0" style={{ color, background: bg }}>{leanLabels[lean]}</span>
+                      <span className="figure text-primary-900 flex-shrink-0">{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(c.amount)}</span>
                     </div>
                   );
                 })}
@@ -479,7 +485,7 @@ export default async function EndorsementBriefPage({
       {/* DATA GAPS */}
       {missingPrinciples.length > 0 && (
         <section className="mb-8">
-          <h2 className="text-lg font-bold text-primary-950 mb-3 uppercase tracking-wide" style={{ borderBottom: '1px solid #e2e8f0', paddingBottom: 6 }}>
+          <h2 className="text-lg font-semibold text-primary-950 mb-3" style={{ borderBottom: '1px solid var(--rule)', paddingBottom: 6 }}>
             Data Gaps — Action Required
           </h2>
           <p className="text-caption text-primary-500 mb-3">
@@ -488,8 +494,8 @@ export default async function EndorsementBriefPage({
           </p>
           <div className="flex flex-wrap gap-2">
             {missingPrinciples.map(key => (
-              <span key={key} className="text-caption px-3 py-1.5 rounded-full font-semibold" style={{ background: '#fef9c3', color: '#854d0e', border: '1px solid #fde68a' }}>
-                {key}: {PA_CHAMBER_PRINCIPLES[key]?.name}
+              <span key={key} className="text-caption px-3 py-1.5 rounded-sm font-semibold" style={{ background: 'var(--brass-wash)', color: 'var(--brass)' }}>
+                <span className="figure">{key}</span>: {PA_CHAMBER_PRINCIPLES[key]?.name}
               </span>
             ))}
           </div>
@@ -497,7 +503,7 @@ export default async function EndorsementBriefPage({
       )}
 
       {/* FOOTER */}
-      <div className="pt-5 text-caption text-primary-400 leading-relaxed" style={{ borderTop: '2px solid #0a1628' }}>
+      <div className="pt-5 text-caption text-primary-400 leading-relaxed" style={{ borderTop: '2px solid var(--ink)' }}>
         <p className="font-semibold text-primary-600 mb-1">PA Chamber of Commerce — For Internal Use Only</p>
         <p>This brief is machine-generated from public legislative records and AI-extracted claims. All scores and positions should be verified by the government affairs team before use in any official endorsement communication. Chamber alignment scores are based on the nine PA Chamber business priorities and do not reflect the Chamber's official position on any individual.</p>
         <p className="mt-2">Evidence sources: PA General Assembly records, LegiScan legislative data, Google News, Bluesky, YouTube. Pipeline last run: {generatedDate}.</p>

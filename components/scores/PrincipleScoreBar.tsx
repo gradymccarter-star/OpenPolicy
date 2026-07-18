@@ -40,17 +40,17 @@ export default function PrincipleScoreBar({
           {principleName}
         </h4>
         <div className="flex items-center space-x-2">
-          <span className="text-body-sm font-semibold" style={{ color }}>
+          <span className="figure text-body-sm font-semibold" style={{ color }}>
             {formatScore(score)}
           </span>
-          <span className="text-caption font-medium" style={{ color: confColor }}>
+          <span className="figure text-caption font-medium" style={{ color: confColor }}>
             ({Math.round(confidence * 100)}% confidence)
           </span>
         </div>
       </div>
-      <div className="w-full rounded-full h-2" style={{ background: 'var(--surface-canvas)' }}>
+      <div className="w-full rounded-sm h-2" style={{ background: 'var(--well)' }}>
         <div
-          className="h-2 rounded-full transition-all duration-500"
+          className="h-2 rounded-sm"
           style={{
             width: `${percentage}%`,
             backgroundColor: color,
@@ -59,7 +59,7 @@ export default function PrincipleScoreBar({
       </div>
       {evidenceSummary && numEvidenceItems !== undefined && (
         <p className="text-caption text-primary-400">
-          Based on {numEvidenceItems} item{numEvidenceItems !== 1 ? 's' : ''}: {evidenceSummary}
+          Based on <span className="figure">{numEvidenceItems}</span> item{numEvidenceItems !== 1 ? 's' : ''}: {evidenceSummary}
           {principleKey && hasEvidence && <span className="ml-1 font-medium text-primary-700">— view evidence &rarr;</span>}
         </p>
       )}
@@ -69,7 +69,7 @@ export default function PrincipleScoreBar({
   if (!principleKey || !hasEvidence) return body;
 
   return (
-    <Link href={`?principle=${principleKey}#evidence-trail`} scroll={false} className="block -m-2 p-2 rounded-lg transition-colors hover:bg-slate-50">
+    <Link href={`?principle=${principleKey}#evidence-trail`} scroll={false} className="block -m-2 p-2 rounded-md transition-colors hover:bg-primary-50">
       {body}
     </Link>
   );

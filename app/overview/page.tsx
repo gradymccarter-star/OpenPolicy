@@ -105,13 +105,13 @@ export default async function OverviewPage({
   return (
     <main className="container-page py-10">
       <div className="mb-6">
-        <p className="text-caption font-semibold uppercase tracking-widest mb-1" style={{ color: '#c9a84c' }}>
+        <p className="overline">
           2026 Pennsylvania House of Representatives
         </p>
-        <h1 className="text-heading-1 mb-1">District Map</h1>
+        <h1 className="text-heading-1 mt-3 mb-1">District Map</h1>
         <p className="text-body-sm text-primary-500">
-          All 203 PA House districts, colored by current officeholder. Click a district to see its representative,
-          Chamber alignment score, and historical voting lean. {districtCount > 0 && `Data available for ${districtCount} districts.`}
+          All <span className="figure">203</span> PA House districts, colored by current officeholder. Click a district to see its representative,
+          Chamber alignment score, and historical voting lean. {districtCount > 0 && <>Data available for <span className="figure">{districtCount}</span> districts.</>}
         </p>
       </div>
 

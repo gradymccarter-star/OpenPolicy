@@ -2,10 +2,11 @@
  * Fetch PA House GOP Press Releases
  *
  * Strategy:
- * 1. CDX API → all Wayback Machine snapshots of pahousegop.com/NewsGroup/Latest-News
- * 2. Each snapshot contains ~10-20 press release URLs (full URLs with slugs)
- * 3. Fetch each live press release page (server-rendered, directly accessible)
- * 4. Extract sponsoring member name, store as press_release evidence
+ * 1. CDX API prefix query → every archived pahousegop.com/News/{id}/{category}/{slug}
+ *    article capture (only URLs that actually have snapshots, with exact timestamps)
+ * 2. Fetch each release via Wayback raw snapshot (id_ mode) — the live site is
+ *    currently unreachable (connections time out)
+ * 3. Extract sponsoring member name, store as press_release evidence
  */
 
 const fs = require('node:fs');
@@ -94,50 +95,41 @@ function extractMemberLastName(text) {
   return null;
 }
 
-// Get all Wayback Machine snapshots of the GOP newsroom listing
-async function getAllSnapshots() {
+// CDX prefix query: every archived article capture under /News/, restricted to
+// the member release categories. Returns Map of article URL → capture timestamp,
+// so every entry is guaranteed to be fetchable from Wayback.
+async function collectUrls() {
+  console.log('Querying Wayback CDX for archived GOP press release pages...');
+  const urlTimestamps = new Map();
   try {
     const { data } = await axios.get(
-      'https://web.archive.org/cdx/search/cdx?url=pahousegop.com/NewsGroup/Latest-News&output=text&fl=timestamp&limit=100&from=20240101&to=20261231',
-      { timeout: 30000, headers: { 'User-Agent': UA } }
+      'https://web.archive.org/cdx/search/cdx?url=pahousegop.com/News/*&output=text&fl=timestamp,original&filter=statuscode:200&collapse=urlkey&from=20240101&to=20261231&limit=100000',
+      { timeout: 60000, headers: { 'User-Agent': UA } }
     );
-    return (data || '')
-      .split('\n')
-      .map(ts => ts.trim())
-      .filter(ts => ts.length === 14);
+    for (const line of (data || '').split('\n')) {
+      const [ts, original] = line.trim().split(/\s+/);
+      if (!ts || !original) continue;
+      const m = original.match(/\/News\/(\d+)\/(Press-Releases|Latest-News)\//);
+      if (!m) continue;
+      // Article IDs below ~30000 are pre-2023 releases (mass-crawled old pages);
+      // skip them — those members mostly aren't in the current candidate roster
+      if (Number(m[1]) < 30000) continue;
+      if (!urlTimestamps.has(original)) urlTimestamps.set(original, ts);
+    }
   } catch (err) {
     console.error('CDX error:', err.message);
-    return [];
   }
+  console.log(`Total unique press release URLs: ${urlTimestamps.size}`);
+  return urlTimestamps;
 }
 
-// Fetch a Wayback snapshot and extract press release full URLs
-async function extractUrlsFromSnapshot(timestamp) {
-  const snapshotUrl = `https://web.archive.org/web/${timestamp}/https://www.pahousegop.com/NewsGroup/Latest-News`;
+// Fetch a single press release via Wayback raw snapshot (id_ mode returns the
+// original page bytes; Wayback redirects to the capture nearest to `timestamp`)
+async function fetchPressRelease(url, timestamp) {
   try {
-    const { data } = await axios.get(snapshotUrl, {
+    const { data } = await axios.get(`https://web.archive.org/web/${timestamp}id_/${url}`, {
       headers: { 'User-Agent': UA },
       timeout: 20000,
-    });
-    // Extract all /News/{id}/Press-Releases/{slug} paths
-    const urls = new Set();
-    const re = /\/News\/(\d+)\/Press-Releases\/([A-Za-z0-9-]+)/g;
-    let m;
-    while ((m = re.exec(data)) !== null) {
-      urls.add(`https://www.pahousegop.com/News/${m[1]}/Press-Releases/${m[2]}`);
-    }
-    return [...urls];
-  } catch {
-    return [];
-  }
-}
-
-// Fetch a single press release and extract text + member name
-async function fetchPressRelease(url) {
-  try {
-    const { data } = await axios.get(url, {
-      headers: { 'User-Agent': UA, Referer: 'https://www.pahousegop.com/NewsGroup/Latest-News' },
-      timeout: 12000,
     });
 
     const text = stripHtml(data);
@@ -146,40 +138,22 @@ async function fetchPressRelease(url) {
     // Check it's actually a press release page
     if (!text.includes('Pennsylvania House')) return null;
 
-    const titleMatch = data.match(/<h1>([^<]+)<\/h1>/i);
+    const titleMatch = data.match(/<h1[^>]*>([^<]+)<\/h1>/i);
     const title = titleMatch ? titleMatch[1].trim() : '';
 
-    const dateMatch = text.match(/(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},?\s+20\d{2}/i);
+    const dateMatch = text.match(/(January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sept|Sep|Oct|Nov|Dec)\.?\s+\d{1,2},?\s+20\d{2}/i);
     let releaseDate = null;
     if (dateMatch) {
-      const d = new Date(dateMatch[0]);
+      const d = new Date(dateMatch[0].replace('.', ''));
       if (!Number.isNaN(d.getTime())) releaseDate = d.toISOString().split('T')[0];
     }
+    // source_date is NOT NULL in evidence_items — fall back to the capture date
+    if (!releaseDate) releaseDate = `${timestamp.slice(0, 4)}-${timestamp.slice(4, 6)}-${timestamp.slice(6, 8)}`;
 
     return { title, date: releaseDate, text };
   } catch {
     return null;
   }
-}
-
-async function collectUrls() {
-  console.log('Fetching Wayback Machine snapshots of GOP newsroom...');
-  const timestamps = await getAllSnapshots();
-  console.log(`Found ${timestamps.length} snapshots\n`);
-
-  const allPrUrls = new Set();
-  for (const ts of timestamps) {
-    process.stdout.write(`  Snapshot ${ts}... `);
-    const urls = await extractUrlsFromSnapshot(ts);
-    let newCount = 0;
-    for (const u of urls) {
-      if (!allPrUrls.has(u)) { allPrUrls.add(u); newCount++; }
-    }
-    console.log(`${urls.length} URLs (${newCount} new)`);
-    await delay(800);
-  }
-  console.log(`\nTotal unique press release URLs: ${allPrUrls.size}`);
-  return allPrUrls;
 }
 
 async function storeRelease(url, release, nameIndex, existingUrls) {
@@ -196,8 +170,8 @@ async function storeRelease(url, release, nameIndex, existingUrls) {
     evidence_type: 'press_release',
     source_url: url,
     source_text: release.title ? `${release.title}\n\n${bodyText}` : bodyText,
-    publication_date: release.date,
-    keyword_filter_passed: true,
+    source_date: release.date,
+    // keyword_filter_passed left NULL so the LLM pipeline picks these up
     content_hash: hash,
   };
 
@@ -210,6 +184,7 @@ async function storeRelease(url, release, nameIndex, existingUrls) {
     console.log(`\n  + ${politician.full_name}: ${(release.title || '').slice(0, 60)}`);
     return 'inserted';
   }
+  console.error(`\n  upsert error (${url}): ${error.message}`);
   return 'error';
 }
 
@@ -236,18 +211,18 @@ async function run() {
   const existingUrls = new Set((existing || []).map(e => e.source_url));
   console.log(`${existingUrls.size} GOP press releases already in DB\n`);
 
-  const allPrUrls = await collectUrls();
+  const urlTimestamps = await collectUrls();
 
   let inserted = 0;
   let skipped = 0;
   let failed = 0;
   let noMember = 0;
 
-  for (const url of allPrUrls) {
+  for (const [url, ts] of urlTimestamps) {
     if (existingUrls.has(url)) { skipped++; continue; }
 
-    const release = await fetchPressRelease(url);
-    await delay(400);
+    const release = await fetchPressRelease(url, ts);
+    await delay(1000);
 
     if (!release) { failed++; process.stdout.write('x'); continue; }
 
@@ -257,7 +232,7 @@ async function run() {
   }
 
   console.log('\n\n=== Summary ===');
-  console.log(`Press releases found:     ${allPrUrls.size}`);
+  console.log(`Press releases found:     ${urlTimestamps.size}`);
   console.log(`Inserted:                 ${inserted}`);
   console.log(`Already in DB (skipped):  ${skipped}`);
   console.log(`Fetch failed:             ${failed}`);

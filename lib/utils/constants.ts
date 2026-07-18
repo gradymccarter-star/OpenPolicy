@@ -9,6 +9,7 @@ export const EVIDENCE_WEIGHTS: Record<string, number> = {
   committee_statement: 0.55,
   floor_speech: 0.45,
   press_release: 0.35,
+  news_article: 0.3,
   other_endorsement: 0.3,
   social_media: 0.2,
 };
@@ -265,26 +266,27 @@ export const COST_PER_1M_TOKENS = {
 // PA General Assembly photo base URL
 export const PHOTO_BASE_URL = 'https://www.legis.state.pa.us/images/members';
 
-// Party colors — light blue (D), light red (R), neutral gray (I)
+// Party colors — desaturated institutional blue (D), brick (R), slate (I)
 export const PARTY_COLORS: Record<string, string> = {
-  D: '#2563eb',
-  R: '#dc2626',
-  I: '#6b7280',
+  D: '#2b5c8a',
+  R: '#a13d33',
+  I: '#5c6375',
 };
 
-// Score color ranges — monochrome (darker = better)
+// Score color ranges — directional at the poles (verdigris = aligned, oxblood
+// = opposed), ink/slate in the middle so the interface stays calm
 export const SCORE_COLORS = {
-  EXCELLENT: { min: 0.8, color: '#0a0e1a' },
-  GOOD: { min: 0.6, color: '#374151' },
-  MODERATE: { min: 0.4, color: '#9ca3af' },
-  POOR: { min: 0, color: '#d1d5db' },
+  EXCELLENT: { min: 0.8, color: '#2f6f52' },
+  GOOD: { min: 0.6, color: '#131a26' },
+  MODERATE: { min: 0.4, color: '#878d9b' },
+  POOR: { min: 0, color: '#9e3b31' },
 };
 
-// Confidence color thresholds — monochrome
+// Confidence color thresholds — monochrome (reliability, not direction)
 export const CONFIDENCE_COLORS = {
-  HIGH: { min: 0.7, color: '#0a0e1a' },
-  MEDIUM: { min: 0.4, color: '#6b7280' },
-  LOW: { min: 0, color: '#d1d5db' },
+  HIGH: { min: 0.7, color: '#131a26' },
+  MEDIUM: { min: 0.4, color: '#5c6375' },
+  LOW: { min: 0, color: '#c6c8ce' },
 };
 
 // Evidence type display labels
@@ -297,6 +299,7 @@ export const EVIDENCE_TYPE_LABELS: Record<string, string> = {
   floor_speech: 'Floor Speech',
   press_release: 'Press Release',
   social_media: 'Social Media',
+  news_article: 'News Coverage',
   questionnaire_response: 'Candidate Questionnaire',
   other_endorsement: 'Third-Party Endorsement',
 };

@@ -1,10 +1,13 @@
 /**
  * Fetch Official Press Releases Job
  *
- * Scrapes official press release pages for all 209 PA House members from:
- *   - pahouse.com (Democratic caucus) — uses Wayback Machine to get release IDs
- *     then fetches live individual pages (which ARE server-rendered)
- *   - pahousegop.com (Republican caucus) — same approach
+ * Scrapes official press release pages for PA House members from:
+ *   - pahouse.com (Democratic caucus) — uses Wayback Machine to get release IDs,
+ *     then fetches individual pages via Wayback raw snapshots (id_ mode).
+ *     The live site is currently unreachable (connections time out), so both
+ *     listing and content come from web.archive.org.
+ *   - Republican members are skipped: pahousegop.com has no per-member news
+ *     pages in Wayback — fetch-gop-press-releases.js covers the GOP caucus.
  *
  * No auth required. Stores as evidence_type='press_release'.
  */
@@ -31,7 +34,7 @@ const crypto = require('node:crypto');
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
 
-const DELAY_MS = 400;
+const DELAY_MS = 1000;
 const delay = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
@@ -70,10 +73,12 @@ async function getPressReleaseIds(lastName, site) {
     );
     snapshotUrl = data?.archived_snapshots?.closest?.url;
   } catch {
-    return [];
+    return { ids: [], snapshotTs: null };
   }
 
-  if (!snapshotUrl) return [];
+  if (!snapshotUrl) return { ids: [], snapshotTs: null };
+
+  const snapshotTs = (snapshotUrl.match(/\/web\/(\d{14})/) || [])[1] || null;
 
   // Fetch the cached snapshot
   let html;
@@ -84,7 +89,7 @@ async function getPressReleaseIds(lastName, site) {
     });
     html = data;
   } catch {
-    return [];
+    return { ids: [], snapshotTs: null };
   }
 
   // Extract press release IDs from links like /InTheNews/NewsRelease/?id=12345
@@ -101,11 +106,13 @@ async function getPressReleaseIds(lastName, site) {
     if (!ids.includes(m[1])) ids.push(m[1]);
   }
 
-  return ids;
+  return { ids, snapshotTs };
 }
 
-// Fetch the full text of a single press release
-async function fetchPressRelease(lastName, id, site) {
+// Fetch the full text of a single press release via Wayback raw snapshot
+// (live site is unreachable; id_ mode returns original page bytes, and
+// Wayback redirects to the capture nearest to snapshotTs)
+async function fetchPressRelease(lastName, id, site, snapshotTs) {
   let url;
   if (site === 'pahouse.com') {
     url = `https://www.pahouse.com/${lastName}/InTheNews/NewsRelease/?id=${id}`;
@@ -115,9 +122,9 @@ async function fetchPressRelease(lastName, id, site) {
 
   let html;
   try {
-    const { data } = await axios.get(url, {
-      headers: { 'User-Agent': UA, Referer: `https://www.${site}/` },
-      timeout: 12000,
+    const { data } = await axios.get(`https://web.archive.org/web/${snapshotTs}id_/${url}`, {
+      headers: { 'User-Agent': UA },
+      timeout: 20000,
     });
     html = data;
   } catch {
@@ -128,13 +135,18 @@ async function fetchPressRelease(lastName, id, site) {
   const titleMatch = html.match(/<title>([^<]+)<\/title>/i);
   const rawTitle = titleMatch ? titleMatch[1].replace(/\s*[-|]\s*(Pennsylvania House.*|Rep\..*)/i, '').trim() : '';
 
-  // Extract date — try common formats
-  const dateMatch = html.match(/(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},?\s+20\d{2}/i);
+  // Extract date — try common formats (full and abbreviated month names)
+  const dateMatch = html.match(/(January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sept|Sep|Oct|Nov|Dec)\.?\s+\d{1,2},?\s+20\d{2}/i);
   let releaseDate = null;
   if (dateMatch) {
-    const d = new Date(dateMatch[0]);
+    const d = new Date(dateMatch[0].replace('.', ''));
     if (!isNaN(d)) releaseDate = d.toISOString().split('T')[0];
   }
+  // source_date is NOT NULL in evidence_items — fall back to the capture date
+  if (!releaseDate && snapshotTs) {
+    releaseDate = `${snapshotTs.slice(0, 4)}-${snapshotTs.slice(4, 6)}-${snapshotTs.slice(6, 8)}`;
+  }
+  if (!releaseDate) return null;
 
   // Get the meaningful body text — everything after the title/nav area
   const text = stripHtml(html);
@@ -184,15 +196,20 @@ async function run() {
   let totalSkipped = 0;
 
   for (const politician of politicians) {
-    const lastName = politician.last_name
+    // GOP members have no per-member news pages in Wayback —
+    // fetch-gop-press-releases.js covers them from the caucus newsroom
+    if (politician.party === 'R') continue;
+
+    const lastName = (politician.last_name || '')
       .replace(/[^A-Za-z]/g, '') // strip punctuation
       .toLowerCase();
+    if (!lastName) continue;
 
-    const site = politician.party === 'R' ? 'pahousegop.com' : 'pahouse.com';
+    const site = 'pahouse.com';
 
     process.stdout.write(`  ${politician.full_name} (${site})... `);
 
-    const ids = await getPressReleaseIds(lastName, site);
+    const { ids, snapshotTs } = await getPressReleaseIds(lastName, site);
     await delay(DELAY_MS);
 
     if (ids.length === 0) {
@@ -211,7 +228,7 @@ async function run() {
         continue;
       }
 
-      const release = await fetchPressRelease(lastName, id, site);
+      const release = await fetchPressRelease(lastName, id, site, snapshotTs);
       await delay(DELAY_MS);
 
       if (!release) continue;
@@ -224,8 +241,8 @@ async function run() {
         source_text: release.title
           ? `${release.title}\n\n${release.text}`
           : release.text,
-        publication_date: release.date,
-        keyword_filter_passed: true,
+        source_date: release.date,
+        // keyword_filter_passed left NULL so the LLM pipeline picks these up
         content_hash: hash,
       };
 
@@ -233,7 +250,9 @@ async function run() {
         .from('evidence_items')
         .upsert(item, { onConflict: 'content_hash', ignoreDuplicates: true });
 
-      if (!error) {
+      if (error) {
+        console.error(`\n    upsert error (${release.url}): ${error.message}`);
+      } else {
         memberInserted++;
         totalInserted++;
         existingUrls.add(release.url);

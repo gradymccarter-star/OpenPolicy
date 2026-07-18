@@ -43,9 +43,9 @@ interface Props {
 }
 
 function voteStyle(pos: string | null | undefined): React.CSSProperties {
-  if (pos === 'yea') return { background: '#dcfce7', color: '#15803d' };
-  if (pos === 'nay') return { background: '#fee2e2', color: '#dc2626' };
-  return { background: 'var(--surface-canvas)', color: 'var(--primary-400)' };
+  if (pos === 'yea') return { background: 'rgba(47,111,82,0.12)', color: 'var(--verdigris)' };
+  if (pos === 'nay') return { background: 'rgba(158,59,49,0.12)', color: 'var(--oxblood)' };
+  return { background: 'var(--well)', color: 'var(--ink-secondary)' };
 }
 
 function partyLabel(party: string | null | undefined): string {
@@ -54,10 +54,10 @@ function partyLabel(party: string | null | undefined): string {
   return party ?? '—';
 }
 
-function winnerStyle(winner: string | null | undefined): React.CSSProperties {
-  if (winner === 'R') return { background: '#fee2e2', color: '#dc2626' };
-  if (winner === 'D') return { background: '#dbeafe', color: '#1d4ed8' };
-  return { background: 'var(--surface-canvas)', color: 'var(--primary-400)' };
+function winnerClass(winner: string | null | undefined): string {
+  if (winner === 'R') return 'bg-republican-100 text-republican-700';
+  if (winner === 'D') return 'bg-democrat-100 text-democrat-700';
+  return 'bg-primary-100 text-primary-600';
 }
 
 function winnerLabel(winner: string | null | undefined): string {
@@ -74,21 +74,21 @@ function newsIcon(isVideo: boolean, evidenceType: string): string {
 
 function billStatusStyle(status: BillStatus | null | undefined): React.CSSProperties {
   if (!status) return {};
-  if (status.status === 4) return { background: '#dcfce7', color: '#15803d' };
-  if (status.status === 6) return { background: '#fee2e2', color: '#dc2626' };
-  if (status.status === 5) return { background: '#fef3c7', color: '#92400e' };
-  return { background: 'var(--surface-canvas)', color: 'var(--primary-500)' };
+  if (status.status === 4) return { background: 'rgba(47,111,82,0.12)', color: 'var(--verdigris)' };
+  if (status.status === 6) return { background: 'rgba(158,59,49,0.12)', color: 'var(--oxblood)' };
+  if (status.status === 5) return { background: 'var(--brass-wash)', color: 'var(--brass)' };
+  return { background: 'var(--well)', color: 'var(--ink-secondary)' };
 }
 
-function candidatePartyStyle(party: string): React.CSSProperties {
-  if (party === 'R') return { background: '#fee2e2', color: '#dc2626' };
-  if (party === 'D') return { background: '#dbeafe', color: '#1d4ed8' };
-  return { background: 'var(--surface-canvas)', color: 'var(--primary-400)' };
+function candidatePartyClass(party: string): string {
+  if (party === 'R') return 'bg-republican-100 text-republican-700';
+  if (party === 'D') return 'bg-democrat-100 text-democrat-700';
+  return 'bg-primary-100 text-primary-600';
 }
 
 function sponsorBadgeStyle(isPrime: boolean): React.CSSProperties {
-  if (isPrime) return { background: 'rgba(201,168,76,0.12)', color: '#92400e', border: '1px solid rgba(201,168,76,0.3)' };
-  return { background: 'transparent', color: 'var(--primary-400)', border: '1px solid var(--border)' };
+  if (isPrime) return { background: 'var(--brass-wash)', color: 'var(--brass)' };
+  return { background: 'var(--well)', color: 'var(--ink-secondary)' };
 }
 
 function SponsoredBills({ items, billStatusMap }: { readonly items: EvidenceItem[]; readonly billStatusMap: Record<string, BillStatus> }) {
@@ -100,17 +100,17 @@ function SponsoredBills({ items, billStatusMap }: { readonly items: EvidenceItem
         title="Bills & Resolutions"
         subtitle="Sponsored and co-sponsored legislation this session, with current status from LegiScan."
       />
-      <div className="space-y-2">
+      <div>
         {shown.map((item) => {
           const status = item.bill_id ? billStatusMap[item.bill_id] : null;
           const isPrime = item.evidence_type === 'bill_sponsorship';
           return (
             <div
               key={item.id}
-              className="flex items-start gap-3 px-4 py-3 rounded-xl"
-              style={{ border: '1px solid var(--border)', background: 'var(--surface-canvas)' }}
+              className="flex items-start gap-3 px-1 py-3 border-b last:border-b-0"
+              style={{ borderColor: 'var(--rule-soft)' }}
             >
-              <span className="flex-shrink-0 mt-0.5 text-caption font-semibold rounded-full px-2 py-0.5 whitespace-nowrap" style={sponsorBadgeStyle(isPrime)}>
+              <span className="flex-shrink-0 mt-0.5 font-semibold rounded-sm px-1.5 py-0.5 whitespace-nowrap" style={{ ...sponsorBadgeStyle(isPrime), fontSize: '0.68rem' }}>
                 {isPrime ? 'Prime' : 'Co'}
               </span>
               <div className="flex-1 min-w-0">
@@ -123,12 +123,12 @@ function SponsoredBills({ items, billStatusMap }: { readonly items: EvidenceItem
                 )}
                 {status?.last_action && (
                   <span className="text-caption text-primary-400 block mt-0.5">
-                    {status.last_action}{status.last_action_date ? ` · ${status.last_action_date}` : ''}
+                    {status.last_action}{status.last_action_date ? ` · ` : ''}{status.last_action_date && <span className="figure">{status.last_action_date}</span>}
                   </span>
                 )}
               </div>
               {status && (
-                <span className="flex-shrink-0 text-caption font-semibold rounded-full px-2 py-0.5 whitespace-nowrap" style={billStatusStyle(status)}>
+                <span className="flex-shrink-0 font-semibold rounded-sm px-1.5 py-0.5 whitespace-nowrap" style={{ ...billStatusStyle(status), fontSize: '0.68rem' }}>
                   {status.status_label}
                 </span>
               )}
@@ -137,7 +137,7 @@ function SponsoredBills({ items, billStatusMap }: { readonly items: EvidenceItem
         })}
       </div>
       <p className="text-caption text-primary-400 mt-4">
-        Showing {shown.length} of {items.length} tracked bills. Status via{' '}
+        Showing <span className="figure">{shown.length}</span> of <span className="figure">{items.length}</span> tracked bills. Status via{' '}
         <a href="https://legiscan.com/PA" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary-700">LegiScan ↗</a>
       </p>
     </SectionCard>
@@ -145,11 +145,11 @@ function SponsoredBills({ items, billStatusMap }: { readonly items: EvidenceItem
 }
 
 function scoreBand(score: number): { label: string; color: string; bg: string } {
-  if (score >= 80) return { label: 'Strong Supporter', color: '#15803d', bg: '#dcfce7' };
-  if (score >= 60) return { label: 'Supporter', color: '#166534', bg: '#bbf7d0' };
-  if (score >= 40) return { label: 'Mixed Record', color: '#92400e', bg: '#fef3c7' };
-  if (score >= 20) return { label: 'Opponent', color: '#b91c1c', bg: '#fee2e2' };
-  return { label: 'Strong Opponent', color: '#7f1d1d', bg: '#fecaca' };
+  if (score >= 80) return { label: 'Strong Supporter', color: 'var(--verdigris)', bg: 'rgba(47,111,82,0.14)' };
+  if (score >= 60) return { label: 'Supporter', color: 'var(--verdigris)', bg: 'rgba(47,111,82,0.08)' };
+  if (score >= 40) return { label: 'Mixed Record', color: 'var(--brass)', bg: 'var(--brass-wash)' };
+  if (score >= 20) return { label: 'Opponent', color: 'var(--oxblood)', bg: 'rgba(158,59,49,0.08)' };
+  return { label: 'Strong Opponent', color: 'var(--oxblood)', bg: 'rgba(158,59,49,0.14)' };
 }
 
 function PAChamberScorecard({
@@ -167,35 +167,35 @@ function PAChamberScorecard({
     <div className="card p-8">
       <h2 className="text-heading-3 mb-1">PA Chamber Scorecard</h2>
       <p className="text-caption text-primary-400 mb-6">
-        {session ?? '2025-2026'} session ·{' '}
+        <span className="figure">{session ?? '2025-2026'}</span> session ·{' '}
         <a href="https://www.pachamber.org/advocacy/chamber_pac/legislative_scorecard/" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary-700">Source ↗</a>
       </p>
 
-      <div className="flex flex-col items-center py-6 mb-6 rounded-xl" style={{ background: band.bg }}>
-        <div className="text-6xl font-bold mb-2" style={{ color: band.color }}>{score.score}%</div>
+      <div className="flex flex-col items-center py-6 mb-6 rounded-lg" style={{ background: band.bg }}>
+        <div className="text-6xl font-bold mb-2 figure" style={{ color: band.color }}>{score.score}%</div>
         <div className="text-body-sm font-semibold" style={{ color: band.color }}>{band.label}</div>
       </div>
 
       <div className="mb-6">
-        <div className="h-2.5 rounded-full overflow-hidden" style={{ background: 'var(--border)' }}>
-          <div className="h-full rounded-full" style={{ width: `${score.score}%`, background: band.color }} />
+        <div className="h-2.5 rounded-sm overflow-hidden" style={{ background: 'var(--well)' }}>
+          <div className="h-full" style={{ width: `${score.score}%`, background: band.color }} />
         </div>
-        <div className="flex justify-between mt-1 text-caption text-primary-400">
+        <div className="flex justify-between mt-1 text-caption text-primary-400 figure">
           <span>0%</span>
           <span>100%</span>
         </div>
       </div>
 
       {stats && (
-        <div className="space-y-2 mt-auto">
+        <div className="mt-auto">
           {[
             { label: 'This Member', value: `${score.score}%`, accent: false },
             { label: `${score.party === 'R' ? 'Republican' : 'Democrat'} Avg`, value: `${partyAvg?.toFixed(0) ?? '—'}%`, accent: true },
             { label: 'House Average', value: `${stats.avg_score.toFixed(0)}%`, accent: false },
           ].map(({ label, value, accent }) => (
-            <div key={label} className="flex items-center justify-between px-4 py-2.5 rounded-xl" style={{ border: '1px solid var(--border)', background: 'var(--surface-canvas)' }}>
+            <div key={label} className="flex items-center justify-between px-1 py-2.5 border-b last:border-b-0" style={{ borderColor: 'var(--rule-soft)' }}>
               <span className="text-caption text-primary-500">{label}</span>
-              <span className="text-body-sm font-bold" style={{ color: accent ? (score.party === 'R' ? '#dc2626' : '#1d4ed8') : 'var(--primary-950)' }}>{value}</span>
+              <span className={`text-body-sm font-bold figure ${accent ? (score.party === 'R' ? 'text-republican-600' : 'text-democrat-600') : 'text-primary-950'}`}>{value}</span>
             </div>
           ))}
         </div>
@@ -204,12 +204,15 @@ function PAChamberScorecard({
   );
 }
 
+// ACLU-PA alignment bands stay monochrome-institutional: verdigris = aligned with the
+// scorecard issuer, oxblood = opposed, brass = mixed. No partisan blue/red here — party
+// colors are reserved for party identity per the design system.
 function acluBand(score: number): { label: string; color: string; bg: string } {
-  if (score >= 80) return { label: 'Very Progressive', color: '#1d4ed8', bg: '#dbeafe' };
-  if (score >= 60) return { label: 'Progressive', color: '#1e40af', bg: '#bfdbfe' };
-  if (score >= 40) return { label: 'Mixed Record', color: '#92400e', bg: '#fef3c7' };
-  if (score >= 20) return { label: 'Conservative', color: '#b91c1c', bg: '#fee2e2' };
-  return { label: 'Very Conservative', color: '#7f1d1d', bg: '#fecaca' };
+  if (score >= 80) return { label: 'Very Progressive', color: 'var(--verdigris)', bg: 'rgba(47,111,82,0.14)' };
+  if (score >= 60) return { label: 'Progressive', color: 'var(--verdigris)', bg: 'rgba(47,111,82,0.08)' };
+  if (score >= 40) return { label: 'Mixed Record', color: 'var(--brass)', bg: 'var(--brass-wash)' };
+  if (score >= 20) return { label: 'Conservative', color: 'var(--oxblood)', bg: 'rgba(158,59,49,0.08)' };
+  return { label: 'Very Conservative', color: 'var(--oxblood)', bg: 'rgba(158,59,49,0.14)' };
 }
 
 function ACLUPAScorecard({
@@ -227,16 +230,16 @@ function ACLUPAScorecard({
     <div className="card p-8">
       <h2 className="text-heading-3 mb-1">ACLU-PA Scorecard</h2>
       <p className="text-caption text-primary-400 mb-6">
-        {session ?? '2025-2026'} session · civil liberties voting record ·{' '}
+        <span className="figure">{session ?? '2025-2026'}</span> session · civil liberties voting record ·{' '}
         <a href="https://aclupalegislativescorecard.org" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary-700">Source ↗</a>
       </p>
-      <div className="flex flex-col items-center py-6 mb-6 rounded-xl" style={{ background: band.bg }}>
-        <div className="text-6xl font-bold mb-2" style={{ color: band.color }}>{score.score}%</div>
+      <div className="flex flex-col items-center py-6 mb-6 rounded-lg" style={{ background: band.bg }}>
+        <div className="text-6xl font-bold mb-2 figure" style={{ color: band.color }}>{score.score}%</div>
         <div className="text-body-sm font-semibold" style={{ color: band.color }}>{band.label}</div>
       </div>
       <div className="mb-6">
-        <div className="h-2.5 rounded-full overflow-hidden" style={{ background: 'var(--border)' }}>
-          <div className="h-full rounded-full" style={{ width: `${score.score}%`, background: band.color }} />
+        <div className="h-2.5 rounded-sm overflow-hidden" style={{ background: 'var(--well)' }}>
+          <div className="h-full" style={{ width: `${score.score}%`, background: band.color }} />
         </div>
         <div className="flex justify-between mt-1 text-caption text-primary-400">
           <span>Conservative</span>
@@ -244,15 +247,15 @@ function ACLUPAScorecard({
         </div>
       </div>
       {stats && (
-        <div className="space-y-2">
+        <div>
           {[
             { label: 'This Member', value: `${score.score}%`, accent: false },
             { label: `${score.party === 'R' ? 'Republican' : 'Democrat'} Avg`, value: `${partyAvg?.toFixed(0) ?? '—'}%`, accent: true },
             { label: 'House Average', value: `${stats.avg_score.toFixed(0)}%`, accent: false },
           ].map(({ label, value, accent }) => (
-            <div key={label} className="flex items-center justify-between px-4 py-2.5 rounded-xl" style={{ border: '1px solid var(--border)', background: 'var(--surface-canvas)' }}>
+            <div key={label} className="flex items-center justify-between px-1 py-2.5 border-b last:border-b-0" style={{ borderColor: 'var(--rule-soft)' }}>
               <span className="text-caption text-primary-500">{label}</span>
-              <span className="text-body-sm font-bold" style={{ color: accent ? (score.party === 'R' ? '#dc2626' : '#1d4ed8') : 'var(--primary-950)' }}>{value}</span>
+              <span className={`text-body-sm font-bold figure ${accent ? (score.party === 'R' ? 'text-republican-600' : 'text-democrat-600') : 'text-primary-950'}`}>{value}</span>
             </div>
           ))}
         </div>
@@ -288,9 +291,11 @@ function SectionHeading({ title, subtitle }: { readonly title: string; readonly 
 }
 
 function StatBox({ label, value }: { readonly label: string; readonly value: string | number }) {
+  // Numeric-looking values get the tabular-mono figure treatment; plain text stays sans.
+  const isFigure = /\d/.test(String(value));
   return (
-    <div className="rounded-xl p-3 text-center" style={{ border: '1px solid var(--border)', background: 'var(--surface-canvas)' }}>
-      <div className="text-xl font-bold text-primary-950">{value}</div>
+    <div className="rounded-md p-3 text-center" style={{ border: '1px solid var(--rule)', background: 'var(--card)' }}>
+      <div className={`text-xl font-bold text-primary-950${isFigure ? ' figure' : ''}`}>{value}</div>
       <div className="text-caption text-primary-400">{label}</div>
     </div>
   );
@@ -376,30 +381,30 @@ export default function ProfileTabs({
             <button
               key={section.id}
               onClick={() => setActive(section.id)}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors w-full"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-md text-left transition-colors w-full"
               style={{
-                borderLeft: isActive ? '3px solid #c9a84c' : '3px solid transparent',
-                background: isActive ? 'rgba(201,168,76,0.07)' : 'transparent',
-                color: isActive ? '#0a1628' : 'var(--primary-400)',
+                borderLeft: isActive ? '3px solid var(--brass-bright)' : '3px solid transparent',
+                background: isActive ? 'var(--brass-wash)' : 'transparent',
+                color: isActive ? 'var(--ink)' : 'var(--ink-secondary)',
                 fontWeight: isActive ? 600 : 500,
               }}
             >
-              <span className="text-caption w-4 text-center flex-shrink-0" style={{ color: isActive ? '#c9a84c' : 'currentColor' }}>
+              <span className="text-caption w-4 text-center flex-shrink-0" style={{ color: isActive ? 'var(--brass-bright)' : 'currentColor' }}>
                 {section.icon}
               </span>
               <span className="text-body-sm leading-tight">{section.label}</span>
               {section.id === 'funding' && contributions.length > 0 && (
                 <span
-                  className="ml-auto text-caption rounded-full px-1.5 py-0.5 flex-shrink-0"
-                  style={{ background: '#c9a84c', color: 'white', fontSize: '10px' }}
+                  className="ml-auto text-caption rounded-sm px-1.5 py-0.5 flex-shrink-0 figure"
+                  style={{ background: 'var(--brass-wash)', color: 'var(--brass)', fontSize: '10px' }}
                 >
                   {contributions.length}
                 </span>
               )}
               {section.id === 'voting' && floorVotes.length > 0 && (
                 <span
-                  className="ml-auto text-caption rounded-full px-1.5 py-0.5 flex-shrink-0"
-                  style={{ background: 'var(--surface-canvas)', color: 'var(--primary-400)', fontSize: '10px', border: '1px solid var(--border)' }}
+                  className="ml-auto text-caption rounded-sm px-1.5 py-0.5 flex-shrink-0 figure"
+                  style={{ background: 'var(--well)', color: 'var(--ink-secondary)', fontSize: '10px' }}
                 >
                   {floorVotes.length}
                 </span>
@@ -412,8 +417,8 @@ export default function ProfileTabs({
       {/* ── Mobile tab row ────────────────────────────────────────── */}
       <div className="md:hidden w-full mb-6">
         <div
-          className="flex gap-1 p-1 rounded-xl overflow-x-auto"
-          style={{ background: 'var(--surface-canvas)' }}
+          className="flex gap-1 overflow-x-auto"
+          style={{ borderBottom: '1px solid var(--rule)' }}
         >
           {visibleSections.map((section) => {
             const isActive = section.id === effectiveActive;
@@ -421,11 +426,11 @@ export default function ProfileTabs({
               <button
                 key={section.id}
                 onClick={() => setActive(section.id)}
-                className="flex-shrink-0 px-3 py-1.5 rounded-lg text-caption font-semibold whitespace-nowrap transition-all"
+                className="flex-shrink-0 px-3 py-2 text-caption whitespace-nowrap transition-colors"
                 style={{
-                  background: isActive ? 'white' : 'transparent',
-                  color: isActive ? '#0a1628' : 'var(--primary-400)',
-                  boxShadow: isActive ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+                  color: isActive ? 'var(--ink)' : 'var(--ink-secondary)',
+                  fontWeight: isActive ? 600 : 500,
+                  boxShadow: isActive ? 'inset 0 -2px 0 var(--brass-bright)' : 'none',
                 }}
               >
                 {section.label}
@@ -457,8 +462,8 @@ export default function ProfileTabs({
               />
               {principleFilter && (
                 <div
-                  className="flex items-center justify-between mb-4 px-4 py-2.5 rounded-lg"
-                  style={{ background: 'rgba(201,168,76,0.1)', border: '1px solid rgba(201,168,76,0.3)' }}
+                  className="flex items-center justify-between mb-4 px-4 py-2.5 rounded-md"
+                  style={{ background: 'var(--brass-wash)', border: '1px solid var(--rule)' }}
                 >
                   <p className="text-body-sm font-medium text-primary-800">
                     Filtered to evidence tagged{' '}
@@ -492,25 +497,25 @@ export default function ProfileTabs({
                 <div className="mb-8">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-caption text-primary-500">Yea rate</span>
-                    <span className="text-caption font-semibold text-primary-950">
+                    <span className="text-caption font-semibold text-primary-950 figure">
                       {Math.round((yeaCount / totalCast) * 100)}%
                     </span>
                   </div>
-                  <div className="h-2 rounded-full overflow-hidden" style={{ background: 'var(--border)' }}>
+                  <div className="h-2 rounded-sm overflow-hidden" style={{ background: 'var(--well)' }}>
                     <div
-                      className="h-full rounded-full"
-                      style={{ width: `${Math.round((yeaCount / totalCast) * 100)}%`, background: '#c9a84c' }}
+                      className="h-full"
+                      style={{ width: `${Math.round((yeaCount / totalCast) * 100)}%`, background: 'var(--brass-bright)' }}
                     />
                   </div>
                 </div>
               )}
               <h3 className="text-body-sm font-semibold text-primary-950 mb-3">Recent Votes</h3>
-              <div className="space-y-2">
+              <div>
                 {floorVotes.slice(0, 20).map((v) => (
                   <div
                     key={v.id}
-                    className="flex items-center justify-between px-4 py-3 rounded-xl"
-                    style={{ background: 'var(--surface-canvas)', border: '1px solid var(--border)' }}
+                    className="flex items-center justify-between px-1 py-3 border-b last:border-b-0"
+                    style={{ borderColor: 'var(--rule-soft)' }}
                   >
                     <div className="flex-1 min-w-0 mr-4">
                       {v.source_url ? (
@@ -523,14 +528,14 @@ export default function ProfileTabs({
                         </span>
                       )}
                       {v.source_date && (
-                        <span className="text-caption text-primary-400">
+                        <span className="text-caption text-primary-400 figure">
                           {new Date(v.source_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                         </span>
                       )}
                     </div>
                     <span
-                      className="flex-shrink-0 text-caption font-bold rounded-full px-3 py-1 uppercase"
-                      style={voteStyle(v.vote_position)}
+                      className="flex-shrink-0 font-semibold rounded-sm px-1.5 py-0.5 uppercase tracking-wide"
+                      style={{ ...voteStyle(v.vote_position), fontSize: '0.68rem' }}
                     >
                       {v.vote_position ?? '—'}
                     </span>
@@ -538,7 +543,7 @@ export default function ProfileTabs({
                 ))}
               </div>
               <p className="text-caption text-primary-400 mt-4">
-                Showing {Math.min(20, floorVotes.length)} of {floorVotes.length} tracked votes.{' '}
+                Showing <span className="figure">{Math.min(20, floorVotes.length)}</span> of <span className="figure">{floorVotes.length}</span> tracked votes.{' '}
                 <a href="https://www.legis.state.pa.us/cfdocs/legis/RC/Public/rc_view_date.cfm?rc_body=H" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary-700">Full House roll call records ↗</a>
               </p>
             </SectionCard>
@@ -558,7 +563,7 @@ export default function ProfileTabs({
                 title="News & Press"
                 subtitle="Press releases and public statements from news sources and official channels."
               />
-              <div className="space-y-3">
+              <div>
                 {newsItems.map((item) => {
                   const title = item.source_text?.split('\n')[0]?.slice(0, 120) ?? 'Article';
                   const isVideo = !!(item.source_url?.includes('youtube.com') || item.source_url?.includes('youtu.be'));
@@ -568,8 +573,8 @@ export default function ProfileTabs({
                       href={item.source_url ?? '#'}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-start gap-4 px-4 py-3 rounded-xl transition-colors hover:bg-stone-50"
-                      style={{ border: '1px solid var(--border)' }}
+                      className="flex items-start gap-4 px-1 py-3 transition-colors hover:bg-primary-50 border-b last:border-b-0"
+                      style={{ borderColor: 'var(--rule-soft)' }}
                     >
                       <span className="flex-shrink-0 mt-0.5 text-primary-300 text-caption">
                         {newsIcon(isVideo, item.evidence_type)}
@@ -578,7 +583,7 @@ export default function ProfileTabs({
                         <p className="text-body-sm text-primary-950 leading-snug line-clamp-2">{title}</p>
                         <div className="flex items-center gap-2 mt-1">
                           {item.source_date && (
-                            <span className="text-caption text-primary-400">
+                            <span className="text-caption text-primary-400 figure">
                               {new Date(item.source_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                             </span>
                           )}
@@ -680,16 +685,16 @@ export default function ProfileTabs({
                     href={c.committeeUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between rounded-xl px-4 py-3 transition-colors hover:bg-stone-50"
-                    style={{ border: '1px solid var(--border)' }}
+                    className="flex items-center justify-between rounded-md px-4 py-3 transition-colors hover:bg-primary-50"
+                    style={{ border: '1px solid var(--rule)' }}
                   >
                     <span className="text-body-sm font-medium text-primary-950">{c.committee}</span>
                     <span
-                      className="text-caption font-semibold rounded-full px-2 py-0.5 ml-3 flex-shrink-0"
+                      className="font-semibold rounded-sm px-1.5 py-0.5 ml-3 flex-shrink-0 tracking-wide"
                       style={
                         c.role === 'Member'
-                          ? { color: 'var(--primary-400)', background: 'var(--surface-canvas)' }
-                          : { color: '#92400e', background: '#fef3c7' }
+                          ? { color: 'var(--ink-secondary)', background: 'var(--well)', fontSize: '0.68rem' }
+                          : { color: 'var(--brass)', background: 'var(--brass-wash)', fontSize: '0.68rem' }
                       }
                     >
                       {c.role}
@@ -735,29 +740,35 @@ export default function ProfileTabs({
                         return (
                           <div key={year}>
                             <div className="flex items-center justify-between mb-1">
-                              <span className="text-body-sm font-semibold text-primary-950">{year}</span>
+                              <span className="text-body-sm font-semibold text-primary-950 figure">{year}</span>
                               <span
-                                className="text-caption font-semibold rounded-full px-2 py-0.5"
-                                style={winnerStyle(result.winner_party)}
+                                className={`font-semibold rounded-sm px-1.5 py-0.5 tracking-wide ${winnerClass(result.winner_party)}`}
+                                style={{ fontSize: '0.68rem' }}
                               >
                                 {winnerLabel(result.winner_party)}
                               </span>
                             </div>
                             {bar && (
                               <>
-                                <div className="h-5 rounded-full overflow-hidden flex" style={{ background: '#dbeafe' }}>
+                                <div className="h-5 rounded-sm overflow-hidden flex" style={{ background: 'var(--well)' }}>
+                                  {/* Party identity fills — desaturated institutional republican/democrat tokens */}
                                   <div
                                     className="h-full transition-all"
-                                    style={{ width: `${bar.rPct}%`, background: '#dc2626' }}
+                                    style={{ width: `${bar.rPct}%`, background: '#b0493d' }}
                                     title={`R: ${bar.rPct}%`}
+                                  />
+                                  <div
+                                    className="h-full transition-all"
+                                    style={{ width: `${bar.dPct}%`, background: '#3d6d9e' }}
+                                    title={`D: ${bar.dPct}%`}
                                   />
                                 </div>
                                 <div className="flex justify-between mt-1">
-                                  <span className="text-caption text-red-600">R {bar.rPct}% · {result.rep_votes.toLocaleString()}</span>
-                                  <span className="text-caption text-blue-600">D {bar.dPct}% · {result.dem_votes.toLocaleString()}</span>
+                                  <span className="text-caption text-republican-600">R <span className="figure">{bar.rPct}%</span> · <span className="figure">{result.rep_votes.toLocaleString()}</span></span>
+                                  <span className="text-caption text-democrat-600">D <span className="figure">{bar.dPct}%</span> · <span className="figure">{result.dem_votes.toLocaleString()}</span></span>
                                 </div>
                                 {result.other_votes > 0 && (
-                                  <span className="text-caption text-primary-400">Other: {result.other_votes.toLocaleString()} ({Math.round((result.other_votes / total) * 100)}%)</span>
+                                  <span className="text-caption text-primary-400">Other: <span className="figure">{result.other_votes.toLocaleString()}</span> (<span className="figure">{Math.round((result.other_votes / total) * 100)}%</span>)</span>
                                 )}
                               </>
                             )}
@@ -770,7 +781,7 @@ export default function ProfileTabs({
                   </p>
                 </>
               ) : (
-                <div className="rounded-xl px-4 py-8 text-center" style={{ background: 'var(--surface-canvas)', border: '1px solid var(--border)' }}>
+                <div className="rounded-md px-4 py-8 text-center" style={{ background: 'var(--well)', border: '1px solid var(--rule-soft)' }}>
                   <p className="text-body-sm text-primary-400">Historical election data not available for this district.</p>
                 </div>
               )}
@@ -808,15 +819,16 @@ export default function ProfileTabs({
                 </div>
                 {voterRegistration.total > 0 && (
                   <>
-                    <div className="h-5 rounded-full overflow-hidden flex">
-                      <div style={{ width: `${Math.round((voterRegistration.republican / voterRegistration.total) * 100)}%`, background: '#dc2626' }} className="h-full" />
-                      <div style={{ width: `${Math.round((voterRegistration.democrat / voterRegistration.total) * 100)}%`, background: '#1d4ed8' }} className="h-full" />
-                      <div style={{ flex: 1, background: '#d1d5db' }} className="h-full" />
+                    <div className="h-5 rounded-sm overflow-hidden flex" style={{ background: 'var(--well)' }}>
+                      {/* Party identity fills — desaturated institutional republican/democrat tokens */}
+                      <div style={{ width: `${Math.round((voterRegistration.republican / voterRegistration.total) * 100)}%`, background: '#b0493d' }} className="h-full" />
+                      <div style={{ width: `${Math.round((voterRegistration.democrat / voterRegistration.total) * 100)}%`, background: '#3d6d9e' }} className="h-full" />
+                      <div style={{ flex: 1, background: 'var(--ink-faint)' }} className="h-full" />
                     </div>
                     <div className="flex gap-4 mt-2 text-caption">
-                      <span className="text-red-600">R {Math.round((voterRegistration.republican / voterRegistration.total) * 100)}%</span>
-                      <span className="text-blue-600">D {Math.round((voterRegistration.democrat / voterRegistration.total) * 100)}%</span>
-                      <span className="text-primary-400">Other {Math.round((voterRegistration.other / voterRegistration.total) * 100)}%</span>
+                      <span className="text-republican-600">R <span className="figure">{Math.round((voterRegistration.republican / voterRegistration.total) * 100)}%</span></span>
+                      <span className="text-democrat-600">D <span className="figure">{Math.round((voterRegistration.democrat / voterRegistration.total) * 100)}%</span></span>
+                      <span className="text-primary-400">Other <span className="figure">{Math.round((voterRegistration.other / voterRegistration.total) * 100)}%</span></span>
                     </div>
                   </>
                 )}
@@ -838,31 +850,31 @@ export default function ProfileTabs({
                     .sort(([a], [b]) => Number(b) - Number(a))
                     .map(([year, candidates]) => (
                       <div key={year}>
-                        <h3 className="text-body-sm font-semibold text-primary-950 mb-3">{year} General Election</h3>
-                        <div className="space-y-2">
+                        <h3 className="text-body-sm font-semibold text-primary-950 mb-3"><span className="figure">{year}</span> General Election</h3>
+                        <div>
                           {candidates.map((c, i) => (
                             <div
                               key={`${year}-${c.candidate}-${i}`}
-                              className="flex items-center justify-between px-4 py-2.5 rounded-xl"
-                              style={{ border: '1px solid var(--border)', background: 'var(--surface-canvas)' }}
+                              className="flex items-center justify-between px-1 py-2.5 border-b last:border-b-0"
+                              style={{ borderColor: 'var(--rule-soft)' }}
                             >
                               <div className="flex items-center gap-3 min-w-0">
                                 {i === 0 && (
-                                  <span className="text-caption font-semibold rounded-full px-2 py-0.5 flex-shrink-0" style={{ background: '#dcfce7', color: '#15803d' }}>
+                                  <span className="font-semibold rounded-sm px-1.5 py-0.5 flex-shrink-0 tracking-wide" style={{ background: 'rgba(47,111,82,0.12)', color: 'var(--verdigris)', fontSize: '0.68rem' }}>
                                     Winner
                                   </span>
                                 )}
                                 <span className="text-body-sm font-medium text-primary-950 truncate">{c.candidate}</span>
                                 <span
-                                  className="text-caption font-semibold rounded-full px-2 py-0.5 flex-shrink-0"
-                                  style={candidatePartyStyle(c.party)}
+                                  className={`font-semibold rounded-sm px-1.5 py-0.5 flex-shrink-0 tracking-wide ${candidatePartyClass(c.party)}`}
+                                  style={{ fontSize: '0.68rem' }}
                                 >
                                   {c.party}
                                 </span>
                               </div>
                               <div className="flex items-center gap-3 text-right flex-shrink-0">
-                                <span className="text-body-sm font-semibold text-primary-950">{c.votes.toLocaleString()}</span>
-                                <span className="text-caption text-primary-400 w-10">{c.pct.toFixed(1)}%</span>
+                                <span className="text-body-sm font-semibold text-primary-950 figure">{c.votes.toLocaleString()}</span>
+                                <span className="text-caption text-primary-400 w-10 figure">{c.pct.toFixed(1)}%</span>
                               </div>
                             </div>
                           ))}
