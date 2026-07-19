@@ -20,12 +20,12 @@ export default function ScoreGauge({
   hasRecord = true,
 }: ScoreGaugeProps) {
   const percentage = score * 100;
-  const color = hasRecord ? getScoreColor(score) : '#9ca3af';
+  const color = hasRecord ? getScoreColor(score) : '#878d9b'; // ink-tertiary; SVG attrs can't take CSS vars
 
   const sizes = {
-    small: { width: 80, height: 80, stroke: 6, fontSize: 'text-lg', confSize: 'text-caption' },
-    medium: { width: 120, height: 120, stroke: 8, fontSize: 'text-2xl', confSize: 'text-caption' },
-    large: { width: 160, height: 160, stroke: 10, fontSize: 'text-3xl', confSize: 'text-body-sm' },
+    small: { width: 80, height: 80, stroke: 4, fontSize: 'text-lg', confSize: 'text-caption' },
+    medium: { width: 120, height: 120, stroke: 5, fontSize: 'text-2xl', confSize: 'text-caption' },
+    large: { width: 160, height: 160, stroke: 6, fontSize: 'text-3xl', confSize: 'text-body-sm' },
   };
 
   const { width, height, stroke, fontSize, confSize } = sizes[size];
@@ -44,7 +44,7 @@ export default function ScoreGauge({
             cy={height / 2}
             r={radius}
             fill="none"
-            stroke="#f3f4f6"
+            stroke="var(--well)"
             strokeWidth={stroke}
           />
           <circle
@@ -56,14 +56,14 @@ export default function ScoreGauge({
             strokeWidth={stroke}
             strokeDasharray={circumference}
             strokeDashoffset={offset}
-            strokeLinecap="round"
+            strokeLinecap="butt"
             className="transition-all duration-500"
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           {hasRecord ? (
             <>
-              <span className={`font-bold ${fontSize}`} style={{ color }}>
+              <span className={`figure font-semibold ${fontSize}`} style={{ color }}>
                 {Math.round(percentage)}%
               </span>
               {confidence !== undefined && (
@@ -73,12 +73,12 @@ export default function ScoreGauge({
               )}
             </>
           ) : (
-            <span className={`font-bold text-primary-400 ${confSize}`}>No record</span>
+            <span className={`font-medium text-primary-400 ${confSize}`}>No record</span>
           )}
         </div>
       </div>
       {showLabel && label && (
-        <p className="mt-2 text-body-sm text-primary-400 text-center">
+        <p className="mt-2 text-caption font-medium uppercase text-primary-400 text-center" style={{ letterSpacing: '0.08em' }}>
           {label}
         </p>
       )}

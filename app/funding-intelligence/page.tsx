@@ -7,30 +7,30 @@ type Lean = 'pro_chamber' | 'anti_chamber' | 'neutral' | 'unknown';
 const LEAN_CONFIG: Record<Lean, { label: string; color: string; bg: string; border: string; description: string }> = {
   pro_chamber: {
     label: 'Pro-Chamber',
-    color: '#166534',
-    bg: '#f0fdf4',
-    border: '#bbf7d0',
+    color: 'var(--verdigris)',
+    bg: 'rgba(47,111,82,0.07)',
+    border: 'rgba(47,111,82,0.25)',
     description: 'Organizations that typically advocate for pro-business policies aligned with the PA Chamber\'s nine priorities: lower taxes, streamlined permitting, civil justice reform, fiscal responsibility, workforce development, energy access, labor flexibility, infrastructure investment, and healthcare cost reduction.',
   },
   anti_chamber: {
     label: 'Anti-Chamber',
-    color: '#991b1b',
-    bg: '#fef2f2',
-    border: '#fecaca',
+    color: 'var(--oxblood)',
+    bg: 'rgba(158,59,49,0.06)',
+    border: 'rgba(158,59,49,0.25)',
     description: 'Organizations that typically oppose Chamber priorities. This includes labor unions that advocate for collective bargaining protections, minimum wage mandates, and prevailing wage laws (which conflict with P7: Labor); and trial lawyer associations that oppose civil justice reform (P3). These organizations\' legislative goals frequently conflict with the Chamber\'s policy agenda.',
   },
   neutral: {
     label: 'Neutral / Unknown',
-    color: '#374151',
-    bg: '#f9fafb',
-    border: '#e5e7eb',
+    color: 'var(--ink-secondary)',
+    bg: 'var(--well)',
+    border: 'var(--rule)',
     description: 'Organizations that take positions on both sides of Chamber issues, or whose policy positions are not consistently aligned or opposed to the Chamber\'s priorities.',
   },
   unknown: {
     label: 'Unclassified',
-    color: '#6b7280',
-    bg: '#f9fafb',
-    border: '#e5e7eb',
+    color: 'var(--ink-tertiary)',
+    bg: 'var(--well)',
+    border: 'var(--rule)',
     description: 'Organizations that have not yet been classified. This includes individual donors (who are not organizations), small PACs with limited public record, and newly identified donors. Individual donors of $1,000+ are tracked but not lean-classified.',
   },
 };
@@ -77,17 +77,25 @@ async function getAllContributions() {
 }
 
 export default async function FundingIntelligencePage() {
-  const supabase = getSupabase();
+  // Render the empty state rather than crashing when the DB is unconfigured/unreachable
+  let orgs: any[] | null = null;
+  let contributions: Awaited<ReturnType<typeof getAllContributions>> = [];
+  let allPoliticians: any[] | null = null;
 
-  const [{ data: orgs }, contributions, { data: allPoliticians }] = await Promise.all([
-    supabase
-      .from('donor_organizations')
-      .select('id, name, normalized_name, lean, industry, lean_rationale, lean_classified_by')
-      .in('lean', ['pro_chamber', 'anti_chamber', 'neutral'])
-      .order('name'),
-    getAllContributions(),
-    supabase.from('politicians').select('id, full_name'),
-  ]);
+  try {
+    const supabase = getSupabase();
+    [{ data: orgs }, contributions, { data: allPoliticians }] = await Promise.all([
+      supabase
+        .from('donor_organizations')
+        .select('id, name, normalized_name, lean, industry, lean_rationale, lean_classified_by')
+        .in('lean', ['pro_chamber', 'anti_chamber', 'neutral'])
+        .order('name'),
+      getAllContributions(),
+      supabase.from('politicians').select('id, full_name'),
+    ]);
+  } catch (error) {
+    console.error('Failed to load funding intelligence data:', error);
+  }
 
   const politicianNameById = new Map((allPoliticians ?? []).map((p: any) => [p.id, p.full_name as string]));
 
@@ -143,6 +151,7 @@ export default async function FundingIntelligencePage() {
         <Link href="/politicians" className="text-caption text-primary-400 hover:text-primary-700 transition-colors">
           &larr; Back to candidates
         </Link>
+        <p className="overline mt-3">Campaign Finance Analysis</p>
         <h1 className="text-heading-1 mt-3 mb-2">Funding Intelligence</h1>
         <p className="text-body-sm text-primary-500 max-w-2xl">
           Every organization that donated to a PA House candidate is classified by its typical alignment with PA Chamber priorities.
@@ -151,34 +160,34 @@ export default async function FundingIntelligencePage() {
       </div>
 
       {/* Totals banner */}
-      <div className="rounded-2xl mb-8 overflow-hidden" style={{ border: '1px solid #e5e7eb' }}>
-        <div className="px-6 py-4 flex items-center justify-between" style={{ background: '#0a1628' }}>
+      <div className="card mb-8 overflow-hidden">
+        <div className="px-6 py-4 flex items-center justify-between" style={{ background: 'var(--well)' }}>
           <div>
-            <p className="text-caption font-semibold uppercase tracking-widest mb-0.5" style={{ color: '#c9a84c' }}>
+            <p className="overline mb-0.5">
               Campaign Finance Summary
             </p>
-            <p className="text-white/50 text-caption">
-              {cycleRange} · {contributions.length.toLocaleString()} contributions tracked · FollowTheMoney.org
+            <p className="text-primary-400 text-caption">
+              {cycleRange} · <span className="figure">{contributions.length.toLocaleString()}</span> contributions tracked · FollowTheMoney.org
             </p>
           </div>
           <div className="text-right">
-            <p className="text-white text-lg font-bold">{fmtDollars(totalTracked)}</p>
-            <p className="text-white/40 text-caption">total classified</p>
+            <p className="figure text-primary-950 text-lg font-bold">{fmtDollars(totalTracked)}</p>
+            <p className="text-primary-400 text-caption">total classified</p>
           </div>
         </div>
-        <div className="grid grid-cols-3 divide-x" style={{ borderTop: '1px solid #e5e7eb' }}>
+        <div className="grid grid-cols-3 divide-x divide-[color:var(--rule-soft)]" style={{ borderTop: '1px solid var(--rule)' }}>
           {([
-            { lean: 'pro_chamber' as Lean, label: 'Pro-Chamber', color: '#166534', bg: '#f0fdf4' },
-            { lean: 'anti_chamber' as Lean, label: 'Anti-Chamber', color: '#991b1b', bg: '#fef2f2' },
-            { lean: 'neutral' as Lean, label: 'Neutral / Unknown', color: '#374151', bg: '#f9fafb' },
+            { lean: 'pro_chamber' as Lean, label: 'Pro-Chamber', color: 'var(--verdigris)', bg: 'rgba(47,111,82,0.07)' },
+            { lean: 'anti_chamber' as Lean, label: 'Anti-Chamber', color: 'var(--oxblood)', bg: 'rgba(158,59,49,0.06)' },
+            { lean: 'neutral' as Lean, label: 'Neutral / Unknown', color: 'var(--ink-secondary)', bg: 'var(--card)' },
           ]).map(({ lean, label, color, bg }) => {
             const total = leanTotals[lean];
             const pct = totalTracked > 0 ? (total / totalTracked * 100).toFixed(1) : '0.0';
             return (
               <div key={lean} className="px-6 py-4" style={{ background: bg }}>
                 <p className="text-caption font-semibold mb-1" style={{ color }}>{label}</p>
-                <p className="text-xl font-bold text-primary-950">{fmtDollars(total)}</p>
-                <p className="text-caption text-primary-400">{pct}% of tracked total · {byLean[lean].length} orgs</p>
+                <p className="figure text-xl font-bold text-primary-950">{fmtDollars(total)}</p>
+                <p className="text-caption text-primary-400"><span className="figure">{pct}%</span> of tracked total · <span className="figure">{byLean[lean].length}</span> orgs</p>
               </div>
             );
           })}
@@ -186,7 +195,7 @@ export default async function FundingIntelligencePage() {
       </div>
 
       {/* Why this matters */}
-      <div className="card p-6 mb-8" style={{ borderLeft: '4px solid #c9a84c' }}>
+      <div className="card p-6 mb-8" style={{ borderLeft: '4px solid var(--brass-bright)' }}>
         <h2 className="font-semibold text-primary-950 mb-2 text-body-sm">Why Donor Classification Matters</h2>
         <p className="text-caption text-primary-600 leading-relaxed">
           Campaign contributions reveal which constituencies a candidate is accountable to. A legislator who receives the majority of their funding
@@ -199,10 +208,11 @@ export default async function FundingIntelligencePage() {
 
       {/* Category explanations */}
       <div className="card p-6 mb-8">
-        <h2 className="text-heading-3 mb-4">Classification Categories</h2>
+        <p className="overline">Methodology</p>
+        <h2 className="text-heading-3 mt-3 mb-4">Classification Categories</h2>
         <div className="space-y-4">
           {(Object.entries(LEAN_CONFIG) as [Lean, typeof LEAN_CONFIG[Lean]][]).map(([lean, cfg]) => (
-            <div key={lean} className="rounded-xl p-4" style={{ border: `1px solid ${cfg.border}`, background: cfg.bg }}>
+            <div key={lean} className="rounded-md p-4" style={{ border: `1px solid ${cfg.border}`, background: cfg.bg }}>
               <div className="flex items-center gap-2 mb-1">
                 <span className="font-bold text-body-sm" style={{ color: cfg.color }}>{cfg.label}</span>
               </div>
@@ -214,14 +224,15 @@ export default async function FundingIntelligencePage() {
 
       {/* Specific category rationales */}
       <div className="card p-6 mb-8">
-        <h2 className="text-heading-3 mb-4">Why Specific Donor Types Are Classified as Anti-Chamber or Pro-Chamber</h2>
+        <p className="overline">Rationale</p>
+        <h2 className="text-heading-3 mt-3 mb-4">Why Specific Donor Types Are Classified as Anti-Chamber or Pro-Chamber</h2>
         <div className="space-y-6">
           {Object.entries(CATEGORY_NOTES).map(([key, note]) => (
-            <div key={key} style={{ borderBottom: '1px solid var(--border)', paddingBottom: 20 }}>
+            <div key={key} style={{ borderBottom: '1px solid var(--rule-soft)', paddingBottom: 20 }}>
               <p className="text-caption text-primary-700 leading-relaxed mb-2">{note.why}</p>
               <div className="flex flex-wrap gap-2">
                 {note.examples.map(ex => (
-                  <span key={ex} className="text-caption px-2.5 py-0.5 rounded-full" style={{ background: 'var(--surface-canvas)', border: '1px solid var(--border)', color: 'var(--primary-600)' }}>
+                  <span key={ex} className="text-caption px-2.5 py-0.5 rounded-sm" style={{ background: 'var(--well)', border: '1px solid var(--rule)', color: 'var(--ink-secondary)' }}>
                     {ex}
                   </span>
                 ))}
@@ -238,15 +249,15 @@ export default async function FundingIntelligencePage() {
         const cfg = LEAN_CONFIG[lean];
         const sectionTotal = orgsForLean.reduce((s: number, o: any) => s + o.total, 0);
         return (
-          <details key={lean} className="mb-4 rounded-2xl overflow-hidden" style={{ border: `1px solid ${cfg.border}` }}>
+          <details key={lean} className="mb-4 rounded-[10px] overflow-hidden" style={{ border: `1px solid ${cfg.border}`, background: 'var(--card)' }}>
             <summary
               className="flex items-center justify-between px-6 py-4 cursor-pointer select-none list-none"
               style={{ background: cfg.bg }}
             >
               <div className="flex items-center gap-3">
                 <span className="font-bold text-body-sm" style={{ color: cfg.color }}>{cfg.label} Organizations</span>
-                <span className="text-caption text-primary-400 font-medium">{orgsForLean.length} orgs</span>
-                <span className="text-caption font-semibold" style={{ color: cfg.color }}>{fmtDollars(sectionTotal)}</span>
+                <span className="text-caption text-primary-400 font-medium"><span className="figure">{orgsForLean.length}</span> orgs</span>
+                <span className="figure text-caption font-semibold" style={{ color: cfg.color }}>{fmtDollars(sectionTotal)}</span>
                 <span className="text-caption text-primary-400">· {cycleRange}</span>
               </div>
               <svg
@@ -257,10 +268,10 @@ export default async function FundingIntelligencePage() {
                 <path d="M6 9l6 6 6-6" />
               </svg>
             </summary>
-            <div className="overflow-x-auto bg-white">
+            <div className="overflow-x-auto" style={{ background: 'var(--card)' }}>
               <table className="w-full text-caption border-collapse">
                 <thead>
-                  <tr style={{ borderBottom: '1px solid var(--border)', background: 'var(--surface-canvas)' }}>
+                  <tr style={{ borderBottom: '1px solid var(--rule)', background: 'var(--well)' }}>
                     <th className="text-left px-4 py-2 font-semibold text-primary-500">Organization</th>
                     <th className="text-left px-4 py-2 font-semibold text-primary-500">Classified By</th>
                     <th className="text-left px-4 py-2 font-semibold text-primary-500">Received By</th>
@@ -272,7 +283,7 @@ export default async function FundingIntelligencePage() {
                     const profileUrl = donorProfileUrl(orgFtmId.get(org.id));
                     const recipientIds = Array.from(orgRecipients.get(org.id) ?? []);
                     return (
-                      <tr key={org.id} style={{ borderBottom: '1px solid var(--border)' }} className="hover:bg-stone-50">
+                      <tr key={org.id} style={{ borderBottom: '1px solid var(--rule-soft)' }} className="hover:bg-primary-50">
                         <td className="px-4 py-2.5 text-primary-900 font-medium">
                           {profileUrl ? (
                             <a
@@ -305,12 +316,12 @@ export default async function FundingIntelligencePage() {
                                 </span>
                               ))}
                               {recipientIds.length > 3 && (
-                                <span className="text-primary-400">+{recipientIds.length - 3} more</span>
+                                <span className="text-primary-400">+<span className="figure">{recipientIds.length - 3}</span> more</span>
                               )}
                             </div>
                           )}
                         </td>
-                        <td className="px-4 py-2.5 text-right font-mono text-primary-900">
+                        <td className="figure px-4 py-2.5 text-right text-primary-900">
                           {org.total > 0 ? fmtDollars(org.total) : '—'}
                         </td>
                       </tr>
@@ -324,7 +335,7 @@ export default async function FundingIntelligencePage() {
       })}
 
       <p className="text-caption text-primary-400 text-center mt-6">
-        Classifications are updated as new data is ingested. To manually update a classification, edit the <code className="bg-stone-100 px-1 rounded">donor_organizations</code> table in Supabase.
+        Classifications are updated as new data is ingested. To manually update a classification, edit the <code className="px-1 rounded-sm" style={{ background: 'var(--well)' }}>donor_organizations</code> table in Supabase.
       </p>
     </main>
   );

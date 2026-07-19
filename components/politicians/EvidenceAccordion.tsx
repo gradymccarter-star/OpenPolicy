@@ -40,17 +40,17 @@ const FOLDERS: Record<string, FolderConfig> = {
 };
 
 const VOTE_STYLES: Record<string, { bg: string; color: string; label: string }> = {
-  yea: { bg: '#dcfce7', color: '#166534', label: 'YEA' },
-  nay: { bg: '#fee2e2', color: '#991b1b', label: 'NAY' },
-  abstain: { bg: '#fef9c3', color: '#854d0e', label: 'ABSTAIN' },
-  absent: { bg: '#f3f4f6', color: '#6b7280', label: 'ABSENT' },
+  yea: { bg: 'rgba(47,111,82,0.12)', color: 'var(--verdigris)', label: 'YEA' },
+  nay: { bg: 'rgba(158,59,49,0.12)', color: 'var(--oxblood)', label: 'NAY' },
+  abstain: { bg: 'var(--brass-wash)', color: 'var(--brass)', label: 'ABSTAIN' },
+  absent: { bg: 'var(--well)', color: 'var(--ink-secondary)', label: 'ABSENT' },
 };
 
 const STANCE_STYLES: Record<string, { bg: string; color: string }> = {
-  support: { bg: '#0a1628', color: '#fff' },
-  oppose: { bg: '#fee2e2', color: '#991b1b' },
-  conditional: { bg: '#fef9c3', color: '#854d0e' },
-  neutral: { bg: '#f3f4f6', color: '#6b7280' },
+  support: { bg: 'rgba(47,111,82,0.12)', color: 'var(--verdigris)' },
+  oppose: { bg: 'rgba(158,59,49,0.12)', color: 'var(--oxblood)' },
+  conditional: { bg: 'var(--brass-wash)', color: 'var(--brass)' },
+  neutral: { bg: 'var(--well)', color: 'var(--ink-secondary)' },
 };
 
 function formatDate(d?: string | null) {
@@ -65,8 +65,8 @@ function formatDate(d?: string | null) {
 function PrinciplePill({ p }: { readonly p: string }) {
   return (
     <span
-      className="inline-flex items-center px-1.5 py-0.5 rounded text-caption font-semibold"
-      style={{ background: 'rgba(201,168,76,0.12)', color: '#b8922e', fontSize: '10px' }}
+      className="inline-flex items-center px-1.5 py-0.5 rounded-sm text-caption font-semibold"
+      style={{ background: 'var(--brass-wash)', color: 'var(--brass)', fontSize: '0.68rem' }}
     >
       {p}
     </span>
@@ -78,21 +78,21 @@ function FloorVoteRow({ item }: { readonly item: EvidenceItem }) {
   const vs = VOTE_STYLES[item.vote_position?.toLowerCase() ?? ''] ?? VOTE_STYLES.absent;
 
   return (
-    <div className="border-b last:border-b-0" style={{ borderColor: '#f1f5f9' }}>
+    <div className="border-b last:border-b-0" style={{ borderColor: 'var(--rule-soft)' }}>
       <button
         onClick={() => setOpen(!open)}
-        className="w-full text-left flex items-center gap-3 py-3 px-4 hover:bg-slate-50 transition-colors"
+        className="w-full text-left flex items-center gap-3 py-3 px-4 hover:bg-primary-50 transition-colors"
       >
         <span
-          className="flex-shrink-0 px-2 py-0.5 rounded font-bold text-caption"
-          style={{ background: vs.bg, color: vs.color, minWidth: 46, textAlign: 'center' }}
+          className="flex-shrink-0 px-2 py-0.5 rounded-sm font-semibold"
+          style={{ background: vs.bg, color: vs.color, minWidth: 46, textAlign: 'center', fontSize: '0.68rem' }}
         >
           {vs.label}
         </span>
         <span className="flex-1 text-body-sm text-primary-800 font-medium line-clamp-1">
           {item.bill_title || 'Bill vote'}
         </span>
-        <span className="text-caption text-primary-400 flex-shrink-0">{formatDate(item.source_date)}</span>
+        <span className="text-caption text-primary-400 flex-shrink-0 figure">{formatDate(item.source_date)}</span>
         {(item.tagged_principles?.length ?? 0) > 0 && (
           <div className="flex gap-1 flex-shrink-0">
             {item.tagged_principles?.map((p) => <PrinciplePill key={p} p={p} />)}
@@ -108,14 +108,14 @@ function FloorVoteRow({ item }: { readonly item: EvidenceItem }) {
       </button>
 
       {open && (
-        <div className="px-4 pb-4 pt-1 space-y-2 bg-slate-50">
+        <div className="px-4 pb-4 pt-1 space-y-2 bg-primary-50">
           {item.claims && item.claims.length > 0 && (
             <div className="space-y-1.5">
               {item.claims.map((c) => {
                 const ss = STANCE_STYLES[c.stance] ?? STANCE_STYLES.neutral;
                 return (
-                  <div key={c.id} className="flex items-start gap-2 text-caption rounded p-2 bg-white" style={{ border: '1px solid #e2e8f0' }}>
-                    <span className="flex-shrink-0 px-1.5 py-0.5 rounded font-semibold" style={{ background: ss.bg, color: ss.color, fontSize: 10 }}>
+                  <div key={c.id} className="flex items-start gap-2 text-caption rounded p-2" style={{ background: 'var(--card)', border: '1px solid var(--rule-soft)' }}>
+                    <span className="flex-shrink-0 px-1.5 py-0.5 rounded-sm font-semibold" style={{ background: ss.bg, color: ss.color, fontSize: '0.68rem' }}>
                       {c.stance} · {c.strength}
                     </span>
                     <span className="text-primary-600">&ldquo;{c.claim_text}&rdquo;</span>
@@ -142,15 +142,15 @@ function SponsorshipRow({ item }: { readonly item: EvidenceItem }) {
   const hasClaims = (item.claims?.length ?? 0) > 0;
 
   return (
-    <div className="border-b last:border-b-0" style={{ borderColor: '#f1f5f9' }}>
+    <div className="border-b last:border-b-0" style={{ borderColor: 'var(--rule-soft)' }}>
       <button
         onClick={() => setOpen(!open)}
-        className="w-full text-left flex items-center gap-3 py-3 px-4 hover:bg-slate-50 transition-colors"
+        className="w-full text-left flex items-center gap-3 py-3 px-4 hover:bg-primary-50 transition-colors"
       >
         <span className="flex-1 text-body-sm text-primary-800 font-medium line-clamp-1">
           {item.bill_title || item.source_text?.substring(0, 80) || 'Bill'}
         </span>
-        <span className="text-caption text-primary-400 flex-shrink-0">{formatDate(item.source_date)}</span>
+        <span className="text-caption text-primary-400 flex-shrink-0 figure">{formatDate(item.source_date)}</span>
         {(item.tagged_principles?.length ?? 0) > 0 && (
           <div className="flex gap-1 flex-shrink-0">
             {item.tagged_principles?.map((p) => <PrinciplePill key={p} p={p} />)}
@@ -166,12 +166,12 @@ function SponsorshipRow({ item }: { readonly item: EvidenceItem }) {
       </button>
 
       {open && (
-        <div className="px-4 pb-4 pt-1 space-y-2 bg-slate-50">
+        <div className="px-4 pb-4 pt-1 space-y-2 bg-primary-50">
           {item.claims?.map((c) => {
             const ss = STANCE_STYLES[c.stance] ?? STANCE_STYLES.neutral;
             return (
-              <div key={c.id} className="flex items-start gap-2 text-caption rounded p-2 bg-white" style={{ border: '1px solid #e2e8f0' }}>
-                <span className="flex-shrink-0 px-1.5 py-0.5 rounded font-semibold" style={{ background: ss.bg, color: ss.color, fontSize: 10 }}>
+              <div key={c.id} className="flex items-start gap-2 text-caption rounded p-2" style={{ background: 'var(--card)', border: '1px solid var(--rule-soft)' }}>
+                <span className="flex-shrink-0 px-1.5 py-0.5 rounded-sm font-semibold" style={{ background: ss.bg, color: ss.color, fontSize: '0.68rem' }}>
                   {c.stance} · {c.strength}
                 </span>
                 <span className="text-primary-600">&ldquo;{c.claim_text}&rdquo;</span>
@@ -197,8 +197,8 @@ function ClaimsBlock({ claims }: { readonly claims?: Claim[] }) {
       {claims.map((c) => {
         const ss = STANCE_STYLES[c.stance] ?? STANCE_STYLES.neutral;
         return (
-          <div key={c.id} className="flex items-start gap-2 text-caption rounded p-2 bg-white" style={{ border: '1px solid #e2e8f0' }}>
-            <span className="flex-shrink-0 px-1.5 py-0.5 rounded font-semibold" style={{ background: ss.bg, color: ss.color, fontSize: 10 }}>
+          <div key={c.id} className="flex items-start gap-2 text-caption rounded p-2" style={{ background: 'var(--card)', border: '1px solid var(--rule-soft)' }}>
+            <span className="flex-shrink-0 px-1.5 py-0.5 rounded-sm font-semibold" style={{ background: ss.bg, color: ss.color, fontSize: '0.68rem' }}>
               {c.stance} · {c.strength}
             </span>
             <span className="text-primary-600">&ldquo;{c.claim_text}&rdquo;</span>
@@ -238,13 +238,13 @@ function YouTubeRow({ item }: { readonly item: EvidenceItem }) {
   const hasClaims = (item.claims?.length ?? 0) > 0;
 
   return (
-    <div className="border-b last:border-b-0" style={{ borderColor: '#f1f5f9' }}>
+    <div className="border-b last:border-b-0" style={{ borderColor: 'var(--rule-soft)' }}>
       <button
         onClick={() => setOpen(!open)}
-        className="w-full text-left flex items-center gap-3 py-3 px-4 hover:bg-slate-50 transition-colors"
+        className="w-full text-left flex items-center gap-3 py-3 px-4 hover:bg-primary-50 transition-colors"
       >
         {/* Thumbnail */}
-        <div className="flex-shrink-0 relative rounded overflow-hidden" style={{ width: 96, height: 54, background: '#000' }}>
+        <div className="flex-shrink-0 relative rounded overflow-hidden" style={{ width: 96, height: 54, background: 'var(--ink)' }}>
           {videoId ? (
             <img
               src={`https://img.youtube.com/vi/${videoId}/mqdefault.jpg`}
@@ -252,11 +252,11 @@ function YouTubeRow({ item }: { readonly item: EvidenceItem }) {
               className="w-full h-full object-cover opacity-90"
             />
           ) : (
-            <div className="w-full h-full" style={{ background: '#1a1a2e' }} />
+            <div className="w-full h-full" style={{ background: 'var(--ink)' }} />
           )}
           {/* Play badge */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="rounded-full flex items-center justify-center" style={{ background: 'rgba(255,0,0,0.85)', width: 22, height: 22 }}>
+            <div className="rounded-sm flex items-center justify-center" style={{ background: 'rgba(19,26,38,0.75)', width: 22, height: 22 }}>
               <svg viewBox="0 0 24 24" fill="white" width={10} height={10} style={{ marginLeft: 2 }}>
                 <path d="M8 5v14l11-7z" />
               </svg>
@@ -267,7 +267,7 @@ function YouTubeRow({ item }: { readonly item: EvidenceItem }) {
         <div className="flex-1 min-w-0">
           <p className="text-body-sm text-primary-800 font-medium line-clamp-2 leading-snug">{title}</p>
         </div>
-        <span className="text-caption text-primary-400 flex-shrink-0">{formatDate(item.source_date)}</span>
+        <span className="text-caption text-primary-400 flex-shrink-0 figure">{formatDate(item.source_date)}</span>
         {(hasClaims || description) && (
           <svg className="flex-shrink-0 w-4 h-4 text-primary-300 transition-transform"
             style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}
@@ -278,7 +278,7 @@ function YouTubeRow({ item }: { readonly item: EvidenceItem }) {
       </button>
 
       {open && (
-        <div className="px-4 pb-4 pt-1 space-y-2 bg-slate-50">
+        <div className="px-4 pb-4 pt-1 space-y-2 bg-primary-50">
           {description && (
             <p className="text-caption text-primary-500 leading-relaxed">{description}</p>
           )}
@@ -296,16 +296,16 @@ function BlueskyRow({ item }: { readonly item: EvidenceItem }) {
   const hasClaims = (item.claims?.length ?? 0) > 0;
 
   return (
-    <div className="border-b last:border-b-0" style={{ borderColor: '#f1f5f9' }}>
+    <div className="border-b last:border-b-0" style={{ borderColor: 'var(--rule-soft)' }}>
       <button
         onClick={() => setOpen(!open)}
-        className="w-full text-left flex items-start gap-3 py-3 px-4 hover:bg-slate-50 transition-colors"
+        className="w-full text-left flex items-start gap-3 py-3 px-4 hover:bg-primary-50 transition-colors"
       >
-        <span className="flex-shrink-0 text-base leading-none mt-0.5" style={{ color: '#0085ff' }}>🦋</span>
+        <span className="flex-shrink-0 text-base leading-none mt-0.5">🦋</span>
         <div className="flex-1 min-w-0">
           <p className="text-body-sm text-primary-800 line-clamp-2 leading-snug">{text}</p>
         </div>
-        <span className="text-caption text-primary-400 flex-shrink-0 pt-0.5">{formatDate(item.source_date)}</span>
+        <span className="text-caption text-primary-400 flex-shrink-0 pt-0.5 figure">{formatDate(item.source_date)}</span>
         {(hasClaims || item.source_url) && (
           <svg className="flex-shrink-0 w-4 h-4 text-primary-300 transition-transform mt-0.5"
             style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}
@@ -316,7 +316,7 @@ function BlueskyRow({ item }: { readonly item: EvidenceItem }) {
       </button>
 
       {open && (
-        <div className="px-4 pb-4 pt-1 space-y-2 bg-slate-50">
+        <div className="px-4 pb-4 pt-1 space-y-2 bg-primary-50">
           {text.length > 120 && (
             <p className="text-caption text-primary-600 leading-relaxed">{text}</p>
           )}
@@ -334,15 +334,15 @@ function TextRow({ item }: { readonly item: EvidenceItem }) {
   const hasClaims = (item.claims?.length ?? 0) > 0;
 
   return (
-    <div className="border-b last:border-b-0" style={{ borderColor: '#f1f5f9' }}>
+    <div className="border-b last:border-b-0" style={{ borderColor: 'var(--rule-soft)' }}>
       <button
         onClick={() => setOpen(!open)}
-        className="w-full text-left flex items-start gap-3 py-3 px-4 hover:bg-slate-50 transition-colors"
+        className="w-full text-left flex items-start gap-3 py-3 px-4 hover:bg-primary-50 transition-colors"
       >
         <div className="flex-1 min-w-0">
           <p className="text-body-sm text-primary-800 font-medium line-clamp-2">{text}</p>
         </div>
-        <span className="text-caption text-primary-400 flex-shrink-0 pt-0.5">{formatDate(item.source_date)}</span>
+        <span className="text-caption text-primary-400 flex-shrink-0 pt-0.5 figure">{formatDate(item.source_date)}</span>
         {(hasClaims || item.source_url) && (
           <svg className="flex-shrink-0 w-4 h-4 text-primary-300 transition-transform mt-0.5"
             style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}
@@ -353,7 +353,7 @@ function TextRow({ item }: { readonly item: EvidenceItem }) {
       </button>
 
       {open && (
-        <div className="px-4 pb-4 pt-1 space-y-2 bg-slate-50">
+        <div className="px-4 pb-4 pt-1 space-y-2 bg-primary-50">
           {text.length > 120 && (
             <p className="text-caption text-primary-600 leading-relaxed">{text}</p>
           )}
@@ -378,11 +378,11 @@ function EvidenceFolder({
   const config = FOLDERS[type] ?? { label: type, icon: '📌', description: '' };
 
   return (
-    <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #e2e8f0' }}>
+    <div className="rounded-lg overflow-hidden" style={{ border: '1px solid var(--rule)' }}>
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center gap-3 p-4 transition-colors hover:bg-slate-50"
-        style={{ background: open ? '#f8fafc' : '#fff' }}
+        className="w-full flex items-center gap-3 p-4 transition-colors hover:bg-primary-50"
+        style={{ background: open ? 'var(--well)' : 'var(--card)' }}
       >
         <span className="text-xl leading-none">{config.icon}</span>
         <div className="flex-1 text-left">
@@ -392,8 +392,8 @@ function EvidenceFolder({
           )}
         </div>
         <span
-          className="text-caption font-bold px-2.5 py-0.5 rounded-full"
-          style={{ background: '#0a1628', color: '#fff', minWidth: 28, textAlign: 'center' }}
+          className="text-caption font-semibold px-2.5 py-0.5 rounded-sm figure"
+          style={{ background: 'rgba(19,26,38,0.08)', color: 'var(--ink)', minWidth: 28, textAlign: 'center' }}
         >
           {items.length}
         </span>
@@ -407,7 +407,7 @@ function EvidenceFolder({
       </button>
 
       {open && (
-        <div style={{ borderTop: '1px solid #e2e8f0' }}>
+        <div style={{ borderTop: '1px solid var(--rule-soft)' }}>
           {items.map((item) => {
             if (type === 'floor_vote') return <FloorVoteRow key={item.id} item={item} />;
             if (type === 'bill_sponsorship' || type === 'bill_cosponsorship') return <SponsorshipRow key={item.id} item={item} />;

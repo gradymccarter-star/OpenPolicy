@@ -1,44 +1,48 @@
 import Link from 'next/link';
+import Keystone from './Keystone';
 
 export default function Footer() {
   return (
-    <footer className="bg-primary-950 text-white mt-auto">
-      <div className="container-page py-16">
+    <footer className="mt-auto" style={{ borderTop: '1px solid var(--rule)', background: 'var(--card)' }}>
+      <div className="container-page py-14">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           <div className="md:col-span-1">
-            <p className="font-bold text-body-sm mb-3">PA Chamber Intelligence</p>
-            <p className="text-body-sm text-primary-400 leading-relaxed">
+            <div className="flex items-center gap-2 mb-3">
+              <Keystone size={14} style={{ color: 'var(--brass-bright)' }} />
+              <p className="font-serif font-semibold text-body-sm text-primary-950">PA Chamber Intelligence</p>
+            </div>
+            <p className="text-caption text-primary-500 leading-relaxed">
               Evidence-based candidate intelligence for the Pennsylvania Chamber of Commerce endorsement process.
             </p>
           </div>
 
           <div>
-            <h4 className="font-semibold text-body-sm mb-4">Navigate</h4>
-            <ul className="space-y-2 text-body-sm text-primary-400">
-              <li><Link href="/" className="hover:text-white transition-colors">Home</Link></li>
-              <li><Link href="/politicians" className="hover:text-white transition-colors">Candidates</Link></li>
-              <li><Link href="/compare" className="hover:text-white transition-colors">Compare</Link></li>
+            <p className="overline mb-4" style={{ fontSize: '0.68rem' }}>Navigate</p>
+            <ul className="space-y-2 text-body-sm text-primary-600">
+              <li><Link href="/" className="hover:text-primary-950 transition-colors">Home</Link></li>
+              <li><Link href="/politicians" className="hover:text-primary-950 transition-colors">Candidates</Link></li>
+              <li><Link href="/compare" className="hover:text-primary-950 transition-colors">Compare</Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-semibold text-body-sm mb-4">Learn</h4>
-            <ul className="space-y-2 text-body-sm text-primary-400">
-              <li><Link href="/principles" className="hover:text-white transition-colors">Scoring Criteria</Link></li>
-              <li><Link href="/about" className="hover:text-white transition-colors">About &amp; Methodology</Link></li>
+            <p className="overline mb-4" style={{ fontSize: '0.68rem' }}>Learn</p>
+            <ul className="space-y-2 text-body-sm text-primary-600">
+              <li><Link href="/principles" className="hover:text-primary-950 transition-colors">Scoring Criteria</Link></li>
+              <li><Link href="/about" className="hover:text-primary-950 transition-colors">About &amp; Methodology</Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-semibold text-body-sm mb-4">Legal</h4>
-            <ul className="space-y-2 text-body-sm text-primary-400">
+            <p className="overline mb-4" style={{ fontSize: '0.68rem' }}>Standards</p>
+            <ul className="space-y-2 text-body-sm text-primary-600">
               <li>Internal use only</li>
               <li>All claims are cited and traceable</li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-12 pt-8 text-caption text-primary-500" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+        <div className="mt-12 pt-6 text-caption text-primary-400" style={{ borderTop: '1px solid var(--rule-soft)' }}>
           <p>&copy; {new Date().getFullYear()} PA Chamber of Commerce Endorsement Intelligence. Built with evidence-based methodology.</p>
         </div>
       </div>

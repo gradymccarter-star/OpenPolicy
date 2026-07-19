@@ -10,7 +10,7 @@ import { getSupabase, extractOverallScore } from '@/lib/db/client';
 import { getCandidacyStatus } from '@/lib/utils/helpers';
 import { getContactInfoForDistrict } from '@/lib/data/contact-info';
 import { getBillStatusMap, getCandidateResults, getVoterRegistration, getVoterRegistrationAsOf, getPAChamberScore, getPAChamberStats, getPAChamberSession, getACLUPAScore, getACLUPAStats, getACLUPASession } from '@/lib/data/static-data';
-import { PA_CHAMBER_PRINCIPLES, EVIDENCE_TYPE_LABELS, EVIDENCE_WEIGHTS } from '@/lib/utils/constants';
+import { PA_CHAMBER_PRINCIPLES, EVIDENCE_TYPE_LABELS, EVIDENCE_WEIGHTS, EXAMPLE_POLITICIANS } from '@/lib/utils/constants';
 import type { ElectionHistoryFile } from '@/lib/utils/types';
 import Image from 'next/image';
 
@@ -29,41 +29,56 @@ export default async function CandidateDetailPage({
 }: {
   readonly params: { readonly id: string };
 }) {
-  if (!UUID_REGEX.test(params.id)) {
-    return <div className="container-page py-12 text-primary-500">Candidate not found</div>;
+  // Demo fallback: when the DB is empty/unconfigured the list page shows
+  // EXAMPLE_POLITICIANS, so their detail links must resolve here too.
+  const example = EXAMPLE_POLITICIANS.find((p) => p.id === params.id);
+
+  let politicianRow: any;
+  let rawPrincipleScores: any[] | null = null;
+  let evidenceData: any[] | null = null;
+  let contributionData: any[] | null = null;
+
+  if (example) {
+    const { overall_score, ...rest } = example as any;
+    politicianRow = { ...rest, overall_scores: [overall_score] };
+  } else {
+    if (!UUID_REGEX.test(params.id)) {
+      return <div className="container-page py-12 text-primary-500">Candidate not found</div>;
+    }
+
+    const supabase = getSupabase();
+
+    const { data } = await supabase
+      .from('politicians')
+      .select('*, overall_scores(*)')
+      .eq('id', params.id)
+      .maybeSingle();
+    politicianRow = data;
+
+    if (!politicianRow) {
+      return <div className="container-page py-12 text-primary-500">Candidate not found</div>;
+    }
+
+    [{ data: rawPrincipleScores }, { data: evidenceData }, { data: contributionData }] = await Promise.all([
+      supabase
+        .from('principle_scores')
+        .select('*')
+        .eq('politician_id', params.id)
+        .order('principle'),
+      supabase
+        .from('evidence_items')
+        .select('*, extracted_claims(*)')
+        .eq('politician_id', params.id)
+        .eq('is_relevant', true)
+        .order('source_date', { ascending: false })
+        .limit(50),
+      supabase
+        .from('campaign_contributions')
+        .select('*, donor_organizations(lean, industry)')
+        .eq('politician_id', params.id)
+        .order('amount', { ascending: false }),
+    ]);
   }
-
-  const supabase = getSupabase();
-
-  const { data: politicianRow } = await supabase
-    .from('politicians')
-    .select('*, overall_scores(*)')
-    .eq('id', params.id)
-    .maybeSingle();
-
-  if (!politicianRow) {
-    return <div className="container-page py-12 text-primary-500">Candidate not found</div>;
-  }
-
-  const [{ data: rawPrincipleScores }, { data: evidenceData }, { data: contributionData }] = await Promise.all([
-    supabase
-      .from('principle_scores')
-      .select('*')
-      .eq('politician_id', params.id)
-      .order('principle'),
-    supabase
-      .from('evidence_items')
-      .select('*, extracted_claims(*)')
-      .eq('politician_id', params.id)
-      .eq('is_relevant', true)
-      .order('source_date', { ascending: false })
-      .limit(50),
-    supabase
-      .from('campaign_contributions')
-      .select('*, donor_organizations(lean, industry)')
-      .eq('politician_id', params.id)
-      .order('amount', { ascending: false }),
-  ]);
 
   const politician = politicianRow;
   const principleScores = rawPrincipleScores ?? [];
@@ -161,23 +176,23 @@ export default async function CandidateDetailPage({
           { num: '2', title: 'AI Classification', desc: 'Each evidence item is filtered by PA business relevance keywords, then classified by Claude AI for alignment with the nine Chamber priorities. Bills are classified for direction. Statements have structured claims extracted.' },
           { num: '3', title: 'Weighted Scoring', desc: 'Scores are computed using transparent math. Bill sponsorships carry the highest weight. Sponsorships tied to Chamber priority bills receive a 3× multiplier. Temporal decay reduces older evidence. Every claim links to its source.' },
         ].map(step => (
-          <div key={step.num} className="p-5" style={{ border: '1px solid var(--border)', borderRadius: '12px' }}>
-            <div className="w-8 h-8 bg-primary-950 text-white rounded-full flex items-center justify-center font-bold text-caption mb-3">{step.num}</div>
+          <div key={step.num} className="card p-5">
+            <div className="w-8 h-8 rounded-md flex items-center justify-center font-semibold text-caption figure mb-3" style={{ background: 'var(--ink)', color: 'var(--paper)' }}>{step.num}</div>
             <h3 className="font-semibold text-primary-950 mb-2 text-body-sm">{step.title}</h3>
             <p className="text-caption text-primary-500 leading-relaxed">{step.desc}</p>
           </div>
         ))}
       </div>
 
-      <div className="mt-6 pt-6" style={{ borderTop: '1px solid var(--border)' }}>
+      <div className="mt-6 pt-6" style={{ borderTop: '1px solid var(--rule)' }}>
         <h3 className="font-semibold text-primary-950 mb-3 text-body-sm">Evidence Type Weights</h3>
         <div className="flex flex-wrap gap-3">
           {Object.entries(EVIDENCE_WEIGHTS).map(([type, weight]) => (
-            <div key={type} className="flex items-center space-x-2 rounded-lg px-3 py-2" style={{ background: 'var(--surface-canvas)' }}>
+            <div key={type} className="flex items-center space-x-2 rounded-md px-3 py-2" style={{ background: 'var(--well)' }}>
               <span className="text-caption font-medium text-primary-500">
                 {EVIDENCE_TYPE_LABELS[type] || type}
               </span>
-              <span className="text-caption font-bold text-primary-950">{weight}</span>
+              <span className="text-caption font-semibold text-primary-950 figure">{weight}</span>
             </div>
           ))}
         </div>
@@ -191,7 +206,7 @@ export default async function CandidateDetailPage({
       <div className="card p-8 mb-8">
         <div className="flex items-start space-x-6">
           {politician.photo_url && (
-            <div className="relative w-32 h-32 rounded-full overflow-hidden flex-shrink-0" style={{ border: '3px solid #c9a84c' }}>
+            <div className="relative w-32 h-32 rounded-full overflow-hidden flex-shrink-0" style={{ border: '1px solid var(--rule)' }}>
               <Image
                 src={politician.photo_url}
                 alt={politician.full_name}
@@ -208,7 +223,7 @@ export default async function CandidateDetailPage({
               <CandidacyBadge status={getCandidacyStatus(politician)} />
               {politician.district && (
                 <Link href={`/overview?district=${politician.district}`} className="text-primary-500 text-body-sm hover:text-primary-950 hover:underline">
-                  District {politician.district}
+                  District <span className="figure">{politician.district}</span>
                 </Link>
               )}
               {politician.county && (

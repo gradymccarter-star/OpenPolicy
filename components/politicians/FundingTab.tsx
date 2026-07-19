@@ -25,10 +25,10 @@ interface Props {
 }
 
 const LEAN_CONFIG: Record<Lean, { label: string; color: string; bg: string; bar: string }> = {
-  pro_chamber:  { label: 'Pro-Chamber',  color: '#166534', bg: '#dcfce7', bar: '#16a34a' },
-  anti_chamber: { label: 'Anti-Chamber', color: '#991b1b', bg: '#fee2e2', bar: '#dc2626' },
-  neutral:      { label: 'Neutral',      color: '#374151', bg: '#f3f4f6', bar: '#6b7280' },
-  unknown:      { label: 'Neutral / Unknown', color: '#6b7280', bg: '#f9fafb', bar: '#d1d5db' },
+  pro_chamber:  { label: 'Pro-Chamber',  color: 'var(--verdigris)', bg: 'rgba(47,111,82,0.12)', bar: 'var(--verdigris)' },
+  anti_chamber: { label: 'Anti-Chamber', color: 'var(--oxblood)', bg: 'rgba(158,59,49,0.12)', bar: 'var(--oxblood)' },
+  neutral:      { label: 'Neutral',      color: 'var(--ink-secondary)', bg: 'var(--well)', bar: 'var(--ink-tertiary)' },
+  unknown:      { label: 'Neutral / Unknown', color: 'var(--ink-secondary)', bg: 'var(--well)', bar: 'var(--ink-faint)' },
 };
 
 const CYCLES = [2024, 2022, 2020];
@@ -40,7 +40,7 @@ function fmt(amount: number) {
 function LeanBadge({ lean }: { lean: Lean }) {
   const cfg = LEAN_CONFIG[lean] ?? LEAN_CONFIG.unknown;
   return (
-    <span className="inline-block text-caption font-semibold rounded px-2 py-0.5" style={{ color: cfg.color, background: cfg.bg }}>
+    <span className="inline-block font-semibold rounded-sm px-1.5 py-0.5 tracking-wide" style={{ color: cfg.color, background: cfg.bg, fontSize: '0.68rem' }}>
       {cfg.label}
     </span>
   );
@@ -108,15 +108,14 @@ function DonutChart({ buckets, total }: { buckets: Record<Lean, number>; total: 
           <path
             key={lean}
             d={makeArcPath(startAngle, endAngle)}
-            fill={LEAN_CONFIG[lean].bar}
-            stroke="white"
             strokeWidth="2"
+            style={{ fill: LEAN_CONFIG[lean].bar, stroke: 'var(--card)' }}
           />
         ))}
-        <text x={CX} y={CY - 6} textAnchor="middle" fontSize="20" fontWeight="bold" fill={cfg.color}>
+        <text x={CX} y={CY - 6} textAnchor="middle" fontSize="20" fontWeight="bold" className="figure" style={{ fill: cfg.color }}>
           {dominantPct}%
         </text>
-        <text x={CX} y={CY + 12} textAnchor="middle" fontSize="9" fill="#9ca3af" fontWeight="500">
+        <text x={CX} y={CY + 12} textAnchor="middle" fontSize="9" fontWeight="500" style={{ fill: 'var(--ink-tertiary)' }}>
           {cfg.label}
         </text>
       </svg>
@@ -140,15 +139,15 @@ function LeanBreakdown({ rows, cycle }: { readonly rows: Contribution[]; readonl
 
   return (
     <div className="card p-6 mb-6">
-      <h3 className="text-heading-3 mb-1">Funding Alignment — {cycle} Election Cycle</h3>
-      <p className="text-caption text-primary-400 mb-4">Breakdown of {fmt(total)} raised during the {cycle} cycle by donor organization alignment</p>
+      <h3 className="text-heading-3 mb-1">Funding Alignment — <span className="figure">{cycle}</span> Election Cycle</h3>
+      <p className="text-caption text-primary-400 mb-4">Breakdown of <span className="figure">{fmt(total)}</span> raised during the <span className="figure">{cycle}</span> cycle by donor organization alignment</p>
 
       <div className="flex flex-col md:flex-row gap-6 items-center">
         <DonutChart buckets={buckets} total={total} />
 
         <div className="flex-1 space-y-3">
           {/* Stacked bar */}
-          <div className="flex rounded-full overflow-hidden h-3" style={{ background: '#f3f4f6' }}>
+          <div className="flex rounded-sm overflow-hidden h-3" style={{ background: 'var(--well)' }}>
             {order.map(lean => {
               const pct = total > 0 ? (buckets[lean] / total) * 100 : 0;
               if (pct < 1) return null;
@@ -169,10 +168,10 @@ function LeanBreakdown({ rows, cycle }: { readonly rows: Contribution[]; readonl
               const pct = total > 0 ? Math.round((amount / total) * 100) : 0;
               const cfg = LEAN_CONFIG[lean];
               return (
-                <div key={lean} className="rounded-xl p-3" style={{ border: `1px solid ${cfg.bg === '#f9fafb' ? '#e5e7eb' : cfg.bg}`, background: cfg.bg }}>
+                <div key={lean} className="rounded-md p-3" style={{ border: '1px solid var(--rule-soft)', background: cfg.bg }}>
                   <div className="text-caption font-semibold mb-0.5" style={{ color: cfg.color }}>{cfg.label}</div>
-                  <div className="text-xl font-bold text-primary-950">{pct}%</div>
-                  <div className="text-caption text-primary-400">{fmt(amount)}</div>
+                  <div className="text-xl font-bold text-primary-950 figure">{pct}%</div>
+                  <div className="text-caption text-primary-400 figure">{fmt(amount)}</div>
                 </div>
               );
             })}
@@ -207,15 +206,15 @@ function CollapsibleTable({
   const total = filtered.reduce((s, c) => s + c.amount, 0);
 
   return (
-    <div className="rounded-xl overflow-hidden" style={{ border: '1px solid var(--border)' }}>
+    <div className="rounded-lg overflow-hidden" style={{ border: '1px solid var(--rule)' }}>
       <button
         onClick={() => setOpen(o => !o)}
-        className="w-full flex items-center justify-between px-5 py-4 text-left transition-colors hover:bg-stone-50"
-        style={{ background: open ? 'var(--surface-canvas)' : 'white' }}
+        className="w-full flex items-center justify-between px-5 py-4 text-left transition-colors hover:bg-primary-50"
+        style={{ background: open ? 'var(--well)' : 'var(--card)' }}
       >
         <div>
           <span className="font-semibold text-primary-950 text-body-sm">{title}</span>
-          <span className="text-caption text-primary-400 ml-3">{fmt(total)} · {filtered.length} donor{filtered.length !== 1 ? 's' : ''}</span>
+          <span className="text-caption text-primary-400 ml-3"><span className="figure">{fmt(total)}</span> · <span className="figure">{filtered.length}</span> donor{filtered.length !== 1 ? 's' : ''}</span>
         </div>
         <div className="flex items-center gap-2">
           <span className="text-caption text-primary-400">{subtitle}</span>
@@ -227,7 +226,7 @@ function CollapsibleTable({
         <div className="overflow-x-auto">
           <table className="w-full text-caption border-collapse">
             <thead>
-              <tr style={{ borderBottom: '1px solid var(--border)', background: 'var(--surface-canvas)' }}>
+              <tr style={{ borderBottom: '1px solid var(--rule)', background: 'var(--well)' }}>
                 <th className="text-left px-5 py-2 font-semibold text-primary-500">Donor</th>
                 {type === 'org' && <th className="text-left px-3 py-2 font-semibold text-primary-500">Alignment</th>}
                 <th className="text-right px-5 py-2 font-semibold text-primary-500">Amount</th>
@@ -239,7 +238,7 @@ function CollapsibleTable({
                 const lean = r.donor_organizations?.lean ?? 'unknown';
                 const profileUrl = donorProfileUrl(r.followthemoney_id);
                 return (
-                  <tr key={r.id} style={{ borderBottom: '1px solid var(--border)' }} className="hover:bg-stone-50">
+                  <tr key={r.id} style={{ borderBottom: '1px solid var(--rule-soft)' }} className="hover:bg-primary-50">
                     <td className="px-5 py-2.5 text-primary-900 font-medium">
                       {profileUrl ? (
                         <a
@@ -260,8 +259,8 @@ function CollapsibleTable({
                         <LeanBadge lean={lean} />
                       </td>
                     )}
-                    <td className="px-5 py-2.5 text-right font-mono text-primary-900">{fmt(r.amount)}</td>
-                    <td className="px-5 py-2.5 text-right text-primary-400">
+                    <td className="px-5 py-2.5 text-right figure text-primary-900">{fmt(r.amount)}</td>
+                    <td className="px-5 py-2.5 text-right text-primary-400 figure">
                       {r.contribution_date
                         ? new Date(r.contribution_date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
                         : `${r.cycle_year} cycle`}
@@ -287,7 +286,7 @@ export default function FundingTab({ contributions }: Props) {
       <div className="card p-8 text-center">
         <p className="text-primary-400 text-body-sm">No campaign finance data available.</p>
         <p className="text-caption text-primary-400 mt-2">
-          Run <code className="bg-stone-100 px-1 rounded">scripts/jobs/fetch-campaign-finance.js</code> to populate.
+          Run <code className="px-1 rounded-sm" style={{ background: 'var(--well)' }}>scripts/jobs/fetch-campaign-finance.js</code> to populate.
         </p>
       </div>
     );
@@ -307,18 +306,18 @@ export default function FundingTab({ contributions }: Props) {
       {/* Funding Intelligence banner */}
       <a href="/funding-intelligence">
         <div
-          className="rounded-xl p-4 flex items-center justify-between transition-opacity hover:opacity-90 cursor-pointer"
-          style={{ background: 'linear-gradient(135deg, #0a1628 0%, #162444 100%)', border: '1px solid #c9a84c' }}
+          className="rounded-lg p-4 flex items-center justify-between transition-colors cursor-pointer"
+          style={{ background: 'var(--card)', border: '1px solid var(--rule)' }}
         >
           <div>
-            <p className="text-caption font-bold uppercase tracking-wider mb-0.5" style={{ color: '#c9a84c' }}>
+            <p className="overline mb-0.5">
               Funding Intelligence
             </p>
-            <p className="text-caption" style={{ color: 'rgba(255,255,255,0.65)' }}>
+            <p className="text-caption" style={{ color: 'var(--ink-secondary)' }}>
               See how every donor organization is classified by PA Chamber alignment →
             </p>
           </div>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" strokeWidth="2" strokeLinecap="round" className="ml-4 flex-shrink-0">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="ml-4 flex-shrink-0" style={{ color: 'var(--brass-bright)' }}>
             <path d="M5 12h14M12 5l7 7-7 7" />
           </svg>
         </div>
@@ -330,20 +329,20 @@ export default function FundingTab({ contributions }: Props) {
         const cycles = cycleTotals.filter(c => c.hasData).map(c => c.year);
         const allDonors = cycleTotals.filter(c => c.hasData).reduce((s, c) => s + c.count, 0);
         return allTotal > 0 ? (
-          <div className="rounded-xl px-5 py-4 flex flex-wrap gap-4 items-center" style={{ background: 'var(--surface-canvas)', border: '1px solid var(--border)' }}>
+          <div className="rounded-lg px-5 py-4 flex flex-wrap gap-4 items-center" style={{ background: 'var(--card)', border: '1px solid var(--rule)' }}>
             <div>
               <div className="text-caption text-primary-400 mb-0.5">Total raised across all cycles</div>
-              <div className="text-xl font-bold text-primary-950">{fmt(allTotal)}</div>
+              <div className="text-xl font-bold text-primary-950 figure">{fmt(allTotal)}</div>
             </div>
-            <div className="w-px h-8 hidden md:block" style={{ background: 'var(--border)' }} />
+            <div className="w-px h-8 hidden md:block" style={{ background: 'var(--rule)' }} />
             <div>
               <div className="text-caption text-primary-400 mb-0.5">Election cycles covered</div>
-              <div className="text-body-sm font-bold text-primary-950">{cycles.join(' · ')}</div>
+              <div className="text-body-sm font-bold text-primary-950 figure">{cycles.join(' · ')}</div>
             </div>
-            <div className="w-px h-8 hidden md:block" style={{ background: 'var(--border)' }} />
+            <div className="w-px h-8 hidden md:block" style={{ background: 'var(--rule)' }} />
             <div>
               <div className="text-caption text-primary-400 mb-0.5">Total donor contributions</div>
-              <div className="text-body-sm font-bold text-primary-950">{allDonors.toLocaleString()}</div>
+              <div className="text-body-sm font-bold text-primary-950 figure">{allDonors.toLocaleString()}</div>
             </div>
             <a
               href="https://www.followthemoney.org"
@@ -368,19 +367,20 @@ export default function FundingTab({ contributions }: Props) {
             <button
               key={year}
               onClick={() => hasData && setActiveCycle(year)}
-              className="text-left rounded-xl p-4 transition-all"
+              className="text-left rounded-md p-4 transition-colors"
               style={{
-                border: `2px solid ${activeCycle === year ? '#c9a84c' : 'var(--border)'}`,
-                background: activeCycle === year ? '#fdf8ee' : 'var(--surface-card)',
+                border: `1px solid ${activeCycle === year ? 'var(--brass)' : 'var(--rule)'}`,
+                boxShadow: activeCycle === year ? 'inset 0 0 0 1px var(--brass)' : 'none',
+                background: activeCycle === year ? 'var(--brass-wash)' : 'var(--card)',
                 opacity: hasData ? 1 : 0.4,
                 cursor: hasData ? 'pointer' : 'default',
               }}
             >
-              <div className="text-caption font-semibold mb-0.5" style={{ color: activeCycle === year ? '#c9a84c' : 'var(--primary-400)' }}>
-                {year} Election Cycle
+              <div className="text-caption font-semibold mb-0.5" style={{ color: activeCycle === year ? 'var(--brass)' : 'var(--ink-tertiary)' }}>
+                <span className="figure">{year}</span> Election Cycle
               </div>
-              <div className="text-body-sm font-bold text-primary-950">{hasData ? fmt(total) : '—'}</div>
-              {hasData && <div className="text-caption text-primary-400 mt-0.5">{count.toLocaleString()} contribution{count === 1 ? '' : 's'}</div>}
+              <div className="text-body-sm font-bold text-primary-950 figure">{hasData ? fmt(total) : '—'}</div>
+              {hasData && <div className="text-caption text-primary-400 mt-0.5"><span className="figure">{count.toLocaleString()}</span> contribution{count === 1 ? '' : 's'}</div>}
             </button>
           ))}
         </div>

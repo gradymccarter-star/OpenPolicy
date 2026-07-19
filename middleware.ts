@@ -19,7 +19,35 @@ function cleanup() {
   });
 }
 
+/**
+ * Site-wide password gate (HTTP Basic Auth). Active only when SITE_PASSWORD is
+ * set — local dev without the env var stays open. Username is ignored; share
+ * just the password. Browsers cache the credential, so visitors are prompted once.
+ */
+function checkPassword(request: NextRequest): NextResponse | null {
+  const password = process.env.SITE_PASSWORD;
+  if (!password) return null;
+
+  const auth = request.headers.get('authorization');
+  if (auth?.startsWith('Basic ')) {
+    try {
+      const decoded = atob(auth.slice(6));
+      if (decoded.slice(decoded.indexOf(':') + 1) === password) return null;
+    } catch {
+      // malformed header — fall through to the 401
+    }
+  }
+
+  return new NextResponse('Authentication required', {
+    status: 401,
+    headers: { 'WWW-Authenticate': 'Basic realm="PA Chamber Intelligence"' },
+  });
+}
+
 export function middleware(request: NextRequest) {
+  const denied = checkPassword(request);
+  if (denied) return denied;
+
   cleanup();
 
   const ip =

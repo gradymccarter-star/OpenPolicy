@@ -202,12 +202,38 @@ async function checkRateLimit() {
   requestsThisMinute++;
 }
 
+// Claude Haiku 4.5 pricing: $1/MTok input, $5/MTok output
 function estimateCost(inputTokens, outputTokens) {
-  return (inputTokens / 1_000_000) * 0.25 + (outputTokens / 1_000_000) * 1.25;
+  return (inputTokens / 1_000_000) * 1.0 + (outputTokens / 1_000_000) * 5.0;
 }
 
 async function callClaude(anthropic, prompt, maxTokens) {
   await checkRateLimit();
+
+  // USE_TOKENROUTER=1 routes the SAME model through TokenRouter (OpenAI-compatible),
+  // billing their credit pool instead of the Anthropic account. Classifier
+  // consistency is preserved — it resolves to claude-haiku-4-5-20251001.
+  if (process.env.USE_TOKENROUTER === '1') {
+    const res = await fetch(`${process.env.TOKENROUTER_BASE_URL}/chat/completions`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${process.env.TOKENROUTER_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5',
+        max_tokens: maxTokens,
+        temperature: 0,
+        messages: [{ role: 'user', content: prompt }],
+      }),
+    });
+    if (!res.ok) throw new Error(`TokenRouter ${res.status}: ${(await res.text()).slice(0, 120)}`);
+    const data = await res.json();
+    const text = data.choices[0].message.content;
+    const cost = estimateCost(data.usage?.prompt_tokens ?? 0, data.usage?.completion_tokens ?? 0);
+    return { text, cost };
+  }
+
   const response = await anthropic.messages.create({
     model: 'claude-haiku-4-5-20251001',
     max_tokens: maxTokens,
@@ -580,16 +606,21 @@ async function runEvaluationPipeline() {
 
   const supabase = createClient(supabaseUrl, supabaseKey, { auth: { persistSession: false } });
   const anthropic = new Anthropic({ apiKey: anthropicKey });
-  const MAX_BUDGET = 10;
+  const MAX_BUDGET = Number(process.env.LLM_MAX_BUDGET ?? 2);
 
   try {
     console.log('STEP 1: Keyword pre-filter...');
     const { passedCount, totalCount } = await runStep1(supabase);
     console.log(`  ${passedCount}/${totalCount} items passed keyword filter\n`);
 
-    console.log('STEP 2: LLM relevance classification...');
-    const step2 = await runStep2(supabase, anthropic, MAX_BUDGET);
-    console.log(`  ${step2.relevantCount} items classified as relevant\n`);
+    let step2 = { relevantCount: 0, cost: 0 };
+    if (process.env.SKIP_STEP2) {
+      console.log('STEP 2: skipped (SKIP_STEP2 set)\n');
+    } else {
+      console.log('STEP 2: LLM relevance classification...');
+      step2 = await runStep2(supabase, anthropic, MAX_BUDGET);
+      console.log(`  ${step2.relevantCount} items classified as relevant\n`);
+    }
 
     const budgetAfter2 = MAX_BUDGET - step2.cost;
 

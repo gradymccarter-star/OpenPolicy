@@ -51,10 +51,14 @@ async function fetchAllPages(buildQuery, pageSize = 1000) {
 const EVIDENCE_WEIGHTS = {
   floor_vote: 1,
   bill_sponsorship: 0.9,
+  committee_vote: 0.85,
   bill_cosponsorship: 0.7,
+  questionnaire_response: 0.7,
   committee_statement: 0.6,
   floor_speech: 0.5,
   press_release: 0.4,
+  news_article: 0.3,
+  other_endorsement: 0.3,
   social_media: 0.2,
 };
 
@@ -97,8 +101,8 @@ const CLAIM_SCORE_MAP = {
 };
 
 const PRINCIPLES = ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P8', 'P9'];
-const BILL_TYPES = new Set(['floor_vote', 'bill_sponsorship', 'bill_cosponsorship']);
-const STATEMENT_TYPES = new Set(['committee_statement', 'floor_speech', 'press_release', 'social_media']);
+const BILL_TYPES = new Set(['floor_vote', 'committee_vote', 'bill_sponsorship', 'bill_cosponsorship']);
+const STATEMENT_TYPES = new Set(['committee_statement', 'floor_speech', 'press_release', 'social_media', 'news_article', 'questionnaire_response']);
 
 // ============================================================
 // SCORING FUNCTIONS (pure deterministic math)

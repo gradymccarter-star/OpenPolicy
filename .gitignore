@@ -51,3 +51,8 @@ next-env.d.ts
 !public/**/*.jpg
 SCAI_CRITICAL_UI_Fixes_PRD.md
 .claude/settings.local.json
+
+# local secrets
+.site-password.txt
+.dbpass.tmp
+supabase/.temp/

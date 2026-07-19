@@ -82,12 +82,10 @@ export default async function PoliticiansPage({ searchParams }: Props) {
   return (
     <main className="container-page py-10">
       <div className="mb-6">
-        <p className="text-caption font-semibold uppercase tracking-widest mb-1" style={{ color: '#c9a84c' }}>
-          2026 Pennsylvania House of Representatives
-        </p>
-        <h1 className="text-heading-1 mb-1">Member Directory</h1>
+        <p className="overline">2026 Pennsylvania House of Representatives</p>
+        <h1 className="text-heading-1 mt-3 mb-1">Member Directory</h1>
         <p className="text-body-sm text-primary-500">
-          All {displayPoliticians.length} active members scored against PA Chamber&apos;s 9 business priorities
+          All <span className="figure">{displayPoliticians.length}</span> active members scored against PA Chamber&apos;s <span className="figure">9</span> business priorities
         </p>
       </div>
 

@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import PoliticianCard from '@/components/politicians/PoliticianCard';
 import Keystone from '@/components/ui/Keystone';
-import HeroBackground from '@/components/ui/HeroBackground';
+import PaOutline from '@/components/ui/PaOutline';
+import HomeSearch from '@/components/ui/HomeSearch';
 import { getSupabase, extractOverallScore } from '@/lib/db/client';
 import { getCandidacyStatus } from '@/lib/utils/helpers';
 import { getContactInfoForDistrict, getCommitteeChairLabel } from '@/lib/data/contact-info';
@@ -55,143 +56,137 @@ export default async function HomePage() {
 
   return (
     <main>
-      {/* Hero */}
-      <section
-        className="relative py-28 md:py-36 overflow-hidden"
-        style={{ background: '#07111f' }}
-      >
-        {/* PA state flag — full bleed, darkened */}
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: 'url(/pa-flag.png)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            opacity: 0.18,
-          }}
-        />
+      {/* Masthead — the cover page of the brief */}
+      <section className="relative overflow-hidden" style={{ borderBottom: '1px solid var(--rule)' }}>
+        <div className="container-page relative py-16 md:py-24">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr,340px] gap-12 lg:gap-16 items-center">
+            <div>
+              <p className="hero-fade-up overline">
+                PA Chamber of Commerce · 2026 Endorsement Cycle
+              </p>
 
-        {/* Dark gradient overlay so text stays readable */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background: 'linear-gradient(to bottom, rgba(7,17,31,0.55) 0%, rgba(7,17,31,0.75) 60%, rgba(7,17,31,0.95) 100%)',
-          }}
-        />
+              <h1 className="hero-fade-up text-display text-primary-950 mt-3 mb-6" style={{ animationDelay: '0.08s' }}>
+                Legislative intelligence for PA&nbsp;House endorsements
+              </h1>
 
-        {/* Dot grid on top */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px)',
-            backgroundSize: '32px 32px',
-          }}
-        />
+              <p className="hero-fade-up text-body text-primary-600 mb-8 max-w-xl" style={{ animationDelay: '0.16s' }}>
+                Evidence-based scoring for {stats.politicians > 0 ? `all ${stats.politicians} PA House candidates` : 'every PA House candidate'} —
+                ranked against the Chamber&apos;s nine business priorities, with every claim cited to its source.
+              </p>
 
-        {/* Animated particles, light sweep, glow */}
-        <HeroBackground />
+              <div className="hero-fade-up max-w-xl" style={{ animationDelay: '0.24s' }}>
+                <HomeSearch />
+              </div>
 
-        <div className="container-page relative z-10 text-center">
-          <div
-            className="hero-fade-up inline-flex items-center gap-2 mb-8 px-4 py-1.5 rounded-full text-caption font-semibold tracking-widest uppercase"
-            style={{ background: 'rgba(201,168,76,0.12)', color: '#c9a84c', border: '1px solid rgba(201,168,76,0.25)', animationDelay: '0s' }}
-          >
-            <Keystone size={12} style={{ color: '#c9a84c' }} />
-            PA Chamber · Fall 2026
-          </div>
+              <div className="hero-fade-up flex items-center gap-6 mt-5 text-body-sm" style={{ animationDelay: '0.3s' }}>
+                <Link href="/politicians" className="font-medium text-primary-600 hover:text-primary-950 transition-colors">
+                  Browse all candidates →
+                </Link>
+                <Link href="/compare" className="font-medium text-primary-600 hover:text-primary-950 transition-colors">
+                  Compare members
+                </Link>
+                <Link href="/overview" className="font-medium text-primary-600 hover:text-primary-950 transition-colors">
+                  District map
+                </Link>
+              </div>
+            </div>
 
-          <h1
-            className="hero-fade-up text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-6 leading-tight"
-            style={{ animationDelay: '0.15s' }}
-          >
-            Legislative Intelligence<br />
-            <span style={{ color: '#c9a84c' }}>for PA House Endorsements</span>
-          </h1>
-
-          <p
-            className="hero-fade-up text-lg md:text-xl mb-10 max-w-xl mx-auto"
-            style={{ color: 'rgba(255,255,255,0.5)', animationDelay: '0.3s' }}
-          >
-            Evidence-based scoring for all {stats.politicians} PA House candidates — ranked against the Chamber&apos;s nine business priorities.
-          </p>
-
-          <div className="hero-fade-up flex flex-col sm:flex-row items-center justify-center gap-4" style={{ animationDelay: '0.45s' }}>
-            <Link
-              href="/politicians"
-              className="group inline-flex items-center gap-3 px-8 py-4 rounded-2xl text-lg font-bold transition-all duration-200 hover:scale-105 hover:shadow-2xl"
-              style={{ background: '#c9a84c', color: '#07111f' }}
-            >
-              Explore All {stats.politicians} Candidates
-              <span className="text-xl transition-transform group-hover:translate-x-1">→</span>
-            </Link>
-            <Link
-              href="/compare"
-              className="inline-flex items-center gap-2 px-6 py-4 rounded-2xl text-base font-semibold transition-all hover:bg-white/10"
-              style={{ color: 'rgba(255,255,255,0.7)', border: '1px solid rgba(255,255,255,0.2)' }}
-            >
-              Compare Members
-            </Link>
+            {/* Cycle card — the commonwealth at a glance */}
+            <div className="hero-fade-up hidden lg:block" style={{ animationDelay: '0.2s' }}>
+              <div className="card p-7">
+                <div className="flex items-center justify-between mb-5">
+                  <p className="overline" style={{ fontSize: '0.65rem' }}>The Commonwealth</p>
+                  <Keystone size={16} style={{ color: 'var(--brass-bright)' }} />
+                </div>
+                <PaOutline
+                  className="w-full mb-6"
+                  strokeWidth={1.5}
+                  style={{ color: 'var(--brass-bright)' }}
+                />
+                <dl>
+                  {[
+                    { label: 'House districts', value: '203' },
+                    { label: 'Chamber priorities', value: '9' },
+                    { label: 'General election', value: 'Nov 3, 2026' },
+                  ].map((row, i) => (
+                    <div
+                      key={row.label}
+                      className="flex items-baseline justify-between py-2.5"
+                      style={i > 0 ? { borderTop: '1px solid var(--rule-soft)' } : undefined}
+                    >
+                      <dt className="text-caption text-primary-500">{row.label}</dt>
+                      <dd className="figure text-body-sm font-semibold text-primary-950">{row.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            </div>
           </div>
         </div>
-      </section>
 
-      {/* Stats bar */}
-      <section style={{ background: '#0a1628', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-        <div className="container-page py-5 grid grid-cols-3 gap-4 text-center">
-          <div>
-            <p className="text-2xl font-bold text-white">{stats.politicians}</p>
-            <p className="text-caption font-medium mt-0.5" style={{ color: 'rgba(255,255,255,0.4)' }}>PA House Members</p>
-          </div>
-          <div style={{ borderLeft: '1px solid rgba(255,255,255,0.08)', borderRight: '1px solid rgba(255,255,255,0.08)' }}>
-            <p className="text-2xl font-bold" style={{ color: '#c9a84c' }}>{stats.evidence_items.toLocaleString()}</p>
-            <p className="text-caption font-medium mt-0.5" style={{ color: 'rgba(255,255,255,0.4)' }}>Evidence Items</p>
-          </div>
-          <div>
-            <p className="text-2xl font-bold text-white">{stats.claims.toLocaleString()}</p>
-            <p className="text-caption font-medium mt-0.5" style={{ color: 'rgba(255,255,255,0.4)' }}>Policy Claims Scored</p>
+        {/* Ledger row — the numbers of record */}
+        <div style={{ borderTop: '1px solid var(--rule)', background: 'var(--card)' }}>
+          <div className="container-page grid grid-cols-3">
+            {[
+              { value: stats.politicians, label: 'PA House Members' },
+              { value: stats.evidence_items, label: 'Evidence Items' },
+              { value: stats.claims, label: 'Policy Claims Scored' },
+            ].map((stat, i) => (
+              <div
+                key={stat.label}
+                className="py-6 text-center sm:text-left"
+                style={i > 0 ? { borderLeft: '1px solid var(--rule-soft)', paddingLeft: '2rem' } : undefined}
+              >
+                <p className="figure text-2xl font-semibold text-primary-950">
+                  {stat.value.toLocaleString()}
+                </p>
+                <p className="text-caption font-medium uppercase text-primary-400 mt-1" style={{ letterSpacing: '0.08em', fontSize: '0.68rem' }}>
+                  {stat.label}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* How it works */}
-      <section className="py-20" style={{ background: 'var(--surface-canvas)' }}>
+      <section className="py-20">
         <div className="container-page">
-          <div className="max-w-xl mb-12">
-            <p className="text-caption font-semibold uppercase tracking-widest mb-3" style={{ color: '#c9a84c' }}>
-              How It Works
-            </p>
-            <h2 className="text-heading-2 text-primary-950 mb-3">From public record to endorsement brief in seconds</h2>
-            <p className="text-body-sm text-primary-500">
-              We analyze every PA House member&apos;s legislative record against the Chamber&apos;s 9 business priorities — automatically, with cited sources your team can verify.
+          <div className="max-w-xl mb-14">
+            <p className="overline">How It Works</p>
+            <h2 className="text-heading-2 text-primary-950 mt-3 mb-3">
+              From public record to endorsement brief
+            </h2>
+            <p className="text-body-sm text-primary-600">
+              We analyze every PA House member&apos;s legislative record against the Chamber&apos;s nine business
+              priorities — automatically, with cited sources your team can verify.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {[
               {
                 num: '01',
-                title: 'Collect Evidence',
-                desc: `Floor votes, bill sponsorships, and press coverage for all ${stats.politicians} PA House candidates — pulled from public legislative records.`,
+                title: 'Collect evidence',
+                desc: 'Floor votes, bill sponsorships, and press coverage for every PA House candidate — pulled from public legislative records.',
               },
               {
                 num: '02',
-                title: 'Score Against 9 Priorities',
-                desc: 'AI classifies each piece of evidence against priorities like Taxes, Energy, Labor, and Infrastructure — with confidence scores.',
+                title: 'Score against nine priorities',
+                desc: 'AI classifies each piece of evidence against priorities like taxes, energy, labor, and infrastructure — with confidence scores.',
               },
               {
                 num: '03',
-                title: 'Generate Endorsement Briefs',
+                title: 'Generate endorsement briefs',
                 desc: 'One-page brief with a staff recommendation, issue-by-issue breakdown, and cited sources — ready to print.',
               },
             ].map((step) => (
-              <div
-                key={step.num}
-                className="p-7 rounded-2xl bg-white"
-                style={{ border: '1px solid var(--border)' }}
-              >
-                <p className="text-3xl font-bold mb-4" style={{ color: '#e8e4dc' }}>{step.num}</p>
-                <h3 className="font-bold text-primary-950 mb-2 text-body-sm">{step.title}</h3>
-                <p className="text-caption text-primary-500 leading-relaxed">{step.desc}</p>
+              <div key={step.num} className="card p-7">
+                <p className="figure text-caption font-semibold mb-5" style={{ color: 'var(--brass)' }}>
+                  {step.num}
+                </p>
+                <h3 className="text-heading-4 text-primary-950 mb-2">{step.title}</h3>
+                <p className="text-body-sm text-primary-600 leading-relaxed">{step.desc}</p>
               </div>
             ))}
           </div>
@@ -199,23 +194,20 @@ export default async function HomePage() {
       </section>
 
       {/* Top candidates */}
-      <section className="py-20" style={{ background: '#fff' }}>
+      <section className="pb-24">
         <div className="container-page">
           <div className="flex items-end justify-between mb-10">
             <div>
-              <p className="text-caption font-semibold uppercase tracking-widest mb-2" style={{ color: '#c9a84c' }}>
-                Top Scoring Members
-              </p>
-              <h2 className="text-heading-2 text-primary-950">
-                {showExamples ? 'Example Candidates' : 'Highest Chamber Alignment'}
+              <p className="overline">Top Scoring Members</p>
+              <h2 className="text-heading-2 text-primary-950 mt-3">
+                {showExamples ? 'Example candidates' : 'Highest Chamber alignment'}
               </h2>
             </div>
             <Link
               href="/politicians"
-              className="text-caption font-semibold transition-colors hover:opacity-80"
-              style={{ color: '#0a1628', border: '1px solid #0a1628', padding: '6px 16px', borderRadius: '8px' }}
+              className="hidden sm:inline-flex text-body-sm font-medium text-primary-600 hover:text-primary-950 transition-colors"
             >
-              View all {stats.politicians} &rarr;
+              View all {stats.politicians > 0 ? stats.politicians : ''} candidates →
             </Link>
           </div>
 

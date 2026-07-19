@@ -18,7 +18,8 @@ export function PartyBadge({ party, className = '' }: BadgeProps) {
 
   return (
     <span
-      className={`inline-flex items-center px-2 py-0.5 rounded-full text-caption font-medium border ${styles.bg} ${styles.text} ${styles.border} ${className}`}
+      className={`inline-flex items-center px-1.5 py-0.5 rounded-sm text-caption font-semibold tracking-wide ${styles.bg} ${styles.text} ${className}`}
+      style={{ fontSize: '0.68rem' }}
     >
       {name}
     </span>
@@ -29,7 +30,8 @@ export function CandidacyBadge({ status, className = '' }: { readonly status: Ca
   if (status !== 'challenger') return null;
   return (
     <span
-      className={`inline-flex items-center px-2 py-0.5 rounded-full text-caption font-medium border border-amber-200 bg-amber-50 text-amber-700 ${className}`}
+      className={`inline-flex items-center px-1.5 py-0.5 rounded-sm text-caption font-semibold tracking-wide ${className}`}
+      style={{ fontSize: '0.68rem', background: 'var(--brass-wash)', color: 'var(--brass)' }}
     >
       Challenger
     </span>
@@ -38,7 +40,7 @@ export function CandidacyBadge({ status, className = '' }: { readonly status: Ca
 
 export function StateBadge({ state }: { state: string }) {
   return (
-    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-caption font-medium text-primary-500" style={{ background: 'var(--surface-canvas)' }}>
+    <span className="inline-flex items-center px-1.5 py-0.5 rounded-sm text-caption font-medium text-primary-500" style={{ background: 'var(--well)' }}>
       {state}
     </span>
   );
