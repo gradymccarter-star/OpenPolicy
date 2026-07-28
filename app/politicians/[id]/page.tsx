@@ -9,7 +9,7 @@ import { CandidacyBadge, PartyBadge } from '@/components/ui/Badge';
 import { getSupabase, extractOverallScore } from '@/lib/db/client';
 import { getCandidacyStatus } from '@/lib/utils/helpers';
 import { getContactInfoForDistrict } from '@/lib/data/contact-info';
-import { getBillStatusMap, getCandidateResults, getVoterRegistration, getVoterRegistrationAsOf, getPAChamberScore, getPAChamberStats, getPAChamberSession, getACLUPAScore, getACLUPAStats, getACLUPASession } from '@/lib/data/static-data';
+import { getBillStatusMap, getCandidateResults, getVoterRegistration, getVoterRegistrationAsOf, getPAChamberScore, getPAChamberStats, getPAChamberSession, getACLUPAScore, getACLUPAStats, getACLUPASession, getNormalizedScore, getScoreNormalizationMeta } from '@/lib/data/static-data';
 import { PA_CHAMBER_PRINCIPLES, EVIDENCE_TYPE_LABELS, EVIDENCE_WEIGHTS, EXAMPLE_POLITICIANS } from '@/lib/utils/constants';
 import type { ElectionHistoryFile } from '@/lib/utils/types';
 import Image from 'next/image';
@@ -112,6 +112,8 @@ export default async function CandidateDetailPage({
   const overallScore = overallData?.overall_score ?? 0;
   const overallConfidence = overallData?.overall_confidence ?? 0;
   const totalEvidence = overallData?.total_evidence_items ?? 0;
+  const normalizedScore = totalEvidence > 0 ? getNormalizedScore(overallScore) : null;
+  const normMeta = getScoreNormalizationMeta();
   let evidenceSummary = 'Declared candidate — no voting or sponsorship record yet';
   if (totalEvidence > 0) {
     const itemWord = totalEvidence === 1 ? 'item' : 'items';
@@ -276,6 +278,8 @@ export default async function CandidateDetailPage({
         aclupaScore={aclupaScore}
         aclupaStats={aclupaStats}
         aclupaSession={aclupaSession}
+        normalizedScore={normalizedScore}
+        normTotal={normMeta?.total_scored ?? null}
       />
     </main>
   );

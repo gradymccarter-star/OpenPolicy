@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import type { BillStatusFile, BillStatus, CandidateResultsFile, CandidateYearResult, VoterRegistrationFile, DistrictVoterRegistration, PAChamberScorecardFile, PAChamberMemberScore } from '@/lib/utils/types';
+import type { BillStatusFile, BillStatus, CandidateResultsFile, CandidateYearResult, VoterRegistrationFile, DistrictVoterRegistration, PAChamberScorecardFile, PAChamberMemberScore, ScoreNormalizationFile } from '@/lib/utils/types';
 
 function loadJson<T>(filename: string): T | null {
   const p = path.join(process.cwd(), 'public', 'data', filename);
@@ -79,4 +79,33 @@ export function getACLUPAStats(): PAChamberScorecardFile['stats'] | null {
 export function getACLUPASession(): string | null {
   if (_aclupa === undefined) getACLUPAScore('000');
   return _aclupa?.session ?? null;
+}
+
+let _normalization: ScoreNormalizationFile | null | undefined;
+
+function loadNormalization(): ScoreNormalizationFile | null {
+  if (_normalization !== undefined) return _normalization;
+  _normalization = loadJson<ScoreNormalizationFile>('score-normalization.json');
+  return _normalization;
+}
+
+// Returns the percentile rank (0–100) of rawScore among all scored candidates.
+// 80 means "outscores 80% of scored candidates". Returns null if no normalization data.
+export function getNormalizedScore(rawScore: number): number | null {
+  const norm = loadNormalization();
+  if (!norm || norm.sorted_scores.length === 0) return null;
+  const scores = norm.sorted_scores;
+  let lo = 0;
+  let hi = scores.length;
+  while (lo < hi) {
+    const mid = (lo + hi) >>> 1;
+    if (scores[mid] < rawScore) lo = mid + 1;
+    else hi = mid;
+  }
+  return Math.round((lo / scores.length) * 100);
+}
+
+export function getScoreNormalizationMeta(): { total_scored: number; generated_at: string } | null {
+  const norm = loadNormalization();
+  return norm ? { total_scored: norm.total_scored, generated_at: norm.generated_at } : null;
 }

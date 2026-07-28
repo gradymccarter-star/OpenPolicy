@@ -428,6 +428,20 @@ export interface PoliticianSortOptions {
   direction: 'asc' | 'desc';
 }
 
+// Shape of public/data/score-normalization.json (see scripts/jobs/compute-score-normalization.js)
+export interface ScoreNormalizationFile {
+  generated_at: string;
+  description: string;
+  total_scored: number;
+  min: number;
+  max: number;
+  mean: number;
+  p25: number;
+  p50: number;
+  p75: number;
+  sorted_scores: number[];
+}
+
 // Shape of public/data/pa-house-pachamber-scorecard.json (see scripts/jobs/fetch-pachamber-scorecard.js)
 export interface PAChamberMemberScore {
   district: string; // zero-padded 3-digit string, e.g. "001", "042", "100"

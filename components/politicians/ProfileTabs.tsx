@@ -40,6 +40,8 @@ interface Props {
   readonly aclupaScore?: PAChamberMemberScore | null;
   readonly aclupaStats?: PAChamberScorecardStats | null;
   readonly aclupaSession?: string | null;
+  readonly normalizedScore?: number | null;
+  readonly normTotal?: number | null;
 }
 
 function voteStyle(pos: string | null | undefined): React.CSSProperties {
@@ -264,6 +266,108 @@ function ACLUPAScorecard({
   );
 }
 
+function scoreComparisonBand(pct: number): { color: string; bg: string; label: string } {
+  if (pct >= 75) return { color: 'var(--verdigris)', bg: 'rgba(47,111,82,0.12)', label: 'Strong Supporter' };
+  if (pct >= 50) return { color: 'var(--verdigris)', bg: 'rgba(47,111,82,0.07)', label: 'Supporter' };
+  if (pct >= 25) return { color: 'var(--oxblood)', bg: 'rgba(158,59,49,0.07)', label: 'Opponent' };
+  return { color: 'var(--oxblood)', bg: 'rgba(158,59,49,0.12)', label: 'Strong Opponent' };
+}
+
+function ScoreComparison({
+  normalizedScore,
+  normTotal,
+  pachamberScore,
+}: {
+  readonly normalizedScore: number;
+  readonly normTotal: number | null | undefined;
+  readonly pachamberScore: PAChamberMemberScore | null | undefined;
+}) {
+  const ourBand = scoreComparisonBand(normalizedScore);
+  const ourAligned = normalizedScore >= 50;
+
+  let agreementNode: React.ReactNode = null;
+  if (pachamberScore != null) {
+    const theirAligned = pachamberScore.score >= 50;
+    const gap = Math.abs(normalizedScore - pachamberScore.score);
+    if (ourAligned === theirAligned) {
+      agreementNode = (
+        <div className="flex items-center gap-2 px-4 py-3 rounded-md mt-4" style={{ background: 'rgba(47,111,82,0.09)', border: '1px solid rgba(47,111,82,0.2)' }}>
+          <span style={{ color: 'var(--verdigris)', fontSize: '0.9rem' }}>✓</span>
+          <p className="text-caption" style={{ color: 'var(--verdigris)' }}>
+            <strong>Scores agree</strong> — both assessments place this member on the {ourAligned ? 'Chamber-aligned' : 'Chamber-opposed'} side
+            {gap <= 15 ? ' with strong consistency' : ''}.
+          </p>
+        </div>
+      );
+    } else {
+      agreementNode = (
+        <div className="flex items-center gap-2 px-4 py-3 rounded-md mt-4" style={{ background: 'rgba(158,59,49,0.08)', border: '1px solid rgba(158,59,49,0.2)' }}>
+          <span style={{ color: 'var(--oxblood)', fontSize: '0.9rem' }}>!</span>
+          <p className="text-caption" style={{ color: 'var(--oxblood)' }}>
+            <strong>Scores diverge</strong> — our AI assessment and the PA Chamber&apos;s published score point in opposite directions. Review the evidence trail.
+          </p>
+        </div>
+      );
+    }
+  }
+
+  return (
+    <div className="card p-8">
+      <h2 className="text-heading-3 mb-1">Score Comparison</h2>
+      <p className="text-caption text-primary-400 mb-6">
+        AI-derived ranking vs. published scorecard — different scales, same question.
+      </p>
+
+      <div className="space-y-6">
+        {/* Our score */}
+        <div>
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="text-body-sm font-semibold text-primary-800">SCAI AI Score</span>
+            <span className="text-body-sm font-bold figure" style={{ color: ourBand.color }}>
+              {normalizedScore}th percentile
+            </span>
+          </div>
+          <div className="h-2.5 rounded-sm overflow-hidden" style={{ background: 'var(--well)' }}>
+            <div className="h-full transition-all" style={{ width: `${normalizedScore}%`, background: ourBand.color }} />
+          </div>
+          <p className="text-caption text-primary-400 mt-1">
+            Outscores {normalizedScore}% of{normTotal ? ` ${normTotal}` : ''} candidates with a voting record ·{' '}
+            <span style={{ color: ourBand.color, fontWeight: 600 }}>{ourBand.label}</span>
+          </p>
+        </div>
+
+        {/* PA Chamber published score */}
+        {pachamberScore != null && (() => {
+          const paBand = scoreBand(pachamberScore.score);
+          return (
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-body-sm font-semibold text-primary-800">PA Chamber Published Score</span>
+                <span className="text-body-sm font-bold figure" style={{ color: paBand.color }}>
+                  {pachamberScore.score}%
+                </span>
+              </div>
+              <div className="h-2.5 rounded-sm overflow-hidden" style={{ background: 'var(--well)' }}>
+                <div className="h-full" style={{ width: `${pachamberScore.score}%`, background: paBand.color }} />
+              </div>
+              <p className="text-caption text-primary-400 mt-1">
+                Voted with the Chamber on {pachamberScore.score}% of tracked bills ·{' '}
+                <span style={{ color: paBand.color, fontWeight: 600 }}>{paBand.label}</span>
+              </p>
+            </div>
+          );
+        })()}
+      </div>
+
+      {agreementNode}
+
+      <p className="text-caption text-primary-400 mt-5" style={{ borderTop: '1px solid var(--rule-soft)', paddingTop: '0.875rem' }}>
+        SCAI score is a percentile rank among candidates with voting records. PA Chamber score is a raw vote-alignment percentage. They measure differently — direction of agreement matters more than the gap.
+      </p>
+    </div>
+  );
+}
+
 const SECTION_DEFS = [
   { id: 'analysis',  label: 'Analysis',      icon: '◎' },
   { id: 'voting',    label: 'Voting Record',  icon: '⊞' },
@@ -319,6 +423,8 @@ export default function ProfileTabs({
   aclupaScore,
   aclupaStats,
   aclupaSession,
+  normalizedScore,
+  normTotal,
 }: Props) {
   const [active, setActive] = useState<SectionId>('analysis');
   const searchParams = useSearchParams();
@@ -447,6 +553,13 @@ export default function ProfileTabs({
         {effectiveActive === 'analysis' && (
           <div className="space-y-8">
             {principleScoresSection}
+            {normalizedScore != null && (
+              <ScoreComparison
+                normalizedScore={normalizedScore}
+                normTotal={normTotal}
+                pachamberScore={pachamberScore}
+              />
+            )}
             {pachamberScore && (
               <PAChamberScorecard score={pachamberScore} stats={pachamberStats} session={pachamberSession} />
             )}
