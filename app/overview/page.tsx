@@ -3,6 +3,7 @@ import path from 'path';
 import OverviewMapClient from '@/components/map/OverviewMapClient';
 import { getSupabase, extractOverallScore } from '@/lib/db/client';
 import { getCandidacyStatus } from '@/lib/utils/helpers';
+import { getNormalizedScore } from '@/lib/data/static-data';
 import { getContactInfoForDistrict, getCommitteeChairLabel, getLeadershipTier, type LeadershipTier } from '@/lib/data/contact-info';
 import type { ElectionHistoryFile, PoliticianWithScores } from '@/lib/utils/types';
 import type { DistrictGeoJSON } from '@/components/map/PADistrictMap';
@@ -97,6 +98,15 @@ export default async function OverviewPage({
   const fundingIds = Object.keys(fundingTotals);
   const { committeeRoleById, leadershipTierById } = buildCommitteeMaps(politiciansByDistrict);
 
+  const normalizedScoresById: Record<string, number | null> = {};
+  for (const reps of Object.values(politiciansByDistrict)) {
+    for (const p of reps) {
+      const raw = p.overall_score?.overall_score;
+      const hasEvidence = (p.overall_score?.total_evidence_items ?? 0) > 0;
+      normalizedScoresById[p.id] = raw != null && hasEvidence ? getNormalizedScore(raw) : null;
+    }
+  }
+
   const geojson = getDistrictGeoJSON();
   const electionHistory = getElectionHistory();
   const districtCount = Object.keys(politiciansByDistrict).length;
@@ -124,6 +134,7 @@ export default async function OverviewPage({
         initialDistrict={initialDistrict ?? null}
         committeeRoleById={committeeRoleById}
         leadershipTierById={leadershipTierById}
+        normalizedScoresById={normalizedScoresById}
       />
     </main>
   );

@@ -3,6 +3,7 @@ import Image from 'next/image';
 import PrintButton from '@/components/ui/PrintButton';
 import { getSupabase, extractOverallScore } from '@/lib/db/client';
 import { PA_CHAMBER_PRINCIPLES } from '@/lib/utils/constants';
+import { rescaleScore } from '@/lib/utils/helpers';
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -40,7 +41,7 @@ function buildSummary(
   principleScores: any[],
   rec: Recommendation,
 ): string {
-  const pct = Math.round(score * 100);
+  const pct = Math.round(rescaleScore(score) * 100);
   const confPct = Math.round(confidence * 100);
   const partyLabel = party === 'R' ? 'Republican' : party === 'D' ? 'Democrat' : 'Independent';
 
@@ -240,7 +241,7 @@ export default async function EndorsementBriefPage({
           </div>
           <div className="text-right">
             <p className="overline mb-1">Overall Alignment</p>
-            <p className="figure text-5xl font-bold text-primary-950">{Math.round(overallScore * 100)}%</p>
+            <p className="figure text-5xl font-bold text-primary-950">{Math.round(rescaleScore(overallScore) * 100)}%</p>
             <p className="figure text-xs text-primary-400 mt-0.5">Confidence: {Math.round(overallConfidence * 100)}%</p>
           </div>
         </div>
@@ -264,15 +265,18 @@ export default async function EndorsementBriefPage({
             const ps = principleScores.find((s: any) => s.principle === key);
             const principle = PA_CHAMBER_PRINCIPLES[key];
             const score = ps?.score ?? 0;
-            const pct = Math.round(score * 100);
+            const scaledScore = rescaleScore(score);
+            const pct = Math.round(scaledScore * 100);
             const numItems = ps?.num_evidence_items ?? 0;
             const numVotes = ps?.num_votes ?? 0;
             const numSponsorships = ps?.num_sponsorships ?? 0;
             const noData = numItems === 0;
             const principleEvidence = (byPrinciple[key] ?? []).slice(0, 3);
 
-            const scoreColor = score >= 0.65 ? 'var(--verdigris)' : score >= 0.50 ? 'var(--brass)' : 'var(--oxblood)';
-            const scoreBg = score >= 0.65 ? 'rgba(47, 111, 82, 0.12)' : score >= 0.50 ? 'var(--brass-wash)' : 'rgba(158, 59, 49, 0.1)';
+            let scoreColor = 'var(--oxblood)';
+            let scoreBg = 'rgba(158, 59, 49, 0.1)';
+            if (scaledScore >= 0.65) { scoreColor = 'var(--verdigris)'; scoreBg = 'rgba(47, 111, 82, 0.12)'; }
+            else if (scaledScore >= 0.50) { scoreColor = 'var(--brass)'; scoreBg = 'var(--brass-wash)'; }
 
             return (
               <div key={key} className="rounded-xl p-4" style={{ border: '1px solid var(--rule)' }}>

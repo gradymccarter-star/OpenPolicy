@@ -6,7 +6,7 @@ import PoliticianCard from '@/components/politicians/PoliticianCard';
 import { CandidacyBadge, PartyBadge } from '@/components/ui/Badge';
 import type { LeadershipTier } from '@/lib/data/contact-info';
 import { SCORE_COLORS } from '@/lib/utils/constants';
-import { getCandidacyStatus, getScoreColor } from '@/lib/utils/helpers';
+import { getCandidacyStatus, getScoreColor, rescaleScore } from '@/lib/utils/helpers';
 import type { ElectionHistoryFile, ElectionYearResult, PoliticianWithScores } from '@/lib/utils/types';
 import PADistrictMap, { type DistrictGeoJSON } from './PADistrictMap';
 
@@ -23,6 +23,7 @@ interface Props {
   readonly initialDistrict: string | null;
   readonly committeeRoleById?: Record<string, string>;
   readonly leadershipTierById?: Record<string, LeadershipTier>;
+  readonly normalizedScoresById?: Record<string, number | null>;
 }
 
 const LEADERSHIP_LABELS: Record<LeadershipTier, string> = {
@@ -63,7 +64,7 @@ function fillForMargin(winner: string | null, marginPct: number | null): string 
   return `rgb(${mix(r1, r2)}, ${mix(g1, g2)}, ${mix(b1, b2)})`;
 }
 
-export default function OverviewMapClient({ geojson, politiciansByDistrict, fundingIds, fundingTotals, electionHistory, initialDistrict, committeeRoleById = {}, leadershipTierById = {} }: Props) {
+export default function OverviewMapClient({ geojson, politiciansByDistrict, fundingIds, fundingTotals, electionHistory, initialDistrict, committeeRoleById = {}, leadershipTierById = {}, normalizedScoresById = {} }: Props) {
   const [view, setView] = useState<'map' | 'table'>('map');
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(initialDistrict);
   const [hoveredDistrict, setHoveredDistrict] = useState<string | null>(null);
@@ -156,7 +157,7 @@ export default function OverviewMapClient({ geojson, politiciansByDistrict, fund
     }
     const avgScore =
       reps.reduce((s, r) => s + (r.overall_score?.overall_score ?? 0), 0) / reps.length;
-    return getScoreColor(avgScore);
+    return getScoreColor(rescaleScore(avgScore));
   };
 
   const selectedReps = selectedDistrict ? politiciansByDistrict[selectedDistrict] ?? [] : [];
@@ -435,7 +436,7 @@ export default function OverviewMapClient({ geojson, politiciansByDistrict, fund
 
                 <div className="space-y-4">
                   {selectedReps.map((rep) => (
-                    <PoliticianCard key={rep.id} politician={rep} hasFunding={fundingSet.has(rep.id)} committeeRole={committeeRoleById[rep.id] ?? null} />
+                    <PoliticianCard key={rep.id} politician={rep} hasFunding={fundingSet.has(rep.id)} committeeRole={committeeRoleById[rep.id] ?? null} normalizedScore={normalizedScoresById[rep.id] ?? null} />
                   ))}
                 </div>
 
@@ -588,7 +589,7 @@ function DistrictTable({
                   {row.reps[0] && <PartyBadge party={row.reps[0].party} />}
                 </td>
                 <td className="px-4 py-2.5 text-right figure text-primary-900">
-                  {row.primaryScore !== null ? `${Math.round(row.primaryScore * 100)}%` : '—'}
+                  {row.primaryScore !== null ? `${Math.round(rescaleScore(row.primaryScore) * 100)}%` : '—'}
                 </td>
                 <td className="px-4 py-2.5 text-right figure text-primary-900">
                   {row.funding > 0 ? fmtMoney(row.funding) : '—'}

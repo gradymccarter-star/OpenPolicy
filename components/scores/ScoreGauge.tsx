@@ -1,6 +1,6 @@
 'use client';
 
-import { getScoreColor, formatScore, getConfidenceColor } from '@/lib/utils/helpers';
+import { getScoreColor, getConfidenceColor, rescaleScore } from '@/lib/utils/helpers';
 
 interface ScoreGaugeProps {
   score: number;
@@ -19,8 +19,9 @@ export default function ScoreGauge({
   label,
   hasRecord = true,
 }: ScoreGaugeProps) {
-  const percentage = score * 100;
-  const color = hasRecord ? getScoreColor(score) : '#878d9b'; // ink-tertiary; SVG attrs can't take CSS vars
+  const scaled = rescaleScore(score);
+  const percentage = scaled * 100;
+  const color = hasRecord ? getScoreColor(scaled) : '#878d9b'; // ink-tertiary; SVG attrs can't take CSS vars
 
   const sizes = {
     small: { width: 80, height: 80, stroke: 4, fontSize: 'text-lg', confSize: 'text-caption' },
@@ -64,7 +65,7 @@ export default function ScoreGauge({
           {hasRecord ? (
             <>
               <span className={`figure font-semibold ${fontSize}`} style={{ color }}>
-                {Math.round(percentage)}%
+                {Math.round(scaled * 100)}%
               </span>
               {confidence !== undefined && (
                 <span className={`${confSize} font-medium`} style={{ color: confColor }}>

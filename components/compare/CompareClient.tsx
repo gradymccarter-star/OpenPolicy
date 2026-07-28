@@ -7,7 +7,7 @@ import { ComparisonRadar } from '@/components/scores/RadarChart';
 import ScoreGauge from '@/components/scores/ScoreGauge';
 import { PartyBadge } from '@/components/ui/Badge';
 import { PA_CHAMBER_PRINCIPLES } from '@/lib/utils/constants';
-import { formatScore, getScoreColor } from '@/lib/utils/helpers';
+import { formatScore, getScoreColor, rescaleScore } from '@/lib/utils/helpers';
 import type { PoliticianWithScores } from '@/lib/utils/types';
 
 function partyLabel(party: string): string {
@@ -173,13 +173,13 @@ export default function CompareClient({ allPoliticians, initialA, initialB }: Co
                           <span className="text-primary-500 text-caption">{os.name}</span>
                         </td>
                         <td className="text-center py-3 px-4" style={{ borderLeft: '1px solid var(--rule-soft)' }}>
-                          <span className="figure font-bold" style={{ color: getScoreColor(scoreA) }}>
-                            {formatScore(scoreA)}
+                          <span className="figure font-bold" style={{ color: getScoreColor(rescaleScore(scoreA)) }}>
+                            {formatScore(rescaleScore(scoreA))}
                           </span>
                         </td>
                         <td className="text-center py-3 px-4" style={{ borderLeft: '1px solid var(--rule-soft)' }}>
-                          <span className="figure font-bold" style={{ color: getScoreColor(scoreB) }}>
-                            {formatScore(scoreB)}
+                          <span className="figure font-bold" style={{ color: getScoreColor(rescaleScore(scoreB)) }}>
+                            {formatScore(rescaleScore(scoreB))}
                           </span>
                         </td>
                         <td className="text-center py-3 px-6" style={{ borderLeft: '1px solid var(--rule-soft)' }}>
@@ -199,18 +199,18 @@ export default function CompareClient({ allPoliticians, initialA, initialB }: Co
                   <tr style={{ borderTop: '2px solid var(--rule)', background: 'var(--well)' }}>
                     <td className="py-4 px-6 font-bold text-primary-950">Overall Score</td>
                     <td className="text-center py-4 px-4" style={{ borderLeft: '1px solid var(--rule-soft)' }}>
-                      <span className="figure font-bold text-lg" style={{ color: getScoreColor(candidateA.overall_score?.overall_score ?? 0) }}>
-                        {formatScore(candidateA.overall_score?.overall_score ?? 0)}
+                      <span className="figure font-bold text-lg" style={{ color: getScoreColor(rescaleScore(candidateA.overall_score?.overall_score ?? 0)) }}>
+                        {formatScore(rescaleScore(candidateA.overall_score?.overall_score ?? 0))}
                       </span>
                     </td>
                     <td className="text-center py-4 px-4" style={{ borderLeft: '1px solid var(--rule-soft)' }}>
-                      <span className="figure font-bold text-lg" style={{ color: getScoreColor(candidateB.overall_score?.overall_score ?? 0) }}>
-                        {formatScore(candidateB.overall_score?.overall_score ?? 0)}
+                      <span className="figure font-bold text-lg" style={{ color: getScoreColor(rescaleScore(candidateB.overall_score?.overall_score ?? 0)) }}>
+                        {formatScore(rescaleScore(candidateB.overall_score?.overall_score ?? 0))}
                       </span>
                     </td>
                     <td className="text-center py-4 px-6" style={{ borderLeft: '1px solid var(--rule-soft)' }}>
                       {(() => {
-                        const d = (candidateA.overall_score?.overall_score ?? 0) - (candidateB.overall_score?.overall_score ?? 0);
+                        const d = rescaleScore(candidateA.overall_score?.overall_score ?? 0) - rescaleScore(candidateB.overall_score?.overall_score ?? 0);
                         const abd = Math.abs(Math.round(d * 100));
                         if (abd < 2) return (
                           <span className="font-bold text-base px-2 py-0.5 rounded-sm" style={{ background: 'var(--well)', color: 'var(--ink-secondary)' }}>Tied</span>
@@ -324,8 +324,8 @@ function CandidateSelector({
               )}
             </div>
           </div>
-          <div className="figure text-lg font-bold" style={{ color: getScoreColor(selectedPolitician.overall_score?.overall_score ?? 0) }}>
-            {formatScore(selectedPolitician.overall_score?.overall_score ?? 0)}
+          <div className="figure text-lg font-bold" style={{ color: getScoreColor(rescaleScore(selectedPolitician.overall_score?.overall_score ?? 0)) }}>
+            {formatScore(rescaleScore(selectedPolitician.overall_score?.overall_score ?? 0))}
           </div>
           <button
             onClick={() => onSelect(null)}
@@ -357,8 +357,8 @@ function CandidateSelector({
                   {partyLabel(p.party)}{p.county && ` · ${p.county} Co.`}
                 </p>
               </div>
-              <span className="figure text-body-sm font-bold" style={{ color: getScoreColor(p.overall_score?.overall_score ?? 0) }}>
-                {formatScore(p.overall_score?.overall_score ?? 0)}
+              <span className="figure text-body-sm font-bold" style={{ color: getScoreColor(rescaleScore(p.overall_score?.overall_score ?? 0)) }}>
+                {formatScore(rescaleScore(p.overall_score?.overall_score ?? 0))}
               </span>
             </button>
           ))}
