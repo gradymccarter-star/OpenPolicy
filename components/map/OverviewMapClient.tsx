@@ -6,7 +6,7 @@ import PoliticianCard from '@/components/politicians/PoliticianCard';
 import { CandidacyBadge, PartyBadge } from '@/components/ui/Badge';
 import type { LeadershipTier } from '@/lib/data/contact-info';
 import { SCORE_COLORS } from '@/lib/utils/constants';
-import { getCandidacyStatus, getScoreColor, rescaleScore } from '@/lib/utils/helpers';
+import { getCandidacyStatus, rescaleScore } from '@/lib/utils/helpers';
 import type { ElectionHistoryFile, ElectionYearResult, PoliticianWithScores } from '@/lib/utils/types';
 import PADistrictMap, { type DistrictGeoJSON } from './PADistrictMap';
 
@@ -38,6 +38,18 @@ function fmtMoney(n: number): string {
 }
 
 const NEUTRAL_FILL = 'var(--well)';
+// Districts with no candidate or no scoring data at all get diagonal hatching (defined in PADistrictMap defs)
+const NO_DATA_FILL = 'url(#no-data-hatch)';
+
+// Vivid 5-band spectrum for score mode — separate from text-display colors (getScoreColor)
+// which use near-black for "GOOD" and are unreadable as map fills.
+function getScoreMapFill(scaledScore: number): string {
+  if (scaledScore >= 0.72) return '#166534'; // green-800 — strong supporter
+  if (scaledScore >= 0.56) return '#16a34a'; // green-600 — supporter
+  if (scaledScore >= 0.42) return '#ca8a04'; // yellow-600 — mixed
+  if (scaledScore >= 0.28) return '#ea580c'; // orange-600 — opponent
+  return '#b91c1c';                           // red-700   — strong opponent
+}
 
 // Sanctioned desaturated institutional party colors (democrat-600 / republican-600),
 // with lighter lean tints (democrat-200 / republican-200). Party identity only.
@@ -144,20 +156,20 @@ export default function OverviewMapClient({ geojson, politiciansByDistrict, fund
       return fillForLeadership(districtLeadershipTier(district));
     }
     const reps = politiciansByDistrict[district];
+    if (!reps || reps.length === 0) return NO_DATA_FILL;
     if (colorMode === 'contested') {
-      if (!reps || reps.length === 0) return NEUTRAL_FILL;
       return reps.length > 1 ? CONTESTED_COLOR : UNCONTESTED_COLOR;
     }
-    if (!reps || reps.length === 0) return NEUTRAL_FILL;
     if (colorMode === 'party') {
-      // Mixed-party districts (rare overlap rows) fall back to neutral rather than picking arbitrarily
       const parties = new Set(reps.map((r) => r.party));
       if (parties.size > 1) return NEUTRAL_FILL;
       return PARTY_FILL[reps[0].party] || NEUTRAL_FILL;
     }
-    const avgScore =
-      reps.reduce((s, r) => s + (r.overall_score?.overall_score ?? 0), 0) / reps.length;
-    return getScoreColor(rescaleScore(avgScore));
+    // Score mode — use only reps that have actual scoring data
+    const scoredReps = reps.filter((r) => (r.overall_score?.total_evidence_items ?? 0) > 0);
+    if (scoredReps.length === 0) return NO_DATA_FILL;
+    const avgRaw = scoredReps.reduce((s, r) => s + (r.overall_score?.overall_score ?? 0), 0) / scoredReps.length;
+    return getScoreMapFill(rescaleScore(avgRaw));
   };
 
   const selectedReps = selectedDistrict ? politiciansByDistrict[selectedDistrict] ?? [] : [];

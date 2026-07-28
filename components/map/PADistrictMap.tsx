@@ -47,6 +47,19 @@ export default function PADistrictMap({
       role="img"
       aria-label="Map of Pennsylvania House districts"
     >
+      <defs>
+        {/* Diagonal grey hatching used for districts with no score data */}
+        <pattern
+          id="no-data-hatch"
+          patternUnits="userSpaceOnUse"
+          width="8"
+          height="8"
+          patternTransform="rotate(45 0 0)"
+        >
+          <rect width="8" height="8" fill="#eae7de" />
+          <line x1="0" y1="0" x2="0" y2="8" stroke="#c8c4ba" strokeWidth="2.5" />
+        </pattern>
+      </defs>
       {geojson.features.map((feature) => {
         const code = feature.properties.district;
         const isSelected = code === selectedDistrict;
