@@ -1,20 +1,21 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { CandidacyBadge, PartyBadge } from '@/components/ui/Badge';
-import { getScoreColor, formatScore, getConfidenceColor, getCandidacyStatus } from '@/lib/utils/helpers';
+import { getScoreColor, formatScore, rescaleScore, getCandidacyStatus } from '@/lib/utils/helpers';
 import type { PoliticianWithScores } from '@/lib/utils/types';
 
 interface PoliticianCardProps {
   readonly politician: PoliticianWithScores;
   readonly hasFunding?: boolean;
   readonly committeeRole?: string | null;
+  readonly normalizedScore?: number | null;
 }
 
-export default function PoliticianCard({ politician, hasFunding = false, committeeRole = null }: PoliticianCardProps) {
+export default function PoliticianCard({ politician, hasFunding = false, committeeRole = null, normalizedScore }: PoliticianCardProps) {
   const os = politician.overall_score;
   const hasRecord = (os?.total_evidence_items ?? 0) > 0;
   const overallScore = os?.overall_score || 0;
-  const overallConfidence = os?.overall_confidence || 0;
+  const scaled = rescaleScore(overallScore);
 
   const principleScores: Record<string, number> = {
     P1: os?.p1_score ?? 0,
@@ -95,15 +96,15 @@ export default function PoliticianCard({ politician, hasFunding = false, committ
             <div className="text-right flex-shrink-0">
               {hasRecord ? (
                 <>
-                  <div className="figure text-2xl font-semibold" style={{ color: getScoreColor(overallScore) }}>
-                    {formatScore(overallScore)}
+                  <div className="figure text-2xl font-semibold" style={{ color: getScoreColor(scaled) }}>
+                    {formatScore(scaled)}
                   </div>
-                  <p className="figure text-caption" style={{ color: getConfidenceColor(overallConfidence), fontSize: '0.68rem' }}>
-                    {Math.round(overallConfidence * 100)}% conf
+                  <p className="figure text-caption mt-0.5" style={{ color: 'var(--ink-tertiary)', fontSize: '0.68rem' }}>
+                    {normalizedScore != null ? `${normalizedScore}th pct.` : '—'}
                   </p>
                 </>
               ) : (
-                <div className="text-caption text-primary-400 font-medium max-w-[90px]">
+                <div className="text-caption text-primary-400 font-medium max-w-[90px] text-center">
                   No record yet
                 </div>
               )}

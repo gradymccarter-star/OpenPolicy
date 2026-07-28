@@ -6,6 +6,7 @@ import HomeSearch from '@/components/ui/HomeSearch';
 import { getSupabase, extractOverallScore } from '@/lib/db/client';
 import { getCandidacyStatus } from '@/lib/utils/helpers';
 import { getContactInfoForDistrict, getCommitteeChairLabel } from '@/lib/data/contact-info';
+import { getNormalizedScore } from '@/lib/data/static-data';
 import { EXAMPLE_POLITICIANS } from '@/lib/utils/constants';
 import type { PoliticianWithScores } from '@/lib/utils/types';
 
@@ -216,17 +217,22 @@ export default async function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {displayPoliticians.slice(0, 6).map((politician) => (
-              <PoliticianCard
-                key={politician.id}
-                politician={politician}
-                committeeRole={
-                  getCandidacyStatus(politician) === 'incumbent'
-                    ? getCommitteeChairLabel(getContactInfoForDistrict(politician.district))
-                    : null
-                }
-              />
-            ))}
+            {displayPoliticians.slice(0, 6).map((politician) => {
+              const raw = politician.overall_score?.overall_score;
+              const hasEvidence = (politician.overall_score?.total_evidence_items ?? 0) > 0;
+              return (
+                <PoliticianCard
+                  key={politician.id}
+                  politician={politician}
+                  normalizedScore={raw != null && hasEvidence ? getNormalizedScore(raw) : null}
+                  committeeRole={
+                    getCandidacyStatus(politician) === 'incumbent'
+                      ? getCommitteeChairLabel(getContactInfoForDistrict(politician.district))
+                      : null
+                  }
+                />
+              );
+            })}
           </div>
         </div>
       </section>

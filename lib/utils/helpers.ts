@@ -44,6 +44,18 @@ export function formatScore(score: number): string {
   return `${Math.round(score * 100)}%`;
 }
 
+// Rescale raw SCAI score (0.4–0.7 distribution) to a wider display range (0.2–0.9).
+// Constants come from score-normalization.json — update if the distribution shifts significantly.
+const SCORE_RAW_MIN = 0.4;
+const SCORE_RAW_MAX = 0.7;
+const SCORE_DISPLAY_MIN = 0.2;
+const SCORE_DISPLAY_MAX = 0.9;
+
+export function rescaleScore(raw: number): number {
+  const clamped = Math.max(SCORE_RAW_MIN, Math.min(SCORE_RAW_MAX, raw));
+  return SCORE_DISPLAY_MIN + ((clamped - SCORE_RAW_MIN) / (SCORE_RAW_MAX - SCORE_RAW_MIN)) * (SCORE_DISPLAY_MAX - SCORE_DISPLAY_MIN);
+}
+
 /**
  * Get color for score
  */
