@@ -100,12 +100,11 @@ export default async function HomePage() {
                 </div>
                 <div className="w-full mb-6 flex items-center justify-center">
                   <Image
-                    src="/pa-flag.png"
+                    src="/pa-seal.png"
                     alt="Commonwealth of Pennsylvania seal"
-                    width={220}
-                    height={220}
-                    className="rounded-full object-cover"
-                    style={{ border: '2px solid var(--rule-soft)' }}
+                    width={260}
+                    height={154}
+                    className="w-full h-auto"
                   />
                 </div>
                 <dl>
