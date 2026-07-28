@@ -1,7 +1,7 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import PoliticianCard from '@/components/politicians/PoliticianCard';
 import Keystone from '@/components/ui/Keystone';
-import PaOutline from '@/components/ui/PaOutline';
 import HomeSearch from '@/components/ui/HomeSearch';
 import { getSupabase, extractOverallScore } from '@/lib/db/client';
 import { getCandidacyStatus } from '@/lib/utils/helpers';
@@ -98,11 +98,16 @@ export default async function HomePage() {
                   <p className="overline" style={{ fontSize: '0.65rem' }}>The Commonwealth</p>
                   <Keystone size={16} style={{ color: 'var(--brass-bright)' }} />
                 </div>
-                <PaOutline
-                  className="w-full mb-6"
-                  strokeWidth={1.5}
-                  style={{ color: 'var(--brass-bright)' }}
-                />
+                <div className="w-full mb-6 flex items-center justify-center">
+                  <Image
+                    src="/pa-flag.png"
+                    alt="Commonwealth of Pennsylvania seal"
+                    width={220}
+                    height={220}
+                    className="rounded-full object-cover"
+                    style={{ border: '2px solid var(--rule-soft)' }}
+                  />
+                </div>
                 <dl>
                   {[
                     { label: 'House districts', value: '203' },
