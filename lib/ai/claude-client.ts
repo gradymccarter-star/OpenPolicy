@@ -12,7 +12,7 @@ import type {
 // Singleton Anthropic client
 let anthropic: Anthropic | null = null;
 
-function getAnthropicClient(): Anthropic {
+export function getAnthropicClient(): Anthropic {
   if (!anthropic) {
     const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey) {
@@ -50,20 +50,17 @@ async function checkRateLimit(): Promise<void> {
   rateLimiter.requestsThisMinute++;
 }
 
-// Budget tracking
-let totalCostToday = 0;
+// Budget tracking — backed by api_usage_log so it's correct across day boundaries
+// and across serverless instances, unlike an in-memory counter.
 const MAX_DAILY_BUDGET = 10;
 
-export function checkBudget(estimatedCost: number): boolean {
-  if (totalCostToday + estimatedCost > MAX_DAILY_BUDGET) {
-    console.error(`Budget exceeded! Total today: $${totalCostToday.toFixed(2)}`);
+export async function checkBudget(estimatedCost: number): Promise<boolean> {
+  const spentToday = await getTodaysCost();
+  if (spentToday + estimatedCost > MAX_DAILY_BUDGET) {
+    console.error(`Budget exceeded! Total today: $${spentToday.toFixed(2)}`);
     return false;
   }
   return true;
-}
-
-export function addToBudget(cost: number): void {
-  totalCostToday += cost;
 }
 
 /**
@@ -77,7 +74,7 @@ async function callClaude(prompt: string, maxTokens: number): Promise<{ text: st
   const estimatedInputTokens = Math.ceil(prompt.length / 4);
   const estimatedCost = estimateClaudeCost(estimatedInputTokens, maxTokens, 'haiku');
 
-  if (!checkBudget(estimatedCost)) {
+  if (!(await checkBudget(estimatedCost))) {
     throw new Error('Daily budget exceeded');
   }
 
@@ -94,7 +91,6 @@ async function callClaude(prompt: string, maxTokens: number): Promise<{ text: st
     const actualCost = estimateClaudeCost(inputTokens, outputTokens, 'haiku');
 
     await logAPIUsage('claude', inputTokens, outputTokens, actualCost, 'success');
-    addToBudget(actualCost);
 
     const content = response.content[0];
     if (content.type !== 'text') {

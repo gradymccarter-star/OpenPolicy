@@ -405,6 +405,34 @@ export interface PoliticianWithScores extends Politician {
   principle_scores?: PrincipleScore[];
 }
 
+// Campaign finance (table: donor_organizations)
+export type DonorLean = 'pro_chamber' | 'anti_chamber' | 'neutral' | 'unknown';
+export type DonorType = 'individual' | 'organization' | 'pac' | 'party' | 'other';
+
+export interface DonorOrganization {
+  id: string;
+  name: string;
+  normalized_name: string;
+  lean: DonorLean;
+  industry: string | null;
+  lean_rationale: string | null;
+  lean_classified_by: string | null;
+}
+
+// Campaign finance (table: campaign_contributions)
+export interface CampaignContribution {
+  id: string;
+  politician_id: string;
+  donor_org_id: string | null;
+  donor_name: string;
+  donor_type: DonorType;
+  amount: number;
+  cycle_year: number;
+  contribution_date: string | null;
+  followthemoney_id: string | null;
+  donor_organizations?: DonorOrganization | null; // present when joined via .select('*, donor_organizations(...)')
+}
+
 // Evidence item with attached claims/classification for API responses
 export interface EvidenceItemWithDetails extends EvidenceItem {
   claims?: ExtractedClaim[];

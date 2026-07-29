@@ -6,14 +6,14 @@ type Lean = 'pro_chamber' | 'anti_chamber' | 'neutral' | 'unknown';
 
 const LEAN_CONFIG: Record<Lean, { label: string; color: string; bg: string; border: string; description: string }> = {
   pro_chamber: {
-    label: 'Pro-Chamber',
+    label: 'Aligned Chamber Funds',
     color: 'var(--verdigris)',
     bg: 'rgba(47,111,82,0.07)',
     border: 'rgba(47,111,82,0.25)',
     description: 'Organizations that typically advocate for pro-business policies aligned with the PA Chamber\'s nine priorities: lower taxes, streamlined permitting, civil justice reform, fiscal responsibility, workforce development, energy access, labor flexibility, infrastructure investment, and healthcare cost reduction.',
   },
   anti_chamber: {
-    label: 'Anti-Chamber',
+    label: 'Misaligned Chamber Funds',
     color: 'var(--oxblood)',
     bg: 'rgba(158,59,49,0.06)',
     border: 'rgba(158,59,49,0.25)',
@@ -177,8 +177,8 @@ export default async function FundingIntelligencePage() {
         </div>
         <div className="grid grid-cols-3 divide-x divide-[color:var(--rule-soft)]" style={{ borderTop: '1px solid var(--rule)' }}>
           {([
-            { lean: 'pro_chamber' as Lean, label: 'Pro-Chamber', color: 'var(--verdigris)', bg: 'rgba(47,111,82,0.07)' },
-            { lean: 'anti_chamber' as Lean, label: 'Anti-Chamber', color: 'var(--oxblood)', bg: 'rgba(158,59,49,0.06)' },
+            { lean: 'pro_chamber' as Lean, label: 'Aligned Chamber Funds', color: 'var(--verdigris)', bg: 'rgba(47,111,82,0.07)' },
+            { lean: 'anti_chamber' as Lean, label: 'Misaligned Chamber Funds', color: 'var(--oxblood)', bg: 'rgba(158,59,49,0.06)' },
             { lean: 'neutral' as Lean, label: 'Neutral / Unknown', color: 'var(--ink-secondary)', bg: 'var(--card)' },
           ]).map(({ lean, label, color, bg }) => {
             const total = leanTotals[lean];
@@ -225,7 +225,7 @@ export default async function FundingIntelligencePage() {
       {/* Specific category rationales */}
       <div className="card p-6 mb-8">
         <p className="overline">Rationale</p>
-        <h2 className="text-heading-3 mt-3 mb-4">Why Specific Donor Types Are Classified as Anti-Chamber or Pro-Chamber</h2>
+        <h2 className="text-heading-3 mt-3 mb-4">Why Specific Donor Types Are Classified as Misaligned or Aligned Chamber Funds</h2>
         <div className="space-y-6">
           {Object.entries(CATEGORY_NOTES).map(([key, note]) => (
             <div key={key} style={{ borderBottom: '1px solid var(--rule-soft)', paddingBottom: 20 }}>

@@ -151,12 +151,12 @@ export default function AboutPage() {
           <h2 className="text-heading-3 mt-3 mb-3">Campaign Finance Data</h2>
           <p className="text-body-sm text-primary-500 leading-relaxed mb-3">
             Each candidate profile includes a Funding tab sourced from FollowTheMoney.org, covering the 2020,
-            2022, and 2024 PA House election cycles. Every donor organization is classified as Pro-Chamber,
-            Anti-Chamber, Neutral, or Unclassified based on its known lobbying positions and advocacy history.
+            2022, and 2024 PA House election cycles. Every donor organization is classified as Aligned Chamber Funds,
+            Misaligned Chamber Funds, Neutral, or Unclassified based on its known lobbying positions and advocacy history.
           </p>
           <p className="text-body-sm text-primary-500 leading-relaxed">
-            Anti-chamber classifications include labor unions (which typically oppose PA Chamber Priority 7 on labor
-            relations) and trial lawyer associations (which oppose Priority 3 on civil justice reform). Pro-chamber
+            Misaligned classifications include labor unions (which typically oppose PA Chamber Priority 7 on labor
+            relations) and trial lawyer associations (which oppose Priority 3 on civil justice reform). Aligned
             classifications include business associations, industry groups, and professional societies whose policy
             goals align with the Chamber&apos;s nine priorities. Classifications use a combination of keyword rules
             and AI classification via Claude.

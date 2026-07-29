@@ -172,7 +172,7 @@ CREATE TABLE batch_jobs (
 -- API Usage Log
 CREATE TABLE api_usage_log (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  api_name VARCHAR(20) NOT NULL CHECK (api_name IN ('claude', 'legiscan', 'pa_legis')),
+  api_name VARCHAR(20) NOT NULL CHECK (api_name IN ('claude', 'legiscan', 'pa_legis', 'claude_agent')),
 
   endpoint TEXT,
   tokens_used INTEGER,

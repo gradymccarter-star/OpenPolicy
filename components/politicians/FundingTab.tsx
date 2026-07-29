@@ -25,8 +25,8 @@ interface Props {
 }
 
 const LEAN_CONFIG: Record<Lean, { label: string; color: string; bg: string; bar: string }> = {
-  pro_chamber:  { label: 'Pro-Chamber',  color: 'var(--verdigris)', bg: 'rgba(47,111,82,0.12)', bar: 'var(--verdigris)' },
-  anti_chamber: { label: 'Anti-Chamber', color: 'var(--oxblood)', bg: 'rgba(158,59,49,0.12)', bar: 'var(--oxblood)' },
+  pro_chamber:  { label: 'Aligned Chamber Funds',   color: 'var(--verdigris)', bg: 'rgba(47,111,82,0.12)', bar: 'var(--verdigris)' },
+  anti_chamber: { label: 'Misaligned Chamber Funds', color: 'var(--oxblood)', bg: 'rgba(158,59,49,0.12)', bar: 'var(--oxblood)' },
   neutral:      { label: 'Neutral',      color: 'var(--ink-secondary)', bg: 'var(--well)', bar: 'var(--ink-tertiary)' },
   unknown:      { label: 'Neutral / Unknown', color: 'var(--ink-secondary)', bg: 'var(--well)', bar: 'var(--ink-faint)' },
 };

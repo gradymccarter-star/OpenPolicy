@@ -11,6 +11,7 @@ const NAV_LINKS = [
   { href: '/overview', label: 'Map' },
   { href: '/compare', label: 'Compare' },
   { href: '/funding-intelligence', label: 'Funding' },
+  { href: '/agent', label: 'AI Agent' },
   { href: '/about', label: 'About' },
 ];
 

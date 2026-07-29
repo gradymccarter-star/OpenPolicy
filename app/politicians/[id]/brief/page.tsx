@@ -447,7 +447,7 @@ export default async function EndorsementBriefPage({
             <div className="flex gap-4 flex-wrap text-caption">
               {([['pro_chamber', 'var(--verdigris)', 'rgba(47, 111, 82, 0.12)'], ['anti_chamber', 'var(--oxblood)', 'rgba(158, 59, 49, 0.1)'], ['unknown', 'var(--ink-secondary)', 'var(--well)']] as const).map(([lean, color, bg]) => {
                 const pct = fundingTotal > 0 ? Math.round((fundingBuckets[lean] / fundingTotal) * 100) : 0;
-                const labels: Record<string, string> = { pro_chamber: 'Pro-Chamber', anti_chamber: 'Anti-Chamber', unknown: 'Neutral / Unknown' };
+                const labels: Record<string, string> = { pro_chamber: 'Aligned Chamber Funds', anti_chamber: 'Misaligned Chamber Funds', unknown: 'Neutral / Unknown' };
                 return (
                   <span key={lean} className="flex items-center gap-1.5 font-semibold px-2 py-0.5 rounded-sm" style={{ color, background: bg }}>
                     <span className="figure">{pct}%</span> {labels[lean]}
@@ -470,7 +470,7 @@ export default async function EndorsementBriefPage({
                     neutral: ['var(--ink-secondary)', 'var(--well)'],
                     unknown: ['var(--ink-tertiary)', 'var(--well)'],
                   };
-                  const leanLabels: Record<string, string> = { pro_chamber: 'Pro-Chamber', anti_chamber: 'Anti-Chamber', neutral: 'Neutral', unknown: 'Neutral / Unknown' };
+                  const leanLabels: Record<string, string> = { pro_chamber: 'Aligned Chamber Funds', anti_chamber: 'Misaligned Chamber Funds', neutral: 'Neutral', unknown: 'Neutral / Unknown' };
                   const [color, bg] = leanColors[lean] ?? leanColors.unknown;
                   return (
                     <div key={i} className="flex items-center justify-between gap-3 py-2 px-3 rounded-md text-caption" style={{ border: '1px solid var(--rule-soft)' }}>

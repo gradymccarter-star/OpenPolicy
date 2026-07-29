@@ -5,7 +5,6 @@ import { useMemo, useState } from 'react';
 import PoliticianCard from '@/components/politicians/PoliticianCard';
 import { CandidacyBadge, PartyBadge } from '@/components/ui/Badge';
 import type { LeadershipTier } from '@/lib/data/contact-info';
-import { SCORE_COLORS } from '@/lib/utils/constants';
 import { getCandidacyStatus, rescaleScore } from '@/lib/utils/helpers';
 import type { ElectionHistoryFile, ElectionYearResult, PoliticianWithScores } from '@/lib/utils/types';
 import PADistrictMap, { type DistrictGeoJSON } from './PADistrictMap';
@@ -41,16 +40,6 @@ const NEUTRAL_FILL = 'var(--well)';
 // Districts with no candidate or no scoring data at all get diagonal hatching (defined in PADistrictMap defs)
 const NO_DATA_FILL = 'url(#no-data-hatch)';
 
-// Vivid 5-band spectrum for score mode — separate from text-display colors (getScoreColor)
-// which use near-black for "GOOD" and are unreadable as map fills.
-function getScoreMapFill(scaledScore: number): string {
-  if (scaledScore >= 0.72) return '#166534'; // green-800 — strong supporter
-  if (scaledScore >= 0.56) return '#16a34a'; // green-600 — supporter
-  if (scaledScore >= 0.42) return '#ca8a04'; // yellow-600 — mixed
-  if (scaledScore >= 0.28) return '#ea580c'; // orange-600 — opponent
-  return '#b91c1c';                           // red-700   — strong opponent
-}
-
 // Sanctioned desaturated institutional party colors (democrat-600 / republican-600),
 // with lighter lean tints (democrat-200 / republican-200). Party identity only.
 const PARTY_FILL: Record<string, string> = { D: '#2b5c8a', R: '#a13d33', I: '#5c6375' };
@@ -60,6 +49,29 @@ function hexToRgb(hex: string): [number, number, number] {
   const m = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(hex);
   if (!m) return [239, 236, 227]; // var(--well)
   return [Number.parseInt(m[1], 16), Number.parseInt(m[2], 16), Number.parseInt(m[3], 16)];
+}
+
+function lerpColor(hexA: string, hexB: string, t: number): string {
+  const [r1, g1, b1] = hexToRgb(hexA);
+  const [r2, g2, b2] = hexToRgb(hexB);
+  const mix = (a: number, b: number) => Math.round(a + (b - a) * t);
+  return `rgb(${mix(r1, r2)}, ${mix(g1, g2)}, ${mix(b1, b2)})`;
+}
+
+// Muted, on-brand gradient (oxblood -> brass -> verdigris, the same institutional
+// palette used for funding alignment elsewhere) rather than 5 hard-coded, saturated
+// stock-color bands — every district gets a shade proportional to its exact score.
+const SCORE_GRADIENT_LOW = '#9e3b31'; // oxblood
+const SCORE_GRADIENT_MID = '#c9a84c'; // brass-bright
+const SCORE_GRADIENT_HIGH = '#2f6f52'; // verdigris
+const SCORE_GRADIENT_CSS = `linear-gradient(to right, ${SCORE_GRADIENT_LOW}, ${SCORE_GRADIENT_MID}, ${SCORE_GRADIENT_HIGH})`;
+
+function getScoreMapFill(scaledScore: number): string {
+  // Renormalize the realistic 0.2-0.9 display range (see rescaleScore) to 0-1 so the
+  // full gradient spread is used rather than compressing colors into the middle.
+  const t = Math.max(0, Math.min(1, (scaledScore - 0.2) / 0.7));
+  if (t <= 0.5) return lerpColor(SCORE_GRADIENT_LOW, SCORE_GRADIENT_MID, t / 0.5);
+  return lerpColor(SCORE_GRADIENT_MID, SCORE_GRADIENT_HIGH, (t - 0.5) / 0.5);
 }
 
 /** Blend the light party tint toward the full party color as margin widens, so close races read lighter than blowouts. */
@@ -101,18 +113,38 @@ export default function OverviewMapClient({ geojson, politiciansByDistrict, fund
     [districtFunding],
   );
 
-  // var(--brass-bright) — kept as a raw hex because the heatmap blend math needs RGB channels
+  // var(--brass-bright) / var(--ink) / var(--ink-faint) — kept as raw hex because the
+  // heatmap blend math needs RGB channels, which CSS custom properties can't provide here.
   const BRASS_BRIGHT = '#c9a84c';
+  const INK = '#131a26';
+  const INK_FAINT = '#c6c8ce';
   const CONTESTED_COLOR = 'var(--ink)';
   const UNCONTESTED_COLOR = 'var(--ink-faint)';
+  const FUNDING_GRADIENT_CSS = `linear-gradient(to right, var(--well), ${BRASS_BRIGHT})`;
+  const CONTESTED_GRADIENT_CSS = `linear-gradient(to right, ${UNCONTESTED_COLOR}, ${CONTESTED_COLOR})`;
 
-  /** Brass heatmap, intensity scaled relative to the highest-funded district on the board. */
+  /**
+   * Brass heatmap, intensity scaled relative to the highest-funded district on the board.
+   * Campaign finance is heavily skewed toward a handful of top fundraisers, so a linear
+   * scale left most districts nearly indistinguishable pale — sqrt spreads the mid-range
+   * out so ordinary differences in funding actually read on the map.
+   */
   function fillForFunding(amount: number): string {
     if (amount <= 0) return NEUTRAL_FILL;
     const [r, g, b] = hexToRgb(BRASS_BRIGHT);
-    const intensity = Math.min(1, 0.25 + 0.75 * (amount / maxDistrictFunding));
+    const intensity = Math.min(1, 0.2 + 0.8 * Math.sqrt(amount / maxDistrictFunding));
     const blend = (channel: number) => Math.round(channel + (255 - channel) * (1 - intensity));
     return `rgb(${blend(r)}, ${blend(g)}, ${blend(b)})`;
+  }
+
+  /** Graduated by candidate count rather than a flat binary split — 3+ candidate primaries
+   * read as more contested than a standard 2-candidate race. */
+  function fillForContested(count: number): string {
+    const intensity = Math.max(0, Math.min(1, (count - 1) / 2));
+    const [r, g, b] = hexToRgb(INK);
+    const [fr, fg, fb] = hexToRgb(INK_FAINT);
+    const blend = (base: number, faint: number) => Math.round(faint + (base - faint) * intensity);
+    return `rgb(${blend(r, fr)}, ${blend(g, fg)}, ${blend(b, fb)})`;
   }
 
   const LEADERSHIP_INTENSITY: Record<LeadershipTier, number> = {
@@ -158,12 +190,14 @@ export default function OverviewMapClient({ geojson, politiciansByDistrict, fund
     const reps = politiciansByDistrict[district];
     if (!reps || reps.length === 0) return NO_DATA_FILL;
     if (colorMode === 'contested') {
-      return reps.length > 1 ? CONTESTED_COLOR : UNCONTESTED_COLOR;
+      return fillForContested(reps.length);
     }
     if (colorMode === 'party') {
-      const parties = new Set(reps.map((r) => r.party));
-      if (parties.size > 1) return NEUTRAL_FILL;
-      return PARTY_FILL[reps[0].party] || NEUTRAL_FILL;
+      // Show who currently holds the seat, not a blank fill just because a declared
+      // opposing-party challenger also exists — that's true of most contested districts.
+      const incumbent = reps.find((r) => getCandidacyStatus(r) === 'incumbent');
+      const primary = incumbent ?? reps[0];
+      return PARTY_FILL[primary.party] || NEUTRAL_FILL;
     }
     // Score mode — use only reps that have actual scoring data
     const scoredReps = reps.filter((r) => (r.overall_score?.total_evidence_items ?? 0) > 0);
@@ -316,25 +350,23 @@ export default function OverviewMapClient({ geojson, politiciansByDistrict, fund
                 </div>
               )}
               {colorMode === 'score' && (
-                <div className="flex items-center gap-4 text-caption text-primary-500">
-                  <LegendSwatch color={SCORE_COLORS.EXCELLENT.color} label="High alignment" />
-                  <LegendSwatch color={SCORE_COLORS.MODERATE.color} label="Moderate" />
-                  <LegendSwatch color={SCORE_COLORS.POOR.color} label="Low alignment" />
-                </div>
+                <GradientLegend gradient={SCORE_GRADIENT_CSS} lowLabel="Low alignment" highLabel="High alignment" />
               )}
               {colorMode === 'funding' && (
-                <div className="flex items-center gap-4 text-caption text-primary-500">
-                  <LegendSwatch color={fillForFunding(maxDistrictFunding)} label="Highest raised" />
-                  <LegendSwatch color={fillForFunding(maxDistrictFunding * 0.15)} label="Lower" />
-                  <LegendSwatch color={NEUTRAL_FILL} label="No funding on file" />
-                </div>
+                <GradientLegend
+                  gradient={FUNDING_GRADIENT_CSS}
+                  lowLabel="Lowest raised"
+                  highLabel="Highest raised"
+                  extra={{ color: NEUTRAL_FILL, label: 'No funding on file' }}
+                />
               )}
               {colorMode === 'contested' && (
-                <div className="flex items-center gap-4 text-caption text-primary-500">
-                  <LegendSwatch color={CONTESTED_COLOR} label="Contested (2+ candidates)" />
-                  <LegendSwatch color={UNCONTESTED_COLOR} label="Uncontested so far" />
-                  <LegendSwatch color={NEUTRAL_FILL} label="No current data" />
-                </div>
+                <GradientLegend
+                  gradient={CONTESTED_GRADIENT_CSS}
+                  lowLabel="Uncontested"
+                  highLabel="Most contested"
+                  extra={{ color: NEUTRAL_FILL, label: 'No current data' }}
+                />
               )}
               {colorMode === 'leadership' && (
                 <div className="flex items-center gap-4 text-caption text-primary-500">
@@ -666,5 +698,28 @@ function LegendSwatch({ color, label }: { readonly color: string; readonly label
       <span className="inline-block w-3 h-3 rounded-sm" style={{ background: color, border: '1px solid var(--rule-soft)' }} />
       {label}
     </span>
+  );
+}
+
+function GradientLegend({
+  gradient,
+  lowLabel,
+  highLabel,
+  extra,
+}: {
+  readonly gradient: string;
+  readonly lowLabel: string;
+  readonly highLabel: string;
+  readonly extra?: { color: string; label: string };
+}) {
+  return (
+    <div className="flex items-center gap-4 text-caption text-primary-500">
+      <div className="flex items-center gap-2">
+        <span>{lowLabel}</span>
+        <span className="inline-block w-24 h-3 rounded-sm" style={{ background: gradient, border: '1px solid var(--rule-soft)' }} />
+        <span>{highLabel}</span>
+      </div>
+      {extra && <LegendSwatch color={extra.color} label={extra.label} />}
+    </div>
   );
 }
