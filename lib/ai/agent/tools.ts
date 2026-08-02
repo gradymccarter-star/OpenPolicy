@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { getSupabase, extractOverallScore } from '@/lib/db/client';
 import { rescaleScore, getCandidacyStatus, donorProfileUrl } from '@/lib/utils/helpers';
-import { getNormalizedScore, getVoterRegistration } from '@/lib/data/static-data';
+import { getNormalizedScore, getVoterRegistration, getDistrictOdds } from '@/lib/data/static-data';
 import { getContactInfoForDistrict, getCommitteeChairLabel } from '@/lib/data/contact-info';
 import { PA_CHAMBER_PRINCIPLES } from '@/lib/utils/constants';
 import type { PrincipleId, ElectionHistoryFile } from '@/lib/utils/types';
@@ -92,7 +92,7 @@ export const AGENT_TOOLS: ToolDefinition[] = [
   {
     name: 'get_district_info',
     description:
-      'Get district-level context: current representatives/challengers, historical general election results, and voter registration breakdown.',
+      'Get district-level context: current representatives/challengers, historical general election results, voter registration breakdown, and a SCAI-generated win-probability estimate (estimated_odds) with a rationale. Use this for any "what are the odds/who will win district X" question — always disclose that estimated_odds is our own AI-generated estimate, not a real prediction market or professional forecast.',
     input_schema: {
       type: 'object',
       properties: {
@@ -290,6 +290,7 @@ async function getDistrictInfo(input: { district: string }): Promise<DistrictInf
   const representatives = (rows ?? []).map(toCandidateSummary);
   const electionHistory = loadElectionHistory()?.districts[input.district] ?? {};
   const voterReg = getVoterRegistration(input.district);
+  const odds = getDistrictOdds(input.district);
 
   return {
     district: input.district,
@@ -300,6 +301,7 @@ async function getDistrictInfo(input: { district: string }): Promise<DistrictInf
     voter_registration: voterReg
       ? { republican: voterReg.republican, democrat: voterReg.democrat, other: voterReg.other, total: voterReg.total }
       : null,
+    estimated_odds: odds ? { dem_win_probability: odds.dem_win_probability, rating: odds.rating, rationale: odds.rationale } : null,
   };
 }
 

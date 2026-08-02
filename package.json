@@ -19,6 +19,7 @@
     "fetch:youtube": "node scripts/jobs/fetch-youtube.js",
     "analyze": "node scripts/jobs/analyze-statements.js",
     "calculate:scores": "node scripts/jobs/calculate-scores.js",
+    "estimate:odds": "node scripts/jobs/compute-district-odds.js",
     "batch:run": "node scripts/orchestrator.js"
   },
   "dependencies": {

@@ -82,4 +82,7 @@ export interface DistrictInfo {
   representatives: CandidateSummary[];
   election_history: Record<string, { dem_votes: number; rep_votes: number; winner_party: string | null }>;
   voter_registration: { republican: number; democrat: number; other: number; total: number } | null;
+  // SCAI-generated estimate (deterministic baseline + Claude review) — not a real
+  // prediction-market or professional forecast. Always disclose that when discussing it.
+  estimated_odds: { dem_win_probability: number; rating: string; rationale: string } | null;
 }

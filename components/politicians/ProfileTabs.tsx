@@ -7,7 +7,7 @@ import EvidenceAccordion from './EvidenceAccordion';
 import FundingTab, { type Contribution } from './FundingTab';
 import ContactTab from './ContactTab';
 import { PA_CHAMBER_PRINCIPLES } from '@/lib/utils/constants';
-import type { DistrictContactInfo, PoliticianWithScores, ElectionYearResult, BillStatus, CandidateYearResult, DistrictVoterRegistration, PAChamberMemberScore, PAChamberScorecardStats } from '@/lib/utils/types';
+import type { DistrictContactInfo, PoliticianWithScores, ElectionYearResult, BillStatus, CandidateYearResult, DistrictVoterRegistration, PAChamberMemberScore, PAChamberScorecardStats, DistrictOddsEntry } from '@/lib/utils/types';
 
 interface EvidenceItem {
   id: string;
@@ -30,6 +30,7 @@ interface Props {
   readonly politician: PoliticianWithScores;
   readonly contactInfo: DistrictContactInfo | null;
   readonly districtHistory?: Record<string, ElectionYearResult> | null;
+  readonly districtOdds?: DistrictOddsEntry | null;
   readonly billStatusMap?: Record<string, BillStatus>;
   readonly candidateResults?: Record<string, CandidateYearResult[]> | null;
   readonly voterRegistration?: DistrictVoterRegistration | null;
@@ -413,6 +414,7 @@ export default function ProfileTabs({
   politician,
   contactInfo,
   districtHistory,
+  districtOdds,
   billStatusMap = {},
   candidateResults,
   voterRegistration,
@@ -839,6 +841,32 @@ export default function ProfileTabs({
                 {politician.county && <StatBox label="County" value={`${politician.county} County`} />}
                 {politician.party && <StatBox label="Current Party" value={partyLabel(politician.party)} />}
               </div>
+
+              {/* Est. win odds */}
+              {districtOdds && (
+                <div className="rounded-md p-5 mb-8" style={{ background: 'var(--well)', border: '1px solid var(--rule)' }}>
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="text-body-sm font-semibold text-primary-950">Est. Win Odds</h3>
+                    <span
+                      className="font-semibold rounded-sm px-1.5 py-0.5 tracking-wide"
+                      style={{
+                        color: districtOdds.dem_win_probability >= 0.5 ? '#3d6d9e' : '#b0493d',
+                        background: districtOdds.dem_win_probability >= 0.5 ? 'rgba(61,109,158,0.1)' : 'rgba(176,73,61,0.1)',
+                        fontSize: '0.68rem',
+                      }}
+                    >
+                      {districtOdds.rating}
+                    </span>
+                  </div>
+                  <p className="figure text-heading-4 text-primary-950 mb-2">
+                    {Math.round(districtOdds.dem_win_probability * 100)}% D &middot; {Math.round((1 - districtOdds.dem_win_probability) * 100)}% R
+                  </p>
+                  <p className="text-body-sm text-primary-600 leading-relaxed mb-2">{districtOdds.rationale}</p>
+                  <p className="text-caption text-primary-400">
+                    SCAI-generated estimate from historical results, registration, and incumbency &mdash; not a real prediction-market or professional forecast.
+                  </p>
+                </div>
+              )}
 
               {/* Election history */}
               {districtHistory ? (

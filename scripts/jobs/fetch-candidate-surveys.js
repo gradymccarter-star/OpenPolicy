@@ -84,6 +84,40 @@ function extractSurvey($) {
   return { year: best.year || null, text: best.text.substring(0, MAX_TEXT) };
 }
 
+/** Ballotpedia candidate infoboxes usually link a "Campaign website" — worth grabbing
+ * while the page is already open, especially for candidates with no completed survey,
+ * since it's often the only public link we have for them at all. */
+function extractCampaignWebsite($) {
+  let href = null;
+  $('a').each((_, el) => {
+    if (href) return;
+    if (/^campaign website$/i.test($(el).text().trim())) href = $(el).attr('href') || null;
+  });
+  return href;
+}
+
+const PLACEHOLDER_PHOTO = /submitphoto/i;
+const PLACEHOLDER_ALT = /silhouette|placeholder/i;
+
+function isRealPhoto($img) {
+  const src = $img.attr('src');
+  const alt = $img.attr('alt') || '';
+  return Boolean(src) && !PLACEHOLDER_PHOTO.test(src) && !PLACEHOLDER_ALT.test(alt);
+}
+
+/** The candidate's headshot lives in the infobox photo carousel's active slide when
+ * Ballotpedia has one on file; an unfilled slot renders a "submit a photo" placeholder
+ * we need to explicitly exclude rather than storing as a real photo. */
+function extractCandidatePhoto($) {
+  let src = null;
+  $('.carousel-inner .item.active img, table.infobox img').each((_, el) => {
+    if (src) return;
+    const $img = $(el);
+    if (isRealPhoto($img)) src = $img.attr('src');
+  });
+  return src;
+}
+
 async function main() {
   const { SUPABASE_URL, SUPABASE_SERVICE_KEY } = process.env;
   if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
@@ -94,7 +128,7 @@ async function main() {
 
   const { data: members, error } = await supabase
     .from('politicians')
-    .select('id, full_name, district')
+    .select('id, full_name, district, photo_url')
     .eq('is_active', true)
     .eq('office_type', 'pa_house');
   if (error) throw error;
@@ -107,6 +141,8 @@ async function main() {
   }
 
   let surveysFound = 0;
+  let websitesFound = 0;
+  let photosFound = 0;
   let candidatesChecked = 0;
   let fetchFailures = 0;
 
@@ -152,6 +188,26 @@ async function main() {
       }
       await delay(DELAY_MS);
 
+      const website = extractCampaignWebsite($cand);
+      if (website) {
+        const { error: webErr } = await supabase.from('politicians').update({ official_website: website }).eq('id', candidate.id);
+        if (!webErr) {
+          websitesFound++;
+          console.log(`  HD-${district}: website found for ${candidate.full_name}`);
+        }
+      }
+
+      if (!candidate.photo_url) {
+        const photo = extractCandidatePhoto($cand);
+        if (photo) {
+          const { error: photoErr } = await supabase.from('politicians').update({ photo_url: photo }).eq('id', candidate.id);
+          if (!photoErr) {
+            photosFound++;
+            console.log(`  HD-${district}: photo found for ${candidate.full_name}`);
+          }
+        }
+      }
+
       const survey = extractSurvey($cand);
       if (!survey) continue;
 
@@ -177,7 +233,7 @@ async function main() {
     }
   }
 
-  console.log(`\nDone. Checked ${candidatesChecked} candidate pages, found ${surveysFound} surveys, ${fetchFailures} fetch failures.`);
+  console.log(`\nDone. Checked ${candidatesChecked} candidate pages, found ${surveysFound} surveys, ${websitesFound} websites, ${photosFound} photos, ${fetchFailures} fetch failures.`);
 }
 
 main().catch((err) => {

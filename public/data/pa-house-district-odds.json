@@ -1,0 +1,1428 @@
+{
+  "generated_at": "2026-07-30T22:58:35.517Z",
+  "description": "SCAI-generated district win-probability estimates: deterministic baseline (historical margin + registration + incumbency) reviewed and explained by Claude. Not a real prediction-market or professional forecast.",
+  "model": "claude-sonnet-5",
+  "districts": {
+    "100": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.03,
+      "rating": "Safe R",
+      "rationale": "Uncontested — only R has a candidate on file.",
+      "computed_at": "2026-07-30T22:54:24.778Z"
+    },
+    "101": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.03,
+      "rating": "Safe R",
+      "rationale": "Uncontested — only R has a candidate on file.",
+      "computed_at": "2026-07-30T22:54:24.778Z"
+    },
+    "102": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.03,
+      "rating": "Safe R",
+      "rationale": "Uncontested — only R has a candidate on file.",
+      "computed_at": "2026-07-30T22:54:24.778Z"
+    },
+    "103": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:54:24.778Z"
+    },
+    "104": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:54:24.778Z"
+    },
+    "105": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:54:24.778Z"
+    },
+    "106": {
+      "dem_win_probability": 0.2,
+      "baseline_probability": 0.247,
+      "rating": "Likely R",
+      "rationale": "The trend has moved sharply against Democrats, from R+9.2 in 2018 and R+7.2 in 2020 to R+26.0 in 2024, indicating a strong worsening trajectory rather than improvement. Registration also favors Republicans by 6,759 voters (22,907 R vs 16,148 D), and the incumbent Mehaffie (R) remains in the race with no offsetting finance data suggesting Democratic strength. Given the deteriorating margin trend, the baseline of 24.7% appears slightly generous, so a modest downward adjustment is warranted.",
+      "computed_at": "2026-07-30T22:54:30.790Z"
+    },
+    "107": {
+      "dem_win_probability": 0.06,
+      "baseline_probability": 0.028,
+      "rating": "Safe R",
+      "rationale": "The district's historical results (R+35 to R+93) and registration gap (R 24,852 vs D 10,651, roughly 2.3:1) strongly favor the Republican incumbent, consistent with the low baseline. However, the massive Democratic fundraising advantage ($1,364,846 vs $14,268) suggests a serious, well-resourced challenge that could modestly improve turnout and competitiveness beyond the historical trend, warranting a small upward adjustment from the 2.8% baseline.",
+      "computed_at": "2026-07-30T22:54:34.922Z"
+    },
+    "108": {
+      "dem_win_probability": 0.02,
+      "baseline_probability": 0.024,
+      "rating": "Safe R",
+      "rationale": "Historical results show consistent, deep R margins (R+99.5 in 2018, R+95.8 in 2020, R+89.7 in 2024), and registration heavily favors Republicans (23,947 R vs 11,191 D, a 12,756-voter gap out of 41,550). The Democratic candidate has raised $0 versus $4,800 for Republicans, indicating no competitive infrastructure, so the baseline of 2.4% is essentially confirmed with only a marginal downward adjustment to 2%.",
+      "computed_at": "2026-07-30T22:54:41.068Z"
+    },
+    "109": {
+      "dem_win_probability": 0.06,
+      "baseline_probability": 0.141,
+      "rating": "Safe R",
+      "rationale": "The district has voted R+32.5 to R+40.2 in the last three cycles with no favorable trend, registration favors Republicans by nearly 2:1 (22,445 R vs 11,808 D), and the Democratic candidate has raised $0 against the incumbent's $263,854. These factors reinforce rather than contradict the baseline, so the probability is adjusted slightly downward to 6% given the total absence of Democratic campaign investment.",
+      "computed_at": "2026-07-30T22:54:46.392Z"
+    },
+    "110": {
+      "dem_win_probability": 0.02,
+      "baseline_probability": 0.024,
+      "rating": "Safe R",
+      "rationale": "The district shows an entrenched and worsening R lean (R+42.3 in 2018 to R+86.0 in 2020 to R+93.8 in 2024), with registration heavily favoring Republicans (26,695 R vs 9,992 D, a ~2.7:1 ratio). The Democratic candidate has raised $0 versus $198,139 for Republicans, and incumbent Tina Pickett provides further advantage, so the baseline 2.4% is affirmed with only a negligible downward adjustment.",
+      "computed_at": "2026-07-30T22:54:49.463Z"
+    },
+    "111": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.038,
+      "rating": "Safe R",
+      "rationale": "The district shows a massive R+96.8 margin in 2024 (up from R+43.4 in 2018), a heavily Republican registration base (R 28,538 vs D 10,450, a nearly 3-to-1 edge), and a stark financial disadvantage with Democrats raising $0 against $260,550 for Republicans. With an entrenched incumbent and no countervailing data points, the baseline of 3.8% is slightly reduced given the near-total absence of Democratic infrastructure or investment in this race.",
+      "computed_at": "2026-07-30T22:54:53.868Z"
+    },
+    "112": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.954,
+      "rating": "Safe D",
+      "rationale": "Historical margins show a strong and accelerating Democratic trend (D+39.3 in 2018, D+30.4 in 2020, D+94.7 in 2024), supported by a substantial voter registration edge (D 24,539 vs R 15,265, +9,274). With incumbent Kyle Mullins (D) running, zero Republican fundraising reported, and $526,531 raised by Democratic candidates, the baseline of 95.4% appears slightly conservative given the lack of any credible GOP financial competitiveness, warranting a modest upward adjustment to 97%.",
+      "computed_at": "2026-07-30T22:54:56.734Z"
+    },
+    "113": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.961,
+      "rating": "Safe D",
+      "rationale": "The district has a strong D lean across recent cycles (D+94.1 in 2024, D+36.7 in 2020, D+96.8 in 2018) and a substantial voter registration edge (D 20,041 vs R 12,840, roughly +7,201). The Democratic incumbent Kyle Donahue is running with a fully funded campaign ($246,110) against an R side that has raised $0, reinforcing rather than undercutting the baseline, so only a slight upward adjustment from 96.1% is warranted.",
+      "computed_at": "2026-07-30T22:54:59.704Z"
+    },
+    "114": {
+      "dem_win_probability": 0.96,
+      "baseline_probability": 0.951,
+      "rating": "Safe D",
+      "rationale": "The district shows a strong Democratic tilt with a 22,071 D vs 15,413 R registration edge (D+6,658) and dominant recent margins (D+94.4 in 2024, D+93.0 in 2018), with only 2020's D+7.7 suggesting occasional competitiveness. Incumbent Bridget Kosierowski's $1,081,227 fundraising against $0 for any Republican candidate signals no serious opposition campaign, warranting a slight upward adjustment from the 95.1% baseline to 96%.",
+      "computed_at": "2026-07-30T22:55:05.048Z"
+    },
+    "115": {
+      "dem_win_probability": 0.76,
+      "baseline_probability": 0.689,
+      "rating": "Likely D",
+      "rationale": "Despite the margin narrowing from D+27.8 (2020) and D+20.2 (2018) to D+6.9 (2024), the district still favors Democrats via a 4,656-voter registration edge (18,984 D vs 14,328 R), and incumbent Maureen Madden benefits from a stark financial advantage ($240,500 raised vs. $0 for Republicans), signaling a very weak or nonexistent GOP challenge. These factors justify a modest upward adjustment from the 68.9% baseline to account for the incumbency and fundraising asymmetry outweighing the erosion in historical margin.",
+      "computed_at": "2026-07-30T22:55:10.782Z"
+    },
+    "116": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.03,
+      "rating": "Safe R",
+      "rationale": "Uncontested — only R has a candidate on file.",
+      "computed_at": "2026-07-30T22:55:10.934Z"
+    },
+    "117": {
+      "dem_win_probability": 0.02,
+      "baseline_probability": 0.032,
+      "rating": "Safe R",
+      "rationale": "This district has consistently voted heavily Republican (R+89.5 in 2024, R+81.8 in 2018, R+54.2 in 2020), and registration heavily favors Republicans (26,166 R vs 11,973 D, a ~14,000 voter gap). The Democratic candidate has raised $0 versus $66,417 for Republicans, indicating no competitive campaign infrastructure, so the baseline of 3.2% is essentially confirmed and adjusted slightly down given the total absence of Democratic financial investment.",
+      "computed_at": "2026-07-30T22:55:13.733Z"
+    },
+    "118": {
+      "dem_win_probability": 0.8,
+      "baseline_probability": 0.728,
+      "rating": "Likely D",
+      "rationale": "The baseline of 72.8% appears to underweight several strongly favorable factors: a consistent D trend strengthening from D+7.1 (2020) to D+12.5 (2024), a healthy registration edge (D 21,797 vs R 18,155, ~+3,642), and an overwhelming financial advantage ($1,803,977 vs $29,000, a ~62:1 ratio) for the incumbent Democrat James Haddock. Given the incumbency, recent margin trend, and near-total financial dominance, a modest upward adjustment to 80% is warranted.",
+      "computed_at": "2026-07-30T22:55:17.317Z"
+    },
+    "119": {
+      "dem_win_probability": 0.3,
+      "baseline_probability": 0.378,
+      "rating": "Likely R",
+      "rationale": "The district swung sharply from D+5.2 (2020) and D+6.1 (2018) to R+25.8 in 2024, and despite a narrow registration edge (D 17,265 vs R 16,764), the incumbent Republican Alec Ryncavage has raised $448,301 versus $0 for any Democratic candidate. This severe fundraising imbalance and the magnitude of the 2024 swing suggest the baseline may be overly optimistic for Democrats, warranting a downward adjustment of about 8 points.",
+      "computed_at": "2026-07-30T22:55:21.823Z"
+    },
+    "120": {
+      "dem_win_probability": 0.2,
+      "baseline_probability": 0.247,
+      "rating": "Likely R",
+      "rationale": "While the margin has trended from R+96.0 in 2018 to R+26.2 in 2020 to R+15.2 in 2024, the district still leans Republican with a registration gap of 2,122 (R 19,685 vs D 17,563) and an entrenched incumbent, Brenda Pugh. The Democratic fundraising disadvantage is stark ($10,472 vs $316,030), suggesting minimal competitive infrastructure this cycle, which supports a slight downward adjustment from the 24.7% baseline.",
+      "computed_at": "2026-07-30T22:55:26.432Z"
+    },
+    "121": {
+      "dem_win_probability": 0.87,
+      "baseline_probability": 0.808,
+      "rating": "Likely D",
+      "rationale": "The registration edge (D 17,098 vs R 10,881, +6,217) combined with consistent Democratic wins in 2024 (D+10.5) and 2018 (D+14.6) supports the baseline, while the complete absence of Republican fundraising ($0 vs $1,206,747 for Democrats) signals a weak or token challenge to incumbent Pashinski. This financial disparity and lack of visible GOP campaign infrastructure justifies a modest upward adjustment from the 80.8% baseline.",
+      "computed_at": "2026-07-30T22:55:34.419Z"
+    },
+    "122": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.03,
+      "rating": "Safe R",
+      "rationale": "Uncontested — only R has a candidate on file.",
+      "computed_at": "2026-07-30T22:55:34.571Z"
+    },
+    "123": {
+      "dem_win_probability": 0.15,
+      "baseline_probability": 0.247,
+      "rating": "Likely R",
+      "rationale": "The district has swung sharply toward Republicans, moving from D+70.3 in 2018 to R+25.2 in 2020 and R+43.8 in 2024, indicating a strong, consistent multi-cycle trend the baseline may underweight. Registration favors Republicans by 8,660 (22,374 R vs 13,714 D), and the incumbent Republican has a massive financial advantage ($187,147 to $0), further supporting a downward adjustment from the 24.7% baseline.",
+      "computed_at": "2026-07-30T22:55:38.515Z"
+    },
+    "124": {
+      "dem_win_probability": 0.04,
+      "baseline_probability": 0.093,
+      "rating": "Safe R",
+      "rationale": "This district shows a consistent, heavily Republican lean (R+84.0 in 2018, R+44.0 in 2020, R+42.3 in 2024) with a registration gap of nearly 14,000 (R 25,026 vs D 11,264), and the Democratic candidate has raised $0 versus $213,768 for Republicans, indicating no viable campaign infrastructure. These factors reinforce rather than undercut the baseline, so the estimate is adjusted slightly downward from 9.3% to reflect the zero-funding red flag against an entrenched incumbent.",
+      "computed_at": "2026-07-30T22:55:41.689Z"
+    },
+    "125": {
+      "dem_win_probability": 0.04,
+      "baseline_probability": 0.08,
+      "rating": "Safe R",
+      "rationale": "This district shows a heavy and worsening R lean historically (R+84.6 in 2018, R+97.2 in 2020, though improving to R+36.8 in 2024) alongside a 2:1 R/D registration disadvantage (26,658 vs 13,335). The Democratic candidate has raised $0 versus $344,860 for Republicans, and the Republican incumbent Joe Kerwin holds the seat, all of which reinforce rather than contradict the baseline's pessimism, warranting a slight downward adjustment from 8.0%.",
+      "computed_at": "2026-07-30T22:55:44.659Z"
+    },
+    "126": {
+      "dem_win_probability": 0.82,
+      "baseline_probability": 0.787,
+      "rating": "Likely D",
+      "rationale": "Despite a narrowing margin from D+99.6 (2018) to D+34.7 (2020) to D+11.8 (2024), the Democratic incumbent Rusnock retains a solid registration edge (17,827 D vs 11,650 R) and faces no funded opposition (R candidates raised $0 vs $10,900 for D), suggesting minimal competitive threat this cycle. This financial and organizational disparity slightly outweighs the trend of margin compression, warranting a modest upward adjustment from the 78.7% baseline.",
+      "computed_at": "2026-07-30T22:55:49.062Z"
+    },
+    "127": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:55:49.214Z"
+    },
+    "128": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.033,
+      "rating": "Safe R",
+      "rationale": "This district has been overwhelmingly Republican in recent cycles (R+96.0 in 2024, R+95.6 in 2020), a sharp jump from R+20.8 in 2018, and registration heavily favors Republicans (22,759 R vs 15,120 D). With the incumbent Mark Gillen (R) running and Democrats having raised $0 versus $13,979 for Republicans, there is no data suggesting a competitive race, so the baseline of 3.3% is retained without adjustment.",
+      "computed_at": "2026-07-30T22:55:51.756Z"
+    },
+    "129": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:55:51.908Z"
+    },
+    "130": {
+      "dem_win_probability": 0.12,
+      "baseline_probability": 0.142,
+      "rating": "Likely R",
+      "rationale": "The district has trended more Republican over time (R+27.6 in 2020 to R+31.2 in 2024), and registration heavily favors Republicans (24,292 R vs 14,100 D, a nearly 10,200-voter gap in a 46,016-voter district). With a sitting Republican incumbent, David Maloney, and no countervailing finance data to suggest a competitive race, the baseline 14.2% is slightly generous given the worsening trend, so I adjust it down modestly to 12%.",
+      "computed_at": "2026-07-30T22:55:56.128Z"
+    },
+    "131": {
+      "dem_win_probability": 0.22,
+      "baseline_probability": 0.302,
+      "rating": "Likely R",
+      "rationale": "The margin trend has moved consistently against Democrats, from R+5.6 in 2018 to R+8.5 in 2020 to R+14.4 in 2024, indicating a worsening rather than improving environment. Registration heavily favors Republicans (23,685 R vs 16,966 D), and the Democratic candidate has raised $0 compared to $590,909 for Republicans, facing an entrenched incumbent (Mackenzie). These factors justify adjusting below the 30.2% baseline rather than above it.",
+      "computed_at": "2026-07-30T22:56:00.469Z"
+    },
+    "132": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.963,
+      "rating": "Safe D",
+      "rationale": "District 132 has been overwhelmingly Democratic in recent cycles (D+100 in 2024 and 2018, D+35.8 in 2020), and Democrats hold a substantial registration edge (21,532 D vs 15,506 R). The incumbent Michael Schlossberg (D) has raised $574,118 while no Republican funds have been reported, reinforcing an already lopsided baseline, so a slight upward adjustment to 97% is warranted.",
+      "computed_at": "2026-07-30T22:56:04.265Z"
+    },
+    "133": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:56:04.417Z"
+    },
+    "134": {
+      "dem_win_probability": 0.92,
+      "baseline_probability": 0.864,
+      "rating": "Safe D",
+      "rationale": "The district's voter registration strongly favors Democrats (19,515 D vs 10,842 R), and incumbent Peter Schweyer's campaign has an overwhelming financial advantage ($522,454 vs $7,275), reinforcing the 2024 D+100 result likely reflecting current district boundaries post-redistricting. The 2018/2020 R-leaning results predate this registration and finance dynamic, so the baseline appears to underweight the incumbency and resource advantage, warranting a modest upward adjustment.",
+      "computed_at": "2026-07-30T22:56:09.337Z"
+    },
+    "135": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.939,
+      "rating": "Safe D",
+      "rationale": "District 135 has consistently voted heavily Democratic (D+99.5 in 2018, D+31.2 in 2020, D+66.9 in 2024), and Democrats hold a substantial registration edge (25,155 D vs 11,908 R, plus 10,671 Other). The incumbent Stephen Samuelson (D) is running with $44,772 raised against $0 for any Republican candidate, indicating no serious opposition, which supports a modest upward adjustment from the 93.9% baseline.",
+      "computed_at": "2026-07-30T22:56:14.463Z"
+    },
+    "136": {
+      "dem_win_probability": 0.95,
+      "baseline_probability": 0.947,
+      "rating": "Safe D",
+      "rationale": "Despite a declining margin trend from D+99.2 (2018) to D+62.8 (2024), Democrats still hold a substantial registration edge (20,274 D vs 12,969 R) and the incumbent Robert Freeman faces a Republican challenger who raised $0 compared to $99,165 for Democratic candidates. These financial and structural advantages support keeping the probability near the baseline, with a slight upward adjustment for the stark fundraising disparity.",
+      "computed_at": "2026-07-30T22:56:19.068Z"
+    },
+    "137": {
+      "dem_win_probability": 0.34,
+      "baseline_probability": 0.387,
+      "rating": "Lean R",
+      "rationale": "Despite a narrow registration edge for Democrats (D 20,299 vs R 19,574), the 2024 result of R+3.2 shows continued Republican strength against incumbent Emrick, and the complete absence of Democratic fundraising ($0 vs R's $1,017,034) signals a severe resource disadvantage likely to suppress turnout and voter contact. This financial gap warrants a downward adjustment from the 38.7% baseline despite the competitive registration numbers.",
+      "computed_at": "2026-07-30T22:56:24.387Z"
+    },
+    "138": {
+      "dem_win_probability": 0.13,
+      "baseline_probability": 0.218,
+      "rating": "Likely R",
+      "rationale": "The district has trended sharply more Republican, from R+17.2 in 2018 to R+29.3 in 2024, and registration favors Republicans by nearly 8,100 voters (24,308 R vs 16,212 D) with 10,493 Other. The Democratic candidate has raised $0 against the Republican incumbent's $301,719, indicating a severe organizational disadvantage that likely reinforces the negative trend rather than offsetting it, so the baseline of 21.8% is adjusted downward to reflect these compounding factors.",
+      "computed_at": "2026-07-30T22:56:28.880Z"
+    },
+    "139": {
+      "dem_win_probability": 0.08,
+      "baseline_probability": 0.16,
+      "rating": "Safe R",
+      "rationale": "The district shows a heavily entrenched Republican advantage: R+30.9 in 2024, R+19.9 in 2020, and R+36.9 in 2018, with no favorable trend for Democrats. Voter registration favors Republicans by over 2:1 (27,877 R vs 12,978 D), and the Democratic candidate has raised $0 compared to $168,092 for Republicans, indicating a severe resource and organizational deficit against an incumbent. These factors justify adjusting slightly below the 16.0% baseline rather than upward.",
+      "computed_at": "2026-07-30T22:56:32.480Z"
+    },
+    "140": {
+      "dem_win_probability": 0.79,
+      "baseline_probability": 0.742,
+      "rating": "Likely D",
+      "rationale": "The Democratic registration edge (19,703 vs 14,529, +5,174) combined with a completely one-sided fundraising gap ($212,325 D vs $0 R) and an incumbent Democrat (Prokopiak) running suggest the baseline may be slightly underweighting current structural advantages. While the historical trend shows margin compression from D+100 (2018) to D+20 (2020) to D+8.1 (2024), the lack of any Republican financial investment signals a weak or token challenge, warranting a modest upward adjustment to 79%.",
+      "computed_at": "2026-07-30T22:56:37.602Z"
+    },
+    "141": {
+      "dem_win_probability": 0.9,
+      "baseline_probability": 0.805,
+      "rating": "Safe D",
+      "rationale": "The district shows a consistent and growing Democratic trend across three cycles (D+24.3 in 2018, D+25.3 in 2020, D+29.7 in 2024), and Democrats hold a substantial registration edge (22,059 D vs 14,447 R, roughly +7,600). With incumbent Tina Davis (D) having raised $4,520,276 against $0 for any Republican candidate, the financial and structural advantages clearly warrant an upward adjustment from the 80.5% baseline.",
+      "computed_at": "2026-07-30T22:56:40.877Z"
+    },
+    "142": {
+      "dem_win_probability": 0.3,
+      "baseline_probability": 0.343,
+      "rating": "Likely R",
+      "rationale": "Despite a favorable trend from R+22.4 in 2020 to R+9.6 in 2024, the district still leans Republican with a registration edge of R 20,201 to D 18,906, and the Democratic candidate has raised $0 compared to the incumbent's $1,028,270, severely limiting campaign viability. This financial disparity and incumbency advantage for Hogan justify a slight downward adjustment from the 34.3% baseline.",
+      "computed_at": "2026-07-30T22:56:45.621Z"
+    },
+    "143": {
+      "dem_win_probability": 0.4,
+      "baseline_probability": 0.351,
+      "rating": "Lean R",
+      "rationale": "The historical trend shows a sharp erosion for Democrats (D+1.7 in 2018 to R+3.1 in 2020 to R+12.7 in 2024) and a registration deficit of 6,799 (R 24,262 vs D 17,463), both of which support the baseline's sub-40% estimate. However, the Democratic candidate's massive fundraising edge ($1,927,965 vs $827,232, more than 2:1) signals strong campaign viability that the baseline may underweight, justifying a modest upward adjustment to 40%.",
+      "computed_at": "2026-07-30T22:56:51.119Z"
+    },
+    "144": {
+      "dem_win_probability": 0.6,
+      "baseline_probability": 0.527,
+      "rating": "Lean D",
+      "rationale": "The district has swung sharply toward Democrats, moving from R+11.0 in 2020 to D+2.7 in 2024, and incumbent Brian Munroe (D) holds a massive financial advantage with $3,362,077 raised versus $0 for any Republican candidate. While the voter registration still favors Republicans (21,203 R vs 18,918 D), the strong multi-cycle trend and incumbency with overwhelming fundraising dominance warrant an upward adjustment from the 52.7% baseline.",
+      "computed_at": "2026-07-30T22:56:55.725Z"
+    },
+    "145": {
+      "dem_win_probability": 0.22,
+      "baseline_probability": 0.251,
+      "rating": "Likely R",
+      "rationale": "The district has shown a consistent double-digit Republican advantage across three cycles (R+13.0 in 2018, R+19.3 in 2020, R+17.8 in 2024), with no favorable trend for Democrats. Registration also strongly favors Republicans (23,543 R vs 14,893 D, a roughly 18.4-point gap), and the incumbent Craig Staats (R) remains in place with no countervailing finance data. Given the stable, unfavorable historical pattern, a slight downward adjustment from the 25.1% baseline is warranted.",
+      "computed_at": "2026-07-30T22:57:01.153Z"
+    },
+    "146": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:57:01.306Z"
+    },
+    "147": {
+      "dem_win_probability": 0.19,
+      "baseline_probability": 0.274,
+      "rating": "Likely R",
+      "rationale": "The Republican margin has widened from R+13.3 (2018) to R+17.1 (2024), and registration favors Republicans by 7,357 voters (23,943 R vs 16,586 D) out of 49,223 total. With the incumbent Donna Scheuren holding a $392,104 to $0 fundraising advantage, the trend and resource gap both point below the 27.4% baseline, warranting a modest downward adjustment.",
+      "computed_at": "2026-07-30T22:57:04.960Z"
+    },
+    "148": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:57:05.112Z"
+    },
+    "149": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:57:05.112Z"
+    },
+    "150": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:57:05.112Z"
+    },
+    "151": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:57:05.112Z"
+    },
+    "152": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:57:05.112Z"
+    },
+    "153": {
+      "dem_win_probability": 0.94,
+      "baseline_probability": 0.878,
+      "rating": "Safe D",
+      "rationale": "District 153 has voted heavily Democratic in all three recent cycles (D+31.4 in 2024, D+76.4 in 2020, D+42.6 in 2018), with a strong D registration edge (25,331 D vs 13,992 R, ~54% vs 30%). The incumbent Democrat Ben Sanchez is running with $138,822 raised against a Republican field that has raised $0, indicating no serious funded opposition, which supports adjusting slightly above the 87.8% baseline.",
+      "computed_at": "2026-07-30T22:57:07.708Z"
+    },
+    "154": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:57:07.860Z"
+    },
+    "155": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:57:07.860Z"
+    },
+    "156": {
+      "dem_win_probability": 0.78,
+      "baseline_probability": 0.691,
+      "rating": "Likely D",
+      "rationale": "The district has trended strongly Democratic, with margins improving from D+13.0 in 2018 to D+17.3 in 2024, and D registration (20,074) exceeds R (18,049) with a sizable Other bloc (8,590) that has trended Democratic historically. The incumbent Christopher Pielli (D) is running with a total financial monopoly ($236,182 to $0 raised by Republicans), suggesting a weak or token GOP challenge, which supports adjusting the baseline upward from 69.1% toward the upper end of the allowed range.",
+      "computed_at": "2026-07-30T22:57:12.212Z"
+    },
+    "157": {
+      "dem_win_probability": 0.8,
+      "baseline_probability": 0.721,
+      "rating": "Likely D",
+      "rationale": "The district shows a consistent and strengthening Democratic trend (D+13.2 in 2018, D+19.4 in 2020, D+21.0 in 2024), and Democrats hold a registration edge (20,640 vs 17,805 R). With incumbent Shusterman running and Republicans reporting $0 raised versus $360,905 for Democrats, the baseline of 72.1% appears to underweight both the trend and the apparent lack of a competitive GOP campaign, warranting an upward adjustment to about 80%.",
+      "computed_at": "2026-07-30T22:57:18.315Z"
+    },
+    "158": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:57:18.466Z"
+    },
+    "159": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:57:18.466Z"
+    },
+    "160": {
+      "dem_win_probability": 0.28,
+      "baseline_probability": 0.367,
+      "rating": "Likely R",
+      "rationale": "The district has trended R-leaning but with improvement (R+5.5 in 2018, R+10.0 in 2020, R+3.6 in 2024), and registration favors Republicans by a wide margin (23,010 R vs 17,889 D, a ~5,100 gap). The complete lack of Democratic fundraising ($0) against a well-funded incumbent Craig Williams ($5.48M) signals a severe organizational disadvantage that likely suppresses turnout and voter contact below what the historical margin trend alone would predict, warranting a downward adjustment from baseline.",
+      "computed_at": "2026-07-30T22:57:22.731Z"
+    },
+    "161": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:57:22.883Z"
+    },
+    "162": {
+      "dem_win_probability": 0.75,
+      "baseline_probability": 0.664,
+      "rating": "Likely D",
+      "rationale": "The Democratic margin has steadily widened across cycles (D+3.1 in 2018, D+8.6 in 2020, D+13.4 in 2024), suggesting the baseline may underweight this consistent trend. Combined with a D registration edge (20,854 vs 17,993 R), an incumbent Democrat, and a stark fundraising disparity ($490,380 to $0), these factors support raising the probability above the 66.4% baseline to about 75%.",
+      "computed_at": "2026-07-30T22:57:26.548Z"
+    },
+    "163": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:57:26.701Z"
+    },
+    "164": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:57:26.701Z"
+    },
+    "165": {
+      "dem_win_probability": 0.72,
+      "baseline_probability": 0.63,
+      "rating": "Likely D",
+      "rationale": "The margin trend shows a clear multi-cycle swing toward Democrats (R+1.5 in 2018 to D+3.1 in 2020 to D+19.2 in 2024), and Democrats now hold a voter registration edge (21,569 D vs 19,861 R). Combined with incumbent Jennifer O'Mara's massive fundraising advantage ($1,356,069 vs $0 for Republicans), these factors suggest the baseline understates Democratic strength, warranting a upward adjustment near the top of the allowed range.",
+      "computed_at": "2026-07-30T22:57:30.851Z"
+    },
+    "166": {
+      "dem_win_probability": 0.85,
+      "baseline_probability": 0.785,
+      "rating": "Likely D",
+      "rationale": "Despite the drop from D+42.7 (2018) and D+41.7 (2020) to D+20.7 (2024), the district remains solidly Democratic, and registration favors Democrats by nearly 6,000 voters (23,660 D vs 17,703 R). With incumbent Gregory Vitali running and Republican candidates having raised $0 compared to $17,678 for Democrats, the financial and organizational disadvantage for Republicans further reduces competitiveness, warranting a modest upward adjustment from the 78.5% baseline.",
+      "computed_at": "2026-07-30T22:57:35.560Z"
+    },
+    "167": {
+      "dem_win_probability": 0.64,
+      "baseline_probability": 0.682,
+      "rating": "Lean D",
+      "rationale": "The district shows a strong favorable trend for Democrats, moving from D+4.3 in 2018 to D+17.1 in 2024, and Democrats hold a registration edge (20,314 vs 17,572 R), supporting the baseline's optimism with incumbent Kristine Howard running. However, the stark fundraising disadvantage ($294,351 D vs $738,100 R, roughly 2.5x more for Republicans) signals a serious, well-funded challenge that could erode the historical and demographic advantages, warranting a modest downward adjustment from the 68.2% baseline.",
+      "computed_at": "2026-07-30T22:57:41.294Z"
+    },
+    "168": {
+      "dem_win_probability": 0.7,
+      "baseline_probability": 0.614,
+      "rating": "Likely D",
+      "rationale": "The district swung sharply from R+1.3 (2018) and R+2.0 (2020) to D+16.2 (2024), and Democrat Lisa Borowski now holds the seat as incumbent, suggesting the baseline may underweight this recent trend. Registration slightly favors Democrats (20,071 vs 18,582) and the fundraising gap is overwhelming ($281,122 vs $11,265), reinforcing a strong Democratic advantage this cycle, warranting an upward adjustment of about 9 points from the 61.4% baseline.",
+      "computed_at": "2026-07-30T22:57:47.029Z"
+    },
+    "169": {
+      "dem_win_probability": 0.02,
+      "baseline_probability": 0.025,
+      "rating": "Safe R",
+      "rationale": "The district shows a consistent and deepening Republican lean, from R+41.1 in 2018 to R+94.9 in 2020 and R+95.1 in 2024, with a registration gap heavily favoring Republicans (27,026 R vs. 12,091 D). Combined with a $0-to-$136,845 fundraising disadvantage and a Republican incumbent, there is no data point suggesting Democratic competitiveness, so the baseline 2.5% is essentially confirmed, adjusted slightly down given the total absence of Democratic campaign investment.",
+      "computed_at": "2026-07-30T22:57:49.999Z"
+    },
+    "170": {
+      "dem_win_probability": 0.37,
+      "baseline_probability": 0.467,
+      "rating": "Lean R",
+      "rationale": "Despite a D registration edge (17,300 D vs 13,558 R), the last recorded result was R+15.2 in 2018, and incumbent Martina White's campaign has raised $9,610,461 compared to $0 for any Democratic candidate, indicating a severe resource and incumbency disadvantage. These factors suggest the baseline 46.7% overstates Democratic competitiveness, warranting a downward adjustment to roughly 37%.",
+      "computed_at": "2026-07-30T22:57:55.574Z"
+    },
+    "171": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.044,
+      "rating": "Safe R",
+      "rationale": "The district shifted sharply Republican over time (R+18.8 in 2018 to R+90.7 in 2024), and registration heavily favors Republicans (24,938 R vs 10,543 D, roughly 2.4:1). With the Democratic candidate reporting $0 raised against $2,662,299 for Republicans and an entrenched incumbent, the baseline 4.4% is reasonable to keep near, with a slight downward adjustment given the total absence of Democratic financial competitiveness.",
+      "computed_at": "2026-07-30T22:57:59.624Z"
+    },
+    "172": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:57:59.776Z"
+    },
+    "173": {
+      "dem_win_probability": 0.88,
+      "baseline_probability": 0.808,
+      "rating": "Likely D",
+      "rationale": "Democratic voter registration advantage is overwhelming (18,518 D vs 8,862 R, a better than 2:1 edge), the 2018 result was D+99.8 (effectively unopposed), and the incumbent Patrick Gallagher (D) faces a Republican field that has raised $0 compared to $370,969 for Democrats. These factors justify nudging above the 80.8% baseline toward 88%, reflecting the lack of any competitive GOP infrastructure in this cycle.",
+      "computed_at": "2026-07-30T22:58:03.379Z"
+    },
+    "174": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:58:03.531Z"
+    },
+    "175": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:58:03.531Z"
+    },
+    "176": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.03,
+      "rating": "Safe R",
+      "rationale": "Uncontested — only R has a candidate on file.",
+      "computed_at": "2026-07-30T22:58:03.531Z"
+    },
+    "177": {
+      "dem_win_probability": 0.83,
+      "baseline_probability": 0.733,
+      "rating": "Likely D",
+      "rationale": "Voter registration favors Democrats by nearly 3:1 (24,629 D vs 8,966 R), the last recorded result was D+18.8 in 2018, and the incumbent Joseph Hohenstein (D) has raised $548,530 while Republican candidates have raised $0, indicating minimal competitive threat. These factors collectively suggest the baseline 73.3% understates the district's strong Democratic lean, warranting a modest upward adjustment to 83%.",
+      "computed_at": "2026-07-30T22:58:07.306Z"
+    },
+    "178": {
+      "dem_win_probability": 0.18,
+      "baseline_probability": 0.259,
+      "rating": "Likely R",
+      "rationale": "The district has trended sharply Republican across three cycles (R+1.7 in 2018 to R+10.9 in 2020 to R+22.6 in 2024), and voter registration now favors Republicans by 7,597 (25,280 R vs 17,683 D). With $0 raised by Democratic candidates versus $572,160 for Republicans and an incumbent Republican, all indicators point below the baseline, warranting a downward adjustment to roughly 18%.",
+      "computed_at": "2026-07-30T22:58:11.634Z"
+    },
+    "179": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:58:11.785Z"
+    },
+    "180": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:58:11.785Z"
+    },
+    "181": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:58:11.786Z"
+    },
+    "182": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:58:11.786Z"
+    },
+    "183": {
+      "dem_win_probability": 0.12,
+      "baseline_probability": 0.212,
+      "rating": "Likely R",
+      "rationale": "The margin has trended sharply against Democrats across three cycles (R+13.3 in 2018, R+22.1 in 2020, R+30.2 in 2024), and registration favors Republicans by nearly 6,800 voters (23,577 R vs 16,766 D). With Democratic candidates reporting $0 raised against $188,108 for Republicans, there's no evidence of a competitive challenge to incumbent Mako, so the probability should be adjusted below the 21.2% baseline to reflect the deteriorating trend and lack of campaign infrastructure.",
+      "computed_at": "2026-07-30T22:58:15.292Z"
+    },
+    "184": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:58:15.443Z"
+    },
+    "185": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:58:15.443Z"
+    },
+    "186": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:58:15.443Z"
+    },
+    "187": {
+      "dem_win_probability": 0.201,
+      "baseline_probability": 0.301,
+      "rating": "Likely R",
+      "rationale": "Despite the district trending less red (R+18.7 in 2018, R+23.0 in 2020, R+10.7 in 2024), the registration gap still favors Republicans by 5,296 voters, and the Democratic candidate has raised $0 versus $584,970 for Republicans, indicating no viable campaign infrastructure against incumbent Ryan Mackenzie. This financial disparity is a strong signal the baseline underweights, warranting a downward adjustment from 30.1% to about 20%.",
+      "computed_at": "2026-07-30T22:58:20.726Z"
+    },
+    "188": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:58:20.879Z"
+    },
+    "189": {
+      "dem_win_probability": 0.7,
+      "baseline_probability": 0.621,
+      "rating": "Likely D",
+      "rationale": "The district swung dramatically from R+17.1 (2018) and R+19.1 (2020) to D+15.0 in 2024, a 34-point shift that the baseline may underweight given its recency. Democrats also hold a registration edge (19,104 vs 14,269 R) and Probst, the incumbent, faces a Republican field that has raised $0 compared to $347,152 for Democratic candidates, all reinforcing a Democratic advantage.",
+      "computed_at": "2026-07-30T22:58:24.740Z"
+    },
+    "190": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:58:24.893Z"
+    },
+    "191": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:58:24.893Z"
+    },
+    "192": {
+      "dem_win_probability": 0.98,
+      "baseline_probability": 0.906,
+      "rating": "Safe D",
+      "rationale": "Registration is overwhelmingly Democratic (36,198 D vs. 2,251 R, an ~16:1 ratio), the 2018 result was a D+99.9 landslide (effectively unopposed), and the incumbent Cephas has raised $191,721 while the Republican side has raised $0, indicating no viable opposition. These factors together justify adjusting above the 90.6% baseline toward near-certainty.",
+      "computed_at": "2026-07-30T22:58:27.375Z"
+    },
+    "193": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.03,
+      "rating": "Safe R",
+      "rationale": "Uncontested — only R has a candidate on file.",
+      "computed_at": "2026-07-30T22:58:27.527Z"
+    },
+    "194": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:58:27.527Z"
+    },
+    "195": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:58:27.527Z"
+    },
+    "196": {
+      "dem_win_probability": 0.02,
+      "baseline_probability": 0.022,
+      "rating": "Safe R",
+      "rationale": "District 196 has been R+95.3 or worse in every recent cycle (2024, 2020, 2018), with a heavily lopsided registration edge of R 26,301 to D 12,898 (nearly 2:1). The Democratic candidate has raised $0 versus the incumbent Seth Grove's $582,722, showing no competitive campaign infrastructure, so the baseline 2.2% is essentially accurate with only a marginal downward adjustment warranted given the total absence of Democratic financial engagement.",
+      "computed_at": "2026-07-30T22:58:30.447Z"
+    },
+    "197": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:58:30.600Z"
+    },
+    "198": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:58:30.600Z"
+    },
+    "199": {
+      "dem_win_probability": 0.16,
+      "baseline_probability": 0.228,
+      "rating": "Likely R",
+      "rationale": "The district has a consistent heavy Republican lean (R+19.4 to R+27.1 across three cycles, R+21.7 most recently), a substantial voter registration deficit for Democrats (14,691 D vs 21,902 R), and an entrenched incumbent in Barbara Gleim. With the Democratic candidate having raised $0 compared to $172,217 for Republicans, there's no evidence of a competitive campaign infrastructure to overcome the structural disadvantages, warranting a slight downward adjustment from baseline.",
+      "computed_at": "2026-07-30T22:58:35.364Z"
+    },
+    "200": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:58:35.516Z"
+    },
+    "201": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:58:35.517Z"
+    },
+    "202": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:58:35.517Z"
+    },
+    "203": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:58:35.517Z"
+    },
+    "001": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:49:55.930Z"
+    },
+    "002": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:49:55.931Z"
+    },
+    "003": {
+      "dem_win_probability": 0.8,
+      "baseline_probability": 0.737,
+      "rating": "Likely D",
+      "rationale": "The district has consistently favored Democrats (D+100 in 2018, D+22.8 in 2020, D+15.3 in 2024), and while the margin has narrowed, voter registration is now nearly even (D 20,161 vs R 19,930), suggesting the historical D+15-22 trend likely understates current Democratic strength given the incumbent's massive fundraising edge ($1,503,582 vs $238,805). This financial disparity and sustained incumbency (Bizzarro) warrant a modest upward adjustment from the 73.7% baseline to reflect the strong resource advantage compounding a favorable but slightly tightening trend.",
+      "computed_at": "2026-07-30T22:49:59.385Z"
+    },
+    "004": {
+      "dem_win_probability": 0.05,
+      "baseline_probability": 0.085,
+      "rating": "Safe R",
+      "rationale": "The district has a heavy R registration edge (22,821 R vs 13,265 D, +9,556), consistent with historical R dominance (R+100 in 2018 and 2020, though narrowing to R+35.3 in 2024). The Democratic candidate has raised $0 versus $69,732 for Republicans, indicating no viable campaign infrastructure, which if anything argues for a slight reduction from the 8.5% baseline rather than an increase.",
+      "computed_at": "2026-07-30T22:50:01.912Z"
+    },
+    "005": {
+      "dem_win_probability": 0.1,
+      "baseline_probability": 0.125,
+      "rating": "Safe R",
+      "rationale": "Registration favors Republicans by nearly 2-to-1 (23,982 R vs 13,629 D), and the district has trended strongly Republican across three cycles (R+33.4 in 2024, R+39.4 in 2020, R+99.2 in 2018), showing no Democratic momentum to offset the baseline. With the Democratic candidate reporting $0 raised against the incumbent's $69,642, there's no evidence of competitive investment that would warrant an upward adjustment, so the estimate stays near the baseline, slightly lowered to reflect the financial disparity.",
+      "computed_at": "2026-07-30T22:50:06.637Z"
+    },
+    "006": {
+      "dem_win_probability": 0.09,
+      "baseline_probability": 0.11,
+      "rating": "Safe R",
+      "rationale": "The district has a strong entrenched R lean (R+39.8 in 2024, R+30.7 in 2020, R+91.5 in 2018) and a heavy registration disadvantage (R 23,864 vs D 12,195, nearly 2:1). Incumbent Bradley Roae's fundraising edge ($92,945 vs $65,777) further supports the baseline's low estimate, so only a slight downward adjustment from 11.0% to 9.0% is warranted given no signs of a favorable trend for Democrats.",
+      "computed_at": "2026-07-30T22:50:09.687Z"
+    },
+    "007": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.03,
+      "rating": "Safe R",
+      "rationale": "Uncontested — only R has a candidate on file.",
+      "computed_at": "2026-07-30T22:50:09.838Z"
+    },
+    "008": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.044,
+      "rating": "Safe R",
+      "rationale": "This district has consistently favored Republicans by massive margins (R+41.5 in 2018, R+49.8 in 2020, R+79.3 in 2024), showing a worsening trend rather than improvement. Registration heavily favors Republicans (29,801 R vs 12,489 D), and the Democratic candidate has raised $0 compared to the incumbent's $354,498, indicating no viable campaign infrastructure. These factors justify keeping the probability at or slightly below the baseline of 4.4%.",
+      "computed_at": "2026-07-30T22:50:13.727Z"
+    },
+    "009": {
+      "dem_win_probability": 0.24,
+      "baseline_probability": 0.187,
+      "rating": "Likely R",
+      "rationale": "The extreme R+79.4 result in 2024 likely reflects an uncontested or lopsided race rather than a genuine partisan shift, especially given the district voted D+7.2 in 2020 and D+13.7 in 2018, suggesting more underlying competitiveness than the baseline fully captures. However, the current registration gap (R 21,089 vs D 15,320, roughly a 5,769-voter R edge) and a sitting Republican incumbent still favor the GOP, so only a modest upward adjustment from the 18.7% baseline is warranted given the lack of finance data to gauge campaign strength.",
+      "computed_at": "2026-07-30T22:50:20.903Z"
+    },
+    "010": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:50:21.055Z"
+    },
+    "011": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.03,
+      "rating": "Safe R",
+      "rationale": "Uncontested — only R has a candidate on file.",
+      "computed_at": "2026-07-30T22:50:21.055Z"
+    },
+    "012": {
+      "dem_win_probability": 0.12,
+      "baseline_probability": 0.187,
+      "rating": "Likely R",
+      "rationale": "The trend line is worsening for Democrats, with the R margin expanding from R+16.6 (2018) to R+22.6 (2020) to R+28.8 (2024), and registration favors Republicans by nearly 2-to-1 (28,067 R vs 15,753 D). The complete absence of Democratic fundraising ($0) against $217,991 raised by Republicans, alongside an incumbent Republican, suggests the baseline of 18.7% is if anything slightly optimistic, warranting a modest downward adjustment.",
+      "computed_at": "2026-07-30T22:50:25.585Z"
+    },
+    "013": {
+      "dem_win_probability": 0.305,
+      "baseline_probability": 0.305,
+      "rating": "Lean R",
+      "rationale": "Estimate based on the deterministic baseline model only — AI review unavailable for this district.",
+      "computed_at": "2026-07-30T22:50:29.540Z"
+    },
+    "014": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.03,
+      "rating": "Safe R",
+      "rationale": "Uncontested — only R has a candidate on file.",
+      "computed_at": "2026-07-30T22:50:29.691Z"
+    },
+    "015": {
+      "dem_win_probability": 0.12,
+      "baseline_probability": 0.143,
+      "rating": "Likely R",
+      "rationale": "The district has posted consistent double-digit Republican margins (R+38.3 in 2018, R+41.7 in 2020, R+37.7 in 2024) with no trend toward Democrats, and registration favors Republicans by nearly 9,000 voters (24,325 R vs 15,501 D). With incumbent Joshua Kail (R) running and no countervailing finance or trend data, the baseline of 14.3% is slightly high given the stable, entrenched R lean, so a modest downward adjustment to 12% is warranted.",
+      "computed_at": "2026-07-30T22:50:34.245Z"
+    },
+    "016": {
+      "dem_win_probability": 0.79,
+      "baseline_probability": 0.709,
+      "rating": "Likely D",
+      "rationale": "The incumbent Democrat Matzie retains a solid registration edge (D 20,823 vs R 16,047, a ~4,776-voter advantage) and has a massive financial advantage ($3,189,494 raised vs $0 for Republicans), signaling minimal GOP campaign infrastructure. While the 2024 margin (D+4.6) narrowed from 2020 (D+12.4), the complete lack of Republican fundraising suggests a weak or token challenge, warranting an upward adjustment from the 70.9% baseline to reflect this stark financial and organizational disparity.",
+      "computed_at": "2026-07-30T22:50:39.657Z"
+    },
+    "017": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.03,
+      "rating": "Safe R",
+      "rationale": "Uncontested — only R has a candidate on file.",
+      "computed_at": "2026-07-30T22:50:39.809Z"
+    },
+    "018": {
+      "dem_win_probability": 0.3,
+      "baseline_probability": 0.383,
+      "rating": "Likely R",
+      "rationale": "The Democratic candidate has raised $0 compared to the Republican incumbent's $1,823,517, signaling a severe organizational and financial disadvantage that will likely suppress turnout and visibility. Despite a slim D+1,306 registration edge, recent results show R+11.3 in 2024 and R+13.1 in 2018, with only 2020's R+4.7 as an outlier, indicating the district leans Republican in most cycles. Given the incumbency and stark funding gap, the baseline 38.3% appears slightly too optimistic for Democrats, warranting a modest downward adjustment.",
+      "computed_at": "2026-07-30T22:50:45.903Z"
+    },
+    "019": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:50:46.055Z"
+    },
+    "020": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:50:46.055Z"
+    },
+    "021": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:50:46.055Z"
+    },
+    "022": {
+      "dem_win_probability": 0.99,
+      "baseline_probability": 0.982,
+      "rating": "Safe D",
+      "rationale": "This district has produced D+100.0 results in 2018, 2020, and 2024, indicating no Republican opposition in recent cycles, and voter registration heavily favors Democrats (17,519 D vs. 6,795 R). With incumbent Joshua Siegel (D) having raised $242,876 versus $0 for any Republican candidate, there is no credible financial or historical basis for a competitive race, supporting a slight upward adjustment from the 98.2% baseline.",
+      "computed_at": "2026-07-30T22:50:50.203Z"
+    },
+    "023": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:50:50.355Z"
+    },
+    "024": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:50:50.355Z"
+    },
+    "025": {
+      "dem_win_probability": 0.86,
+      "baseline_probability": 0.761,
+      "rating": "Likely D",
+      "rationale": "The district shows a consistent and strengthening Democratic trend (D+15.3 in 2018, D+16.6 in 2020, D+19.2 in 2024), a substantial D registration advantage (23,916 D vs 14,450 R), and an incumbent (Markosek) facing no funded opposition ($309,803 raised by Democrats vs $0 by Republicans). Given the lack of any Republican financial competitiveness and the clear multi-cycle trend the baseline may be underweighting, an upward adjustment of about 10 points from 76.1% to 86% is warranted.",
+      "computed_at": "2026-07-30T22:50:53.537Z"
+    },
+    "026": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:50:53.689Z"
+    },
+    "027": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:50:53.689Z"
+    },
+    "028": {
+      "dem_win_probability": 0.24,
+      "baseline_probability": 0.317,
+      "rating": "Likely R",
+      "rationale": "The margin trend has worsened for Democrats, moving from R+8.9 (2018) to R+7.4 (2020) to R+14.0 (2024), suggesting the baseline may be too generous rather than too harsh. Registration favors Republicans by nearly 4,750 voters (22,507 R vs 17,757 D), and the complete absence of Democratic fundraising ($0) against the incumbent's $196,022 signals a significantly under-resourced challenge, warranting a downward adjustment from the 31.7% baseline.",
+      "computed_at": "2026-07-30T22:50:58.922Z"
+    },
+    "029": {
+      "dem_win_probability": 0.69,
+      "baseline_probability": 0.596,
+      "rating": "Lean D",
+      "rationale": "The district swung sharply from R+11.3 (2020) to D+13.4 (2024), and Democrats now hold a registration edge (22,633 vs 20,791). Incumbent Democrat Timothy Brennan has a massive financial advantage ($873,677 raised vs. $0 for Republicans), suggesting a weak or underfunded GOP challenge, which supports adjusting the baseline upward from 59.6% to about 69%.",
+      "computed_at": "2026-07-30T22:51:03.108Z"
+    },
+    "030": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:51:03.259Z"
+    },
+    "031": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:51:03.259Z"
+    },
+    "032": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:51:03.259Z"
+    },
+    "033": {
+      "dem_win_probability": 0.72,
+      "baseline_probability": 0.634,
+      "rating": "Likely D",
+      "rationale": "The district shows a strong Democratic trend in the most recent cycle (D+11.6 in 2024, up from D+11.4 in 2018, with only a minor R+2.8 dip in 2020), and Democrats hold a clear registration edge (20,897 D vs 16,332 R). Incumbent Mandy Steele's overwhelming fundraising advantage ($1,479,640 vs $0 for Republicans) with no visible GOP campaign infrastructure further strengthens the Democratic position beyond the baseline's weighting of historical volatility.",
+      "computed_at": "2026-07-30T22:51:08.020Z"
+    },
+    "034": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:51:08.172Z"
+    },
+    "035": {
+      "dem_win_probability": 0.99,
+      "baseline_probability": 0.98,
+      "rating": "Safe D",
+      "rationale": "This district has been overwhelmingly Democratic across three consecutive cycles (D+95.4 in 2024, D+92.5 in 2020, D+96.7 in 2018), with voter registration heavily favoring Democrats (25,950 D vs 10,686 R). The incumbent Matthew Gergely (D) is running with a financial advantage ($27,100 raised vs $0 for Republicans), reinforcing rather than undermining the baseline, so only a slight upward adjustment from 98.0% is warranted.",
+      "computed_at": "2026-07-30T22:51:10.625Z"
+    },
+    "036": {
+      "dem_win_probability": 0.98,
+      "baseline_probability": 0.959,
+      "rating": "Safe D",
+      "rationale": "The district shows overwhelming Democratic strength across all three cycles (D+97.1 in 2018, D+25.2 in 2020, D+77.8 in 2024), a nearly 3-to-1 D/R registration edge (25,873 vs 8,947), and an incumbent Democrat, Jessica Benham, running with $328,283 raised against zero funds for any Republican candidate. Given the total absence of Republican financial competitiveness and the consistent double-digit historical margins, the baseline of 95.9% appears slightly conservative, warranting a modest upward adjustment.",
+      "computed_at": "2026-07-30T22:51:14.165Z"
+    },
+    "037": {
+      "dem_win_probability": 0.05,
+      "baseline_probability": 0.128,
+      "rating": "Safe R",
+      "rationale": "This district has been solidly Republican across three cycles (R+45.3 in 2018, R+36.6 in 2020, R+33.5 in 2024), showing no meaningful Democratic trend despite slight narrowing. Registration heavily favors Republicans (27,445 R vs 12,013 D, a ~15,000-voter gap), and the Democratic candidate has raised $0 versus $146,434 for Republicans, indicating no viable campaign infrastructure against incumbent Melinda Fee. These factors justify adjusting slightly below the 12.8% baseline rather than above it.",
+      "computed_at": "2026-07-30T22:51:18.673Z"
+    },
+    "038": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:51:18.825Z"
+    },
+    "039": {
+      "dem_win_probability": 0.19,
+      "baseline_probability": 0.263,
+      "rating": "Likely R",
+      "rationale": "The district has trended more Republican since 2018 (R+11.6) with R+25.6 in 2020 and R+24.1 in 2024, and voter registration favors Republicans by 2,078 (21,549 R vs 19,471 D). With zero Democratic fundraising against $192,122 raised by Republicans and an entrenched incumbent, the baseline's 26.3% appears slightly too optimistic given the near-total resource and structural disadvantage.",
+      "computed_at": "2026-07-30T22:51:22.972Z"
+    },
+    "040": {
+      "dem_win_probability": 0.2,
+      "baseline_probability": 0.279,
+      "rating": "Likely R",
+      "rationale": "The margin trend has worsened for Democrats across three cycles (R+12.1 in 2018, R+14.4 in 2020, R+20.7 in 2024), and registration favors Republicans by 4,291 voters (23,748 R vs 19,457 D). With a Republican incumbent, $663,235 raised by R candidates, and $0 raised by any Democrat, the baseline of 27.9% appears too generous given the deteriorating trend and total resource/organizational vacuum on the Democratic side.",
+      "computed_at": "2026-07-30T22:51:27.478Z"
+    },
+    "041": {
+      "dem_win_probability": 0.24,
+      "baseline_probability": 0.316,
+      "rating": "Likely R",
+      "rationale": "The district has consistently favored Republicans across three cycles (R+12.5 in 2018, R+15.7 in 2020, R+11.3 in 2024) with no clear Democratic trend, and voter registration favors Republicans by 4,573 (20,709 to 16,136). The complete absence of Democratic fundraising ($0) against the incumbent's $1,795,879 signals a severely under-resourced or possibly unopposed-in-practice campaign, warranting a downward adjustment from the baseline.",
+      "computed_at": "2026-07-30T22:51:33.054Z"
+    },
+    "042": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:51:33.205Z"
+    },
+    "043": {
+      "dem_win_probability": 0.02,
+      "baseline_probability": 0.023,
+      "rating": "Safe R",
+      "rationale": "District 043 shows an overwhelming and consistent R lean (R+97.3 in 2024, R+96.3 in 2020, R+24.8 in 2018), with registration heavily favoring Republicans (22,061 R vs 8,787 D, a nearly 2.5:1 ratio). The Democratic candidate has raised $0 versus $199,623 for Republicans, and the incumbent Keith Greiner (R) faces no signs of vulnerability in the data, so the baseline 2.3% is left essentially unchanged, adjusted only slightly downward given the total lack of Democratic financial competitiveness.",
+      "computed_at": "2026-07-30T22:51:36.284Z"
+    },
+    "044": {
+      "dem_win_probability": 0.33,
+      "baseline_probability": 0.382,
+      "rating": "Lean R",
+      "rationale": "The baseline of 38.2% likely overweights the narrow registration gap (R 20,584 vs D 19,705), given that the Democratic candidate has raised $0 compared to the incumbent Gaydos's $1,057,950, signaling a severely under-resourced or possibly non-competitive campaign. Historical margins also show persistent Republican leans (R+3.4, R+9.9, R+7.6) with no clear Democratic trend, so a downward adjustment to roughly 33% is warranted.",
+      "computed_at": "2026-07-30T22:51:42.011Z"
+    },
+    "045": {
+      "dem_win_probability": 0.85,
+      "baseline_probability": 0.796,
+      "rating": "Likely D",
+      "rationale": "The district has a consistent Democratic lean (D+16.1 in 2024, D+23.4 in 2020) and a substantial registration advantage (D 24,386 vs R 15,369, a ~9,000 edge). Incumbent Kulik's massive fundraising lead ($357,414 vs $77,840) further strengthens her position beyond what the baseline captures, warranting a modest upward adjustment from 79.6%.",
+      "computed_at": "2026-07-30T22:51:46.233Z"
+    },
+    "046": {
+      "dem_win_probability": 0.18,
+      "baseline_probability": 0.257,
+      "rating": "Likely R",
+      "rationale": "The margin trend has moved sharply against Democrats, from R+11.3 in 2018 to R+20.1 in 2020 to R+24.3 in 2024, showing a worsening rather than improving trajectory that the baseline may not fully capture. Registration favors Republicans by nearly 4,007 voters (22,842 R vs 18,835 D), and the Democratic candidate has raised $0 compared to the incumbent's $251,133, indicating a severe organizational and financial disadvantage. These compounding negative indicators justify a downward adjustment from the 25.7% baseline to about 18%.",
+      "computed_at": "2026-07-30T22:51:50.210Z"
+    },
+    "047": {
+      "dem_win_probability": 0.13,
+      "baseline_probability": 0.196,
+      "rating": "Likely R",
+      "rationale": "The district has voted R+25 to R+30 in the last three cycles with a consistent trend, and voter registration favors Republicans by nearly 9,000 (23,436 R vs 14,524 D). The Democratic fundraising figure of $3,136 versus $260,498 for Republicans signals an extremely weak challenger campaign against an entrenched incumbent, warranting a downward adjustment from the 19.6% baseline.",
+      "computed_at": "2026-07-30T22:51:53.897Z"
+    },
+    "048": {
+      "dem_win_probability": 0.04,
+      "baseline_probability": 0.061,
+      "rating": "Safe R",
+      "rationale": "The district has shifted sharply Republican, from R+11.4 in 2018 to R+96.4 in 2024, with a wide voter registration gap (R 22,095 vs D 16,702). The Democratic candidate has raised $0 compared to $1,183,895 for Republicans, and the incumbent O'Neal faces no signs of vulnerability, so the baseline 6.1% is slightly reduced given the total absence of Democratic campaign infrastructure.",
+      "computed_at": "2026-07-30T22:51:56.602Z"
+    },
+    "049": {
+      "dem_win_probability": 0.9,
+      "baseline_probability": 0.865,
+      "rating": "Safe D",
+      "rationale": "Voter registration strongly favors Democrats (18,660 D vs 9,156 R), the incumbent Ismail Smith-Wade-El is a sitting Democrat, and Republicans have raised $0 compared to $258,525 for Democrats, indicating a severely underfunded or nonexistent GOP campaign. While the 2018 (R+0.1) and 2020 (R+27.1) results show this seat can be competitive, the 2024 D+96.6 margin combined with the financial and registration disparities justify a modest upward adjustment from the 86.5% baseline.",
+      "computed_at": "2026-07-30T22:52:01.577Z"
+    },
+    "050": {
+      "dem_win_probability": 0.2,
+      "baseline_probability": 0.284,
+      "rating": "Likely R",
+      "rationale": "The district swung sharply from D+6.5 (2020) to R+38.1 (2024), and registration now favors Republicans by nearly 6,000 voters (20,804 R vs 14,888 D). With the Democratic candidate reporting $0 raised against the incumbent's $270,179, there is no evidence of a competitive campaign to offset the adverse trend, so the baseline 28.4% appears slightly too high and is adjusted down to 20%.",
+      "computed_at": "2026-07-30T22:52:07.008Z"
+    },
+    "051": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.03,
+      "rating": "Safe R",
+      "rationale": "Uncontested — only R has a candidate on file.",
+      "computed_at": "2026-07-30T22:52:07.159Z"
+    },
+    "052": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.03,
+      "rating": "Safe R",
+      "rationale": "Uncontested — only R has a candidate on file.",
+      "computed_at": "2026-07-30T22:52:07.159Z"
+    },
+    "053": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:52:07.159Z"
+    },
+    "054": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:52:07.159Z"
+    },
+    "055": {
+      "dem_win_probability": 0.214,
+      "baseline_probability": 0.314,
+      "rating": "Likely R",
+      "rationale": "The district has swung sharply toward Republicans, with the margin moving from D+94.8 in 2018 to R+5.4 in 2020 to R+35.5 in 2024, indicating a strong multi-cycle trend the baseline may underweight. Registration also favors Republicans (23,817 R vs 16,752 D), and the Democratic candidate has raised $0 compared to $167,381 for Republicans against an incumbent, further undermining competitiveness. These combined factors justify lowering the baseline from 31.4% to about 21%.",
+      "computed_at": "2026-07-30T22:52:11.065Z"
+    },
+    "056": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.03,
+      "rating": "Safe R",
+      "rationale": "Uncontested — only R has a candidate on file.",
+      "computed_at": "2026-07-30T22:52:11.216Z"
+    },
+    "057": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.047,
+      "rating": "Safe R",
+      "rationale": "The district has shown a consistent and worsening Republican trend (R+25.6 in 2018 to R+44.2 in 2020 to R+96.3 in 2024), well beyond competitive range, and R voter registration (23,575) exceeds D (16,691) by nearly 7,000 in a 46,576-voter district. With the Democratic candidate reporting $0 raised versus $188,462 for Republicans and an incumbent (Nelson) in place, there is no data point suggesting improvement over the baseline, so the estimate is set slightly below the 4.7% baseline.",
+      "computed_at": "2026-07-30T22:52:14.172Z"
+    },
+    "058": {
+      "dem_win_probability": 0.1,
+      "baseline_probability": 0.177,
+      "rating": "Safe R",
+      "rationale": "The trend is worsening for Democrats, not improving: R+23.4 (2018) to R+15.9 (2020) to R+38.3 (2024), with registration favoring Republicans by over 7,300 (23,361 R vs 16,036 D). The Democratic candidate has raised $0 against the Republican incumbent's $524,178, indicating no viable funded challenge, which justifies keeping the probability at or below the 17.7% baseline.",
+      "computed_at": "2026-07-30T22:52:19.804Z"
+    },
+    "059": {
+      "dem_win_probability": 0.06,
+      "baseline_probability": 0.09,
+      "rating": "Safe R",
+      "rationale": "Historical results show consistent, heavy Republican margins (R+40.6 in 2018, R+97.4 in 2020, R+39.5 in 2024) with no Democratic competitiveness trend, and registration favors Republicans by over 12,000 (26,550 R vs 14,396 D), a nearly 2:1 edge. With an incumbent Republican (Rossi) and no offsetting campaign finance data suggesting a strong Democratic challenge, the baseline 9.0% is slightly high given the district's entrenched partisan lean, so I adjust down modestly to 6%.",
+      "computed_at": "2026-07-30T22:52:22.997Z"
+    },
+    "060": {
+      "dem_win_probability": 0.02,
+      "baseline_probability": 0.026,
+      "rating": "Safe R",
+      "rationale": "District 060 has been a consistent, extreme R stronghold (R+97.5 in 2018, R+70.6 in 2020, R+97.3 in 2024), with voter registration heavily favoring Republicans (24,078 R vs 13,596 D, a ~10,500 gap). The Democratic candidate has raised $0 versus the incumbent Abby Major's $42,420, showing no competitive infrastructure, so the baseline 2.6% is essentially confirmed and adjusted only slightly downward given the total absence of Democratic financial activity.",
+      "computed_at": "2026-07-30T22:52:27.792Z"
+    },
+    "061": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:52:27.943Z"
+    },
+    "062": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.057,
+      "rating": "Safe R",
+      "rationale": "This district has moved sharply Republican over three cycles (R+16.2 in 2018 to R+36.2 in 2020 to R+83.3 in 2024), and the R voter registration edge of 21,827 to 12,133 (nearly 2:1) reinforces this trend. With a $0 to $181,219 fundraising gap and an entrenched incumbent, there is no evidence to support raising the baseline; if anything the accelerating trend and total financial vacuum on the Democratic side justify a slight downward adjustment from the 5.7% baseline.",
+      "computed_at": "2026-07-30T22:52:31.376Z"
+    },
+    "063": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.039,
+      "rating": "Safe R",
+      "rationale": "The district has consistently voted heavily Republican (R+49.6 in 2018, R+96.2 in 2020, R+62.2 in 2024) with no favorable trend, and registration heavily favors Republicans (27,850 R vs 8,638 D, a >3:1 ratio). The Democratic candidate has raised $0 versus $43,068 for Republicans, and the incumbent Bashline holds the seat, reinforcing rather than undermining the baseline's low estimate, so only a slight downward adjustment from 3.9% is warranted.",
+      "computed_at": "2026-07-30T22:52:34.121Z"
+    },
+    "064": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.035,
+      "rating": "Safe R",
+      "rationale": "The district has a heavy and consistent Republican lean (R+80.1 in 2024, R+79.9 in 2020) and registration favors Republicans by nearly 2.5:1 (24,373 R vs 9,600 D). With the Democratic candidate reporting $0 raised against the incumbent's $47,375, there is no evidence of a competitive challenge, so the probability stays near the baseline, adjusted slightly down to 3%.",
+      "computed_at": "2026-07-30T22:52:38.031Z"
+    },
+    "065": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.046,
+      "rating": "Safe R",
+      "rationale": "This district shows an overwhelming and consistent Republican advantage: R+53.7 in 2024, R+99.7 in 2020, and R+95.3 in 2018, with a registration gap of R 24,216 to D 9,602 (over 2.5:1). The Democratic candidate has raised $0 versus $122,498 for Republicans, and incumbent Kathy Rapp faces no resource-backed challenge, so the baseline 4.6% is slightly reduced given the total absence of Democratic campaign infrastructure.",
+      "computed_at": "2026-07-30T22:52:41.373Z"
+    },
+    "066": {
+      "dem_win_probability": 0.015,
+      "baseline_probability": 0.017,
+      "rating": "Safe R",
+      "rationale": "Historical results show a heavily Republican district (R+95.8 in 2024, R+94.9 in 2020, R+59.0 in 2018), with registration favoring Republicans by a nearly 4:1 margin (26,496 R vs 7,236 D). The Democratic candidate has raised $0 compared to $1,048,408 for Republicans, and the incumbent is a sitting Republican, all of which reinforce rather than contradict the baseline, so no upward adjustment is warranted.",
+      "computed_at": "2026-07-30T22:52:43.870Z"
+    },
+    "067": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.05,
+      "rating": "Safe R",
+      "rationale": "The district shows consistent, heavy Republican margins across three cycles (R+57.5 in 2018, R+46.8 in 2020, R+63.1 in 2024), with no favorable trend for Democrats. Registration is overwhelmingly Republican (26,017 R vs 7,693 D), and the Democratic candidate has raised $0 against $239,919 for Republicans, indicating no viable campaign infrastructure. These factors support a slight downward adjustment from the 5.0% baseline rather than any upward revision.",
+      "computed_at": "2026-07-30T22:52:47.046Z"
+    },
+    "068": {
+      "dem_win_probability": 0.015,
+      "baseline_probability": 0.018,
+      "rating": "Safe R",
+      "rationale": "This district shows a consistent and worsening R trend (R+53.7 in 2018 to R+87.5 in 2020 to R+95.4 in 2024), with a registration gap of nearly 4-to-1 (28,415 R vs 7,427 D). The Democratic candidate has raised $0 against $126,771 for Republicans, indicating no viable campaign infrastructure, so the baseline of 1.8% is essentially accurate and does not warrant upward adjustment.",
+      "computed_at": "2026-07-30T22:52:50.012Z"
+    },
+    "069": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.03,
+      "rating": "Safe R",
+      "rationale": "Uncontested — only R has a candidate on file.",
+      "computed_at": "2026-07-30T22:52:50.163Z"
+    },
+    "070": {
+      "dem_win_probability": 0.97,
+      "baseline_probability": 0.97,
+      "rating": "Safe D",
+      "rationale": "Uncontested — only D has a candidate on file.",
+      "computed_at": "2026-07-30T22:52:50.163Z"
+    },
+    "071": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.03,
+      "rating": "Safe R",
+      "rationale": "Uncontested — only R has a candidate on file.",
+      "computed_at": "2026-07-30T22:52:50.163Z"
+    },
+    "072": {
+      "dem_win_probability": 0.6,
+      "baseline_probability": 0.529,
+      "rating": "Lean D",
+      "rationale": "Despite a nearly 4,600-voter GOP registration edge (20,350 R vs 15,738 D), the district has consistently elected Democrats by D+2.8 to D+5.4 margins across three cycles, and incumbent Frank Burns holds a massive financial advantage ($4,754,591 raised vs $0 for Republicans). This combination of durable incumbency, fundraising dominance, and a stable multi-cycle Democratic trend suggests the baseline underweights Burns' entrenched advantage, warranting an upward adjustment from 52.9%.",
+      "computed_at": "2026-07-30T22:52:54.724Z"
+    },
+    "073": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.03,
+      "rating": "Safe R",
+      "rationale": "Uncontested — only R has a candidate on file.",
+      "computed_at": "2026-07-30T22:52:54.875Z"
+    },
+    "074": {
+      "dem_win_probability": 0.63,
+      "baseline_probability": 0.673,
+      "rating": "Lean D",
+      "rationale": "The Democratic margin has steadily eroded from D+22.9 in 2018 to D+16.5 in 2020 to D+10.1 in 2024, a consistent multi-cycle trend the baseline may underweight, while the voter registration edge is now modest (D 18,298 vs R 15,648, with 7,700 Other). Incumbent Dan Williams (D) still provides an incumbency boost, but the narrowing trend and lack of campaign finance data to confirm strength justify a slight downward adjustment from the 67.3% baseline to about 63%.",
+      "computed_at": "2026-07-30T22:52:59.967Z"
+    },
+    "075": {
+      "dem_win_probability": 0.02,
+      "baseline_probability": 0.027,
+      "rating": "Safe R",
+      "rationale": "This district shows a consistent, overwhelming Republican advantage (R+98.3 in 2018, R+52.4 in 2020, R+92.8 in 2024) with no favorable trend for Democrats. Registration is heavily skewed R 25,481 to D 10,791 (roughly 2.4:1), and the Democratic candidate has raised $0 versus $149,510 for Republicans, indicating no viable campaign infrastructure against incumbent Mike Armanini. These factors reinforce rather than undercut the baseline, so the probability is kept near the model's 2.7% estimate, adjusted slightly down given the total lack of Democratic funding.",
+      "computed_at": "2026-07-30T22:53:03.512Z"
+    },
+    "076": {
+      "dem_win_probability": 0.05,
+      "baseline_probability": 0.136,
+      "rating": "Safe R",
+      "rationale": "The margin has deteriorated sharply across three cycles (R+7.4 in 2018 to R+30.8 in 2020 to R+38.6 in 2024), indicating a strengthening GOP trend rather than a reversion opportunity. Registration favors Republicans by 22,350 to 10,326 (a ~12,000 gap in a 38,266-voter district), and the Democratic candidate has raised $0 versus $116,254 for Republicans, suggesting minimal campaign infrastructure to counter these trends. These factors justify a slight downward adjustment from the 13.6% baseline rather than an upward one.",
+      "computed_at": "2026-07-30T22:53:08.137Z"
+    },
+    "077": {
+      "dem_win_probability": 0.87,
+      "baseline_probability": 0.802,
+      "rating": "Likely D",
+      "rationale": "The district has consistently favored Democrats (D+97.2 in 2018, D+30.6 in 2020, D+22.7 in 2024), and Democratic registration exceeds Republican by nearly 3,800 voters (17,972 vs 14,165). With incumbent Scott Conklin running, $145,970 raised by Democrats versus $0 reported for Republicans signals a severely under-resourced or possibly absent GOP challenge, warranting an upward adjustment from the 80.2% baseline to reflect this stark financial and structural disadvantage for Republicans.",
+      "computed_at": "2026-07-30T22:53:11.414Z"
+    },
+    "078": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.03,
+      "rating": "Safe R",
+      "rationale": "Uncontested — only R has a candidate on file.",
+      "computed_at": "2026-07-30T22:53:11.565Z"
+    },
+    "079": {
+      "dem_win_probability": 0.05,
+      "baseline_probability": 0.045,
+      "rating": "Safe R",
+      "rationale": "The district has been consistently and heavily Republican (R+76.8 in 2018, R+40.3 in 2020, R+83.3 in 2024), with no clear trend toward Democrats, and registration favors Republicans nearly 2-to-1 (22,124 R vs 11,705 D). With a sitting Republican incumbent and no countervailing campaign finance or candidate data to suggest a competitive race, the baseline of 4.5% is essentially accurate; a slight upward adjustment to 5% accounts for the volatility seen between 2018 and 2020 margins.",
+      "computed_at": "2026-07-30T22:53:15.618Z"
+    },
+    "080": {
+      "dem_win_probability": 0.02,
+      "baseline_probability": 0.023,
+      "rating": "Safe R",
+      "rationale": "This district shows a heavily entrenched Republican advantage: R+84.5 in 2024 and R+95.9 in 2020, with registration favoring Republicans by a massive margin (29,812 R vs 8,373 D, a ~21,439 gap in a 43,212-voter district). The Democratic candidate has raised $0 compared to $101,879 for Republicans, and incumbent Scott Barger (R) faces no apparent resource disadvantage, so the baseline of 2.3% is essentially confirmed with only a slight downward adjustment given the zero Democratic funding.",
+      "computed_at": "2026-07-30T22:53:20.324Z"
+    },
+    "081": {
+      "dem_win_probability": 0.02,
+      "baseline_probability": 0.065,
+      "rating": "Safe R",
+      "rationale": "This district has trended sharply more Republican (R+27.9 in 2018 to R+37.2 in 2020 to R+57.4 in 2024), and registration heavily favors Republicans (28,017 R vs 8,550 D, a ~19,467 gap out of 41,384 voters). With the Democratic candidate reporting $0 raised against $50,381 for Republicans and an entrenched incumbent, the baseline 6.5% appears slightly too high given the worsening trend and total lack of Democratic financial competitiveness, warranting a modest downward adjustment.",
+      "computed_at": "2026-07-30T22:53:23.292Z"
+    },
+    "082": {
+      "dem_win_probability": 0.51,
+      "baseline_probability": 0.452,
+      "rating": "Toss-up",
+      "rationale": "The extreme R+95.6 and R+79.2 margins in 2020/2018 likely reflect uncontested or lopsided prior races, making the 2024 D+7.6 result and current registration edge (D 16,693 vs R 15,958) far more relevant to the present matchup. With Paul Takac now the sitting Democratic incumbent building on that 2024 win, the baseline's 45.2% appears to underweight incumbency and the favorable registration trend, warranting a modest upward adjustment to just above 50%.",
+      "computed_at": "2026-07-30T22:53:29.334Z"
+    },
+    "083": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.03,
+      "rating": "Safe R",
+      "rationale": "Uncontested — only R has a candidate on file.",
+      "computed_at": "2026-07-30T22:53:29.484Z"
+    },
+    "084": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.03,
+      "rating": "Safe R",
+      "rationale": "Uncontested — only R has a candidate on file.",
+      "computed_at": "2026-07-30T22:53:29.484Z"
+    },
+    "085": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.03,
+      "rating": "Safe R",
+      "rationale": "Uncontested — only R has a candidate on file.",
+      "computed_at": "2026-07-30T22:53:29.484Z"
+    },
+    "086": {
+      "dem_win_probability": 0.02,
+      "baseline_probability": 0.024,
+      "rating": "Safe R",
+      "rationale": "This is an overwhelmingly Republican district with R+83.4 and R+96.6 margins in the last two cycles, a registration gap of 28,577 R to 8,049 D (roughly 3.5:1), and a Democratic fundraising total of $0 versus $192,069 for Republicans. There is no positive trend or incumbency shift to warrant deviating from the baseline, so the estimate remains near the 2.4% figure.",
+      "computed_at": "2026-07-30T22:53:31.900Z"
+    },
+    "087": {
+      "dem_win_probability": 0.15,
+      "baseline_probability": 0.233,
+      "rating": "Likely R",
+      "rationale": "The margin trend has worsened sharply for Democrats, from R+13.2 (2018) and R+11.8 (2020) to R+23.3 (2024), while registration favors Republicans by nearly 10,000 voters (24,982 R vs 15,339 D). With zero reported Democratic fundraising against $307,601 raised by Republicans and an R incumbent in place, the baseline 23.3% appears too generous, warranting a downward adjustment to about 15%.",
+      "computed_at": "2026-07-30T22:53:36.298Z"
+    },
+    "088": {
+      "dem_win_probability": 0.35,
+      "baseline_probability": 0.321,
+      "rating": "Lean R",
+      "rationale": "The margin has trended toward Democrats over three cycles (R+16.1 in 2018 and 2020, narrowing to R+10.3 in 2024), suggesting some baseline underweighting of this shift. However, Republicans still hold a registration edge of 21,121 to 16,868 (Other 8,756) and a massive fundraising advantage ($636,489 vs $217,428), which combined with incumbent Delozier's presence justifies only a modest upward adjustment from the 32.1% baseline to 35%.",
+      "computed_at": "2026-07-30T22:53:41.019Z"
+    },
+    "089": {
+      "dem_win_probability": 0.05,
+      "baseline_probability": 0.077,
+      "rating": "Safe R",
+      "rationale": "Despite the historical margin improving from R+95.8 (2018) to R+78.5 (2020) to R+41.0 (2024), the district remains heavily Republican with a registration gap of R 25,303 to D 11,647 (nearly 2.2:1) and a massive fundraising disparity ($193,205 R vs $17,144 D). Given the entrenched incumbent Robert Kauffman and lack of competitive financial backing for the Democrat, the baseline of 7.7% is reasonable but slightly lowered to 5% given the resource imbalance likely limiting turnout gains from the trend.",
+      "computed_at": "2026-07-30T22:53:45.412Z"
+    },
+    "090": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.03,
+      "rating": "Safe R",
+      "rationale": "Uncontested — only R has a candidate on file.",
+      "computed_at": "2026-07-30T22:53:45.564Z"
+    },
+    "091": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.049,
+      "rating": "Safe R",
+      "rationale": "District 091 shows overwhelming Republican dominance with historical margins of R+72.8 (2024) and R+94.0 (2020), and voter registration heavily favors Republicans (27,575 R vs 13,190 D, a gap of over 14,000). The Democratic candidate has raised $0 compared to $31,537 for Republicans, indicating no competitive campaign infrastructure against incumbent Dan Moul, so the baseline of 4.9% is reasonable and slightly lowered given the total absence of Democratic fundraising.",
+      "computed_at": "2026-07-30T22:53:48.380Z"
+    },
+    "092": {
+      "dem_win_probability": 0.03,
+      "baseline_probability": 0.105,
+      "rating": "Safe R",
+      "rationale": "The district has a consistent R+38 to R+44 margin across three cycles (2018, 2020, 2024), a heavy GOP registration edge (29,437 R vs 12,116 D, with Other at 8,321), and the Democratic candidate has raised $0 versus $116,749 for Republicans, indicating no viable campaign infrastructure. Given the incumbent Marc Anderson's entrenched position and total absence of Democratic financial competitiveness, the baseline 10.5% appears too high, warranting a downward adjustment to reflect near-certain Republican retention.",
+      "computed_at": "2026-07-30T22:53:51.669Z"
+    },
+    "093": {
+      "dem_win_probability": 0.02,
+      "baseline_probability": 0.031,
+      "rating": "Safe R",
+      "rationale": "The district has shown consistent and worsening Republican dominance (R+91.7 in 2020, R+92.8 in 2024), with a registration gap of nearly 2:1 (26,626 R vs 14,108 D). The Democratic candidate raised $0 compared to $121,839 for Republicans, indicating no viable campaign infrastructure, so the baseline 3.1% is adjusted slightly downward to 2%.",
+      "computed_at": "2026-07-30T22:53:55.359Z"
+    },
+    "094": {
+      "dem_win_probability": 0.02,
+      "baseline_probability": 0.027,
+      "rating": "Safe R",
+      "rationale": "The district has been solidly Republican across recent cycles (R+93.6 in 2024, R+93.8 in 2020, R+32.6 in 2018), and voter registration heavily favors Republicans (25,315 R vs 11,523 D, with Other 7,900). The Democratic candidate has raised $0 compared to $619,008 for Republicans, and the incumbent Wendy Fink (R) faces no apparent competitive threat, so the baseline 2.7% is essentially confirmed with a slight downward adjustment given the total absence of Democratic financial investment.",
+      "computed_at": "2026-07-30T22:54:02.000Z"
+    },
+    "095": {
+      "dem_win_probability": 0.84,
+      "baseline_probability": 0.817,
+      "rating": "Likely D",
+      "rationale": "Democratic registration advantage of nearly 8,834 voters (19,030 D vs 10,196 R) combined with a sitting Democratic incumbent (Carol Hill-Evans) supports a high floor, and the district has never gone Republican in the last three cycles (D+18.2 in 2024, D+27.9 in 2020, D+97.3 in 2018). The narrowing margin from D+27.9 to D+18.2 suggests some erosion but not enough to offset the strong structural and incumbency advantages, so a modest upward adjustment from the 81.7% baseline to 84% is warranted.",
+      "computed_at": "2026-07-30T22:54:08.249Z"
+    },
+    "096": {
+      "dem_win_probability": 0.92,
+      "baseline_probability": 0.863,
+      "rating": "Safe D",
+      "rationale": "Despite the narrowing from D+98.1 (2018) and D+96.9 (2020) to D+20.7 (2024), the district still retains a comfortable Democratic lean, reinforced by a D registration edge of 21,974 vs 15,934 R. The incumbent Rivera (D) faces a Republican field that has raised $0 compared to $110,225 for Democrats, indicating essentially no competitive GOP campaign infrastructure this cycle, which supports nudging the baseline probability upward from 86.3%.",
+      "computed_at": "2026-07-30T22:54:14.186Z"
+    },
+    "097": {
+      "dem_win_probability": 0.12,
+      "baseline_probability": 0.22,
+      "rating": "Likely R",
+      "rationale": "The district has trended sharply more Republican, from R+13.3 in 2018 to R+23.6 in 2024, and registration heavily favors Republicans (25,012 R vs 14,264 D, nearly a 2:1 edge). With Democrats reporting $0 raised versus $310,111 for Republicans and no signs of a competitive campaign infrastructure, the baseline of 22% appears too generous, warranting a downward adjustment to reflect the worsening trend and financial disparity.",
+      "computed_at": "2026-07-30T22:54:17.106Z"
+    },
+    "098": {
+      "dem_win_probability": 0.1,
+      "baseline_probability": 0.157,
+      "rating": "Safe R",
+      "rationale": "Registration favors Republicans by more than 2:1 (26,890 R vs 12,690 D), and the district has voted R by 28-33 points in each of the last three cycles with no sign of a durable Democratic trend. The Democratic candidate has raised $0 compared to the incumbent's $167,037, suggesting a non-competitive campaign, which justifies adjusting slightly below the baseline rather than above it.",
+      "computed_at": "2026-07-30T22:54:21.662Z"
+    },
+    "099": {
+      "dem_win_probability": 0.025,
+      "baseline_probability": 0.027,
+      "rating": "Safe R",
+      "rationale": "The district has trended sharply more Republican over three cycles (R+42.8 in 2018, R+46.7 in 2020, R+97.2 in 2024), and registration heavily favors Republicans (24,234 R vs 8,423 D, a nearly 3-to-1 gap). With zero Democratic fundraising versus $96,131 raised by Republicans and an entrenched incumbent, there is no evidence to move above the baseline; if anything the widening margin and financial disparity support keeping the estimate at or slightly below 2.7%.",
+      "computed_at": "2026-07-30T22:54:24.627Z"
+    }
+  }
+}

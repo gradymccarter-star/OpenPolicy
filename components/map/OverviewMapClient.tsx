@@ -6,12 +6,12 @@ import PoliticianCard from '@/components/politicians/PoliticianCard';
 import { CandidacyBadge, PartyBadge } from '@/components/ui/Badge';
 import type { LeadershipTier } from '@/lib/data/contact-info';
 import { getCandidacyStatus, rescaleScore } from '@/lib/utils/helpers';
-import type { ElectionHistoryFile, ElectionYearResult, PoliticianWithScores } from '@/lib/utils/types';
+import type { DistrictOddsEntry, ElectionHistoryFile, ElectionYearResult, PoliticianWithScores } from '@/lib/utils/types';
 import PADistrictMap, { type DistrictGeoJSON } from './PADistrictMap';
 
 const TOTAL_DISTRICTS = 203;
 
-type ColorMode = 'party' | 'score' | 'funding' | 'contested' | 'leadership' | `year:${string}`;
+type ColorMode = 'party' | 'score' | 'odds' | 'funding' | 'contested' | 'leadership' | `year:${string}`;
 
 interface Props {
   readonly geojson: DistrictGeoJSON;
@@ -23,6 +23,7 @@ interface Props {
   readonly committeeRoleById?: Record<string, string>;
   readonly leadershipTierById?: Record<string, LeadershipTier>;
   readonly normalizedScoresById?: Record<string, number | null>;
+  readonly districtOdds?: Record<string, DistrictOddsEntry>;
 }
 
 const LEADERSHIP_LABELS: Record<LeadershipTier, string> = {
@@ -74,6 +75,18 @@ function getScoreMapFill(scaledScore: number): string {
   return lerpColor(SCORE_GRADIENT_MID, SCORE_GRADIENT_HIGH, (t - 0.5) / 0.5);
 }
 
+// SCAI-estimated win probability gradient — deliberately party-colored (unlike the
+// oxblood/brass/verdigris Chamber-alignment gradient) since this is a different
+// concept: electability, not policy alignment.
+const ODDS_NEUTRAL = '#efece3';
+const ODDS_GRADIENT_CSS = `linear-gradient(to right, ${PARTY_FILL.R}, ${ODDS_NEUTRAL}, ${PARTY_FILL.D})`;
+
+function getOddsMapFill(demWinProbability: number): string {
+  const t = Math.max(0, Math.min(1, demWinProbability));
+  if (t <= 0.5) return lerpColor(PARTY_FILL.R, ODDS_NEUTRAL, t / 0.5);
+  return lerpColor(ODDS_NEUTRAL, PARTY_FILL.D, (t - 0.5) / 0.5);
+}
+
 /** Blend the light party tint toward the full party color as margin widens, so close races read lighter than blowouts. */
 function fillForMargin(winner: string | null, marginPct: number | null): string {
   if (!winner || marginPct === null) return NEUTRAL_FILL;
@@ -88,7 +101,7 @@ function fillForMargin(winner: string | null, marginPct: number | null): string 
   return `rgb(${mix(r1, r2)}, ${mix(g1, g2)}, ${mix(b1, b2)})`;
 }
 
-export default function OverviewMapClient({ geojson, politiciansByDistrict, fundingIds, fundingTotals, electionHistory, initialDistrict, committeeRoleById = {}, leadershipTierById = {}, normalizedScoresById = {} }: Props) {
+export default function OverviewMapClient({ geojson, politiciansByDistrict, fundingIds, fundingTotals, electionHistory, initialDistrict, committeeRoleById = {}, leadershipTierById = {}, normalizedScoresById = {}, districtOdds = {} }: Props) {
   const [view, setView] = useState<'map' | 'table'>('map');
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(initialDistrict);
   const [hoveredDistrict, setHoveredDistrict] = useState<string | null>(null);
@@ -113,38 +126,38 @@ export default function OverviewMapClient({ geojson, politiciansByDistrict, fund
     [districtFunding],
   );
 
-  // var(--brass-bright) / var(--ink) / var(--ink-faint) — kept as raw hex because the
-  // heatmap blend math needs RGB channels, which CSS custom properties can't provide here.
+  // var(--brass-bright) — kept as raw hex for the leadership heatmap's RGB blend math.
   const BRASS_BRIGHT = '#c9a84c';
-  const INK = '#131a26';
-  const INK_FAINT = '#c6c8ce';
-  const CONTESTED_COLOR = 'var(--ink)';
-  const UNCONTESTED_COLOR = 'var(--ink-faint)';
-  const FUNDING_GRADIENT_CSS = `linear-gradient(to right, var(--well), ${BRASS_BRIGHT})`;
-  const CONTESTED_GRADIENT_CSS = `linear-gradient(to right, ${UNCONTESTED_COLOR}, ${CONTESTED_COLOR})`;
+  // Standalone, non-theme gradients (purple / green) so these two modes read as visually
+  // distinct from Score's and Odds's oxblood/brass/verdigris/party-color language.
+  const FUNDING_GRADIENT_LOW = '#e5d9f2'; // pale lavender
+  const FUNDING_GRADIENT_MID = '#8b6bb0'; // plum
+  const FUNDING_GRADIENT_HIGH = '#4a2c6d'; // deep purple
+  const CONTESTED_GRADIENT_LOW = '#dcefe0'; // pale mint
+  const CONTESTED_GRADIENT_MID = '#4f9d69'; // green
+  const CONTESTED_GRADIENT_HIGH = '#1e5631'; // deep forest green
+  const FUNDING_GRADIENT_CSS = `linear-gradient(to right, ${FUNDING_GRADIENT_LOW}, ${FUNDING_GRADIENT_MID}, ${FUNDING_GRADIENT_HIGH})`;
+  const CONTESTED_GRADIENT_CSS = `linear-gradient(to right, ${CONTESTED_GRADIENT_LOW}, ${CONTESTED_GRADIENT_MID}, ${CONTESTED_GRADIENT_HIGH})`;
 
   /**
-   * Brass heatmap, intensity scaled relative to the highest-funded district on the board.
-   * Campaign finance is heavily skewed toward a handful of top fundraisers, so a linear
-   * scale left most districts nearly indistinguishable pale — sqrt spreads the mid-range
-   * out so ordinary differences in funding actually read on the map.
+   * Purple gradient, intensity scaled relative to the highest-funded district on the
+   * board. Campaign finance is heavily skewed toward a handful of top fundraisers, so a
+   * linear scale left most districts nearly indistinguishable — sqrt spreads the
+   * mid-range out so ordinary differences in funding actually read on the map.
    */
   function fillForFunding(amount: number): string {
     if (amount <= 0) return NEUTRAL_FILL;
-    const [r, g, b] = hexToRgb(BRASS_BRIGHT);
-    const intensity = Math.min(1, 0.2 + 0.8 * Math.sqrt(amount / maxDistrictFunding));
-    const blend = (channel: number) => Math.round(channel + (255 - channel) * (1 - intensity));
-    return `rgb(${blend(r)}, ${blend(g)}, ${blend(b)})`;
+    const t = Math.min(1, 0.2 + 0.8 * Math.sqrt(amount / maxDistrictFunding));
+    if (t <= 0.5) return lerpColor(FUNDING_GRADIENT_LOW, FUNDING_GRADIENT_MID, t / 0.5);
+    return lerpColor(FUNDING_GRADIENT_MID, FUNDING_GRADIENT_HIGH, (t - 0.5) / 0.5);
   }
 
-  /** Graduated by candidate count rather than a flat binary split — 3+ candidate primaries
-   * read as more contested than a standard 2-candidate race. */
+  /** Green gradient, graduated by candidate count rather than a flat binary split —
+   * 3+ candidate primaries read as more contested than a standard 2-candidate race. */
   function fillForContested(count: number): string {
-    const intensity = Math.max(0, Math.min(1, (count - 1) / 2));
-    const [r, g, b] = hexToRgb(INK);
-    const [fr, fg, fb] = hexToRgb(INK_FAINT);
-    const blend = (base: number, faint: number) => Math.round(faint + (base - faint) * intensity);
-    return `rgb(${blend(r, fr)}, ${blend(g, fg)}, ${blend(b, fb)})`;
+    const t = Math.max(0, Math.min(1, (count - 1) / 2));
+    if (t <= 0.5) return lerpColor(CONTESTED_GRADIENT_LOW, CONTESTED_GRADIENT_MID, t / 0.5);
+    return lerpColor(CONTESTED_GRADIENT_MID, CONTESTED_GRADIENT_HIGH, (t - 0.5) / 0.5);
   }
 
   const LEADERSHIP_INTENSITY: Record<LeadershipTier, number> = {
@@ -187,6 +200,11 @@ export default function OverviewMapClient({ geojson, politiciansByDistrict, fund
     if (colorMode === 'leadership') {
       return fillForLeadership(districtLeadershipTier(district));
     }
+    if (colorMode === 'odds') {
+      const odds = districtOdds[district];
+      if (!odds) return NO_DATA_FILL;
+      return getOddsMapFill(odds.dem_win_probability);
+    }
     const reps = politiciansByDistrict[district];
     if (!reps || reps.length === 0) return NO_DATA_FILL;
     if (colorMode === 'contested') {
@@ -212,6 +230,7 @@ export default function OverviewMapClient({ geojson, politiciansByDistrict, fund
     : null;
   const hoveredLeadershipTier = hoveredDistrict && colorMode === 'leadership' ? districtLeadershipTier(hoveredDistrict) : null;
   const selectedHistory = selectedDistrict ? electionHistory?.districts[selectedDistrict] : undefined;
+  const selectedOdds = selectedDistrict ? districtOdds[selectedDistrict] : undefined;
 
   const searchMatches = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -310,6 +329,13 @@ export default function OverviewMapClient({ geojson, politiciansByDistrict, fund
                   By Chamber Score
                 </button>
                 <button
+                  onClick={() => setColorMode('odds')}
+                  className="px-3 py-1.5 rounded-sm text-caption font-semibold transition-colors"
+                  style={colorMode === 'odds' ? { background: 'var(--ink)', color: 'var(--paper)' } : { color: 'var(--ink-secondary)' }}
+                >
+                  Est. Win Odds
+                </button>
+                <button
                   onClick={() => setColorMode('funding')}
                   className="px-3 py-1.5 rounded-sm text-caption font-semibold transition-colors"
                   style={colorMode === 'funding' ? { background: 'var(--ink)', color: 'var(--paper)' } : { color: 'var(--ink-secondary)' }}
@@ -351,6 +377,14 @@ export default function OverviewMapClient({ geojson, politiciansByDistrict, fund
               )}
               {colorMode === 'score' && (
                 <GradientLegend gradient={SCORE_GRADIENT_CSS} lowLabel="Low alignment" highLabel="High alignment" />
+              )}
+              {colorMode === 'odds' && (
+                <GradientLegend
+                  gradient={ODDS_GRADIENT_CSS}
+                  lowLabel="Favors R"
+                  highLabel="Favors D"
+                  extra={{ color: NEUTRAL_FILL, label: 'No estimate' }}
+                />
               )}
               {colorMode === 'funding' && (
                 <GradientLegend
@@ -486,6 +520,30 @@ export default function OverviewMapClient({ geojson, politiciansByDistrict, fund
 
                 {selectedHistory && Object.keys(selectedHistory).length > 0 && (
                   <HistoryTrendBars history={selectedHistory} years={historyYears} />
+                )}
+
+                {selectedOdds && (
+                  <div className="card p-5 mt-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="overline">Est. Win Odds</p>
+                      <span
+                        className="text-caption font-semibold px-2 py-0.5 rounded-sm"
+                        style={{
+                          color: selectedOdds.dem_win_probability >= 0.5 ? PARTY_FILL.D : PARTY_FILL.R,
+                          background: selectedOdds.dem_win_probability >= 0.5 ? 'rgba(43,92,138,0.1)' : 'rgba(161,61,51,0.1)',
+                        }}
+                      >
+                        {selectedOdds.rating}
+                      </span>
+                    </div>
+                    <p className="figure text-heading-4 text-primary-950 mb-2">
+                      {Math.round(selectedOdds.dem_win_probability * 100)}% D &middot; {Math.round((1 - selectedOdds.dem_win_probability) * 100)}% R
+                    </p>
+                    <p className="text-body-sm text-primary-600 leading-relaxed mb-2">{selectedOdds.rationale}</p>
+                    <p className="text-caption text-primary-400">
+                      SCAI-generated estimate from historical results, registration, and incumbency &mdash; not a real prediction-market or professional forecast.
+                    </p>
+                  </div>
                 )}
               </div>
             )}

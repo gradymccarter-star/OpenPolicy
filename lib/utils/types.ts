@@ -470,6 +470,24 @@ export interface ScoreNormalizationFile {
   sorted_scores: number[];
 }
 
+// Shape of public/data/pa-house-district-odds.json (see scripts/jobs/compute-district-odds.js)
+// dem_win_probability is a SCAI-generated estimate (deterministic baseline + Claude
+// review), not a real prediction-market or professional forecaster's number.
+export interface DistrictOddsEntry {
+  dem_win_probability: number; // 0-1
+  baseline_probability: number; // pre-AI-adjustment deterministic value, for auditability
+  rating: string; // 'Safe D' | 'Likely D' | 'Lean D' | 'Toss-up' | 'Lean R' | 'Likely R' | 'Safe R'
+  rationale: string;
+  computed_at: string;
+}
+
+export interface DistrictOddsFile {
+  generated_at: string;
+  description: string;
+  model: string;
+  districts: Record<string, DistrictOddsEntry>;
+}
+
 // Shape of public/data/pa-house-pachamber-scorecard.json (see scripts/jobs/fetch-pachamber-scorecard.js)
 export interface PAChamberMemberScore {
   district: string; // zero-padded 3-digit string, e.g. "001", "042", "100"

@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import type { BillStatusFile, BillStatus, CandidateResultsFile, CandidateYearResult, VoterRegistrationFile, DistrictVoterRegistration, PAChamberScorecardFile, PAChamberMemberScore, ScoreNormalizationFile } from '@/lib/utils/types';
+import type { BillStatusFile, BillStatus, CandidateResultsFile, CandidateYearResult, VoterRegistrationFile, DistrictVoterRegistration, PAChamberScorecardFile, PAChamberMemberScore, ScoreNormalizationFile, DistrictOddsFile, DistrictOddsEntry } from '@/lib/utils/types';
 
 function loadJson<T>(filename: string): T | null {
   const p = path.join(process.cwd(), 'public', 'data', filename);
@@ -108,4 +108,16 @@ export function getNormalizedScore(rawScore: number): number | null {
 export function getScoreNormalizationMeta(): { total_scored: number; generated_at: string } | null {
   const norm = loadNormalization();
   return norm ? { total_scored: norm.total_scored, generated_at: norm.generated_at } : null;
+}
+
+let _districtOdds: DistrictOddsFile | null | undefined;
+
+export function getDistrictOdds(district: string): DistrictOddsEntry | null {
+  if (_districtOdds === undefined) _districtOdds = loadJson<DistrictOddsFile>('pa-house-district-odds.json');
+  return _districtOdds?.districts[district] ?? null;
+}
+
+export function getDistrictOddsMeta(): { generated_at: string; model: string } | null {
+  if (_districtOdds === undefined) _districtOdds = loadJson<DistrictOddsFile>('pa-house-district-odds.json');
+  return _districtOdds ? { generated_at: _districtOdds.generated_at, model: _districtOdds.model } : null;
 }

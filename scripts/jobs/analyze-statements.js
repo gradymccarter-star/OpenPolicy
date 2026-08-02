@@ -168,7 +168,7 @@ const CLAIM_SCORE_MAP = {
 };
 
 const BILL_EVIDENCE_TYPES = ['floor_vote', 'bill_sponsorship', 'bill_cosponsorship'];
-const STATEMENT_EVIDENCE_TYPES = ['committee_statement', 'floor_speech', 'press_release', 'news_article', 'social_media'];
+const STATEMENT_EVIDENCE_TYPES = ['committee_statement', 'floor_speech', 'press_release', 'news_article', 'social_media', 'questionnaire_response'];
 const CHUNK = 200;
 
 // ============================================================
@@ -272,8 +272,8 @@ async function fetchAllPages(buildQuery, pageSize = 1000) {
 
 async function runStep1(supabase) {
   const [newItems, reprocessItems] = await Promise.all([
-    fetchAllPages(() => supabase.from('evidence_items').select('id, bill_title, source_text').is('keyword_filter_passed', null)),
-    fetchAllPages(() => supabase.from('evidence_items').select('id, bill_title, source_text').eq('keyword_filter_passed', false).is('is_relevant', null)),
+    fetchAllPages(() => supabase.from('evidence_items').select('id, evidence_type, bill_title, source_text').is('keyword_filter_passed', null)),
+    fetchAllPages(() => supabase.from('evidence_items').select('id, evidence_type, bill_title, source_text').eq('keyword_filter_passed', false).is('is_relevant', null)),
   ]);
 
   const unfiltered = [...newItems, ...reprocessItems];
@@ -281,6 +281,17 @@ async function runStep1(supabase) {
   const failedIds = [];
 
   for (const item of unfiltered) {
+    // Candidate survey responses are short-form, plain-language prose about a
+    // candidate's own platform — the exact bill-title phrases this keyword list
+    // targets (e.g. "corporate net income") rarely appear verbatim even when the
+    // content is substantively relevant. Since a candidate chose to write it, it's
+    // always worth a real relevance judgment rather than a blunt keyword gate —
+    // this is also the ONLY evidence type available for most challengers, so
+    // silently dropping it here would make it impossible to ever score them.
+    if (item.evidence_type === 'questionnaire_response') {
+      passedIds.push(item.id);
+      continue;
+    }
     const text = `${item.bill_title || ''} ${item.source_text || ''}`;
     if (isPABusinessRelevant(text)) {
       passedIds.push(item.id);
@@ -507,7 +518,15 @@ async function runStep4(supabase, anthropic, maxBudget) {
 
   const politicianMap = new Map(allPoliticians.map((p) => [p.id, p]));
   const claimedIds = new Set(alreadyClaimed.map((c) => c.evidence_item_id));
-  const unprocessed = relevantStatements.filter((s) => !claimedIds.has(s.id));
+  let unprocessed = relevantStatements.filter((s) => !claimedIds.has(s.id));
+
+  // Optional scope-down, e.g. CLAIM_EXTRACTION_IDS=uuid1,uuid2 — lets a large
+  // pre-existing backlog not starve a small newly-added batch of its budget
+  // (unprocessed has no priority ordering otherwise).
+  if (process.env.CLAIM_EXTRACTION_IDS) {
+    const onlyIds = new Set(process.env.CLAIM_EXTRACTION_IDS.split(',').map((s) => s.trim()));
+    unprocessed = unprocessed.filter((s) => onlyIds.has(s.id));
+  }
 
   console.log(`  ${unprocessed.length} statements need claim extraction`);
 
@@ -529,7 +548,7 @@ DATE: ${new Date(stmt.source_date).toISOString().split('T')[0]}
 CONTENT:
 ${(stmt.source_text || '').substring(0, 3000)}
 
-Extract every distinct policy claim related to PA Chamber priorities (taxes, permitting, civil justice, fiscal policy, workforce, energy, labor, infrastructure, health care).
+Extract every distinct policy claim related to PA Chamber priorities.
 
 Return ONLY valid JSON with no other text:
 {
@@ -540,7 +559,7 @@ Return ONLY valid JSON with no other text:
       "strength": "strong" | "moderate" | "weak",
       "is_hedged": true or false,
       "target_policy": "specific policy, bill, or concept being referenced",
-      "pa_chamber_principles": ["P1", "P3", etc]
+      "pa_chamber_principles": ["P1"]
     }
   ],
   "extraction_confidence": 0.0 to 1.0
@@ -549,6 +568,11 @@ Return ONLY valid JSON with no other text:
 stance: support=explicitly in favor, oppose=explicitly against, neutral=no clear side, conditional=supports/opposes only under specific conditions
 strength: strong=definitive language, moderate=clear but not emphatic, weak=tentative
 is_hedged: true if qualifying language like "generally", "in principle", "could see"
+
+pa_chamber_principles MUST contain only these exact codes, never spelled-out names:
+P1=Taxes & Business Competitiveness, P2=Permitting & Regulatory Reform, P3=Civil Justice,
+P4=Fiscal Responsibility, P5=Workforce & Education, P6=Energy & Environment, P7=Labor & Employment,
+P8=Infrastructure, P9=Health Care. A claim can map to multiple codes, e.g. ["P1","P4"].
 
 Extract ONLY claims actually present in the text. If no relevant policy claims, return an empty claims array.`;
 

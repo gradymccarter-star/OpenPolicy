@@ -5,7 +5,7 @@ import { getSupabase, extractOverallScore } from '@/lib/db/client';
 import { getCandidacyStatus } from '@/lib/utils/helpers';
 import { getNormalizedScore } from '@/lib/data/static-data';
 import { getContactInfoForDistrict, getCommitteeChairLabel, getLeadershipTier, type LeadershipTier } from '@/lib/data/contact-info';
-import type { ElectionHistoryFile, PoliticianWithScores } from '@/lib/utils/types';
+import type { DistrictOddsFile, ElectionHistoryFile, PoliticianWithScores } from '@/lib/utils/types';
 import type { DistrictGeoJSON } from '@/components/map/PADistrictMap';
 
 function buildCommitteeMaps(politiciansByDistrict: Record<string, PoliticianWithScores[]>): {
@@ -78,6 +78,12 @@ function getElectionHistory(): ElectionHistoryFile | null {
   return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
 }
 
+function getDistrictOdds(): DistrictOddsFile | null {
+  const filePath = path.join(process.cwd(), 'public', 'data', 'pa-house-district-odds.json');
+  if (!fs.existsSync(filePath)) return null;
+  return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+}
+
 export default async function OverviewPage({
   searchParams,
 }: {
@@ -109,6 +115,7 @@ export default async function OverviewPage({
 
   const geojson = getDistrictGeoJSON();
   const electionHistory = getElectionHistory();
+  const districtOdds = getDistrictOdds();
   const districtCount = Object.keys(politiciansByDistrict).length;
   const { district: initialDistrict } = await searchParams;
 
@@ -135,6 +142,7 @@ export default async function OverviewPage({
         committeeRoleById={committeeRoleById}
         leadershipTierById={leadershipTierById}
         normalizedScoresById={normalizedScoresById}
+        districtOdds={districtOdds?.districts ?? {}}
       />
     </main>
   );

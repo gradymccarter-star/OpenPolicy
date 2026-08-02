@@ -9,7 +9,7 @@ import { CandidacyBadge, PartyBadge } from '@/components/ui/Badge';
 import { getSupabase, extractOverallScore } from '@/lib/db/client';
 import { getCandidacyStatus } from '@/lib/utils/helpers';
 import { getContactInfoForDistrict } from '@/lib/data/contact-info';
-import { getBillStatusMap, getCandidateResults, getVoterRegistration, getVoterRegistrationAsOf, getPAChamberScore, getPAChamberStats, getPAChamberSession, getACLUPAScore, getACLUPAStats, getACLUPASession, getNormalizedScore, getScoreNormalizationMeta } from '@/lib/data/static-data';
+import { getBillStatusMap, getCandidateResults, getVoterRegistration, getVoterRegistrationAsOf, getPAChamberScore, getPAChamberStats, getPAChamberSession, getACLUPAScore, getACLUPAStats, getACLUPASession, getNormalizedScore, getScoreNormalizationMeta, getDistrictOdds } from '@/lib/data/static-data';
 import { PA_CHAMBER_PRINCIPLES, EVIDENCE_TYPE_LABELS, EVIDENCE_WEIGHTS, EXAMPLE_POLITICIANS } from '@/lib/utils/constants';
 import type { ElectionHistoryFile } from '@/lib/utils/types';
 import Image from 'next/image';
@@ -107,6 +107,7 @@ export default async function CandidateDetailPage({
   const aclupaScore = politicianRow.district ? getACLUPAScore(politicianRow.district) : null;
   const aclupaStats = getACLUPAStats();
   const aclupaSession = getACLUPASession();
+  const districtOdds = politicianRow.district ? getDistrictOdds(politicianRow.district) : null;
 
   const overallData = extractOverallScore(politicianRow);
   const overallScore = overallData?.overall_score ?? 0;
@@ -268,6 +269,7 @@ export default async function CandidateDetailPage({
         politician={politician}
         contactInfo={contactInfo}
         districtHistory={districtHistory}
+        districtOdds={districtOdds}
         billStatusMap={billStatusMap}
         candidateResults={candidateResults}
         voterRegistration={voterRegistration}
