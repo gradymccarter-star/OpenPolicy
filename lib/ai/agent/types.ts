@@ -36,6 +36,7 @@ export interface CandidateSummary {
   candidacy_status: string;
   display_score: number | null; // 0-100, rescaled — null if no evidence yet
   percentile: number | null; // 0-100
+  confidence: number | null; // 0-1 — low means the score is thin (e.g. one candidate survey), not proven
   profile_url: string;
 }
 

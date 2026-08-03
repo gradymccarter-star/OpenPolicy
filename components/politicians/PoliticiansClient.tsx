@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import PoliticianCard from './PoliticianCard';
+import { rankingScore } from '@/lib/utils/helpers';
 import type { PoliticianWithScores } from '@/lib/utils/types';
 
 interface PoliticiansClientProps {
@@ -50,7 +51,10 @@ export default function PoliticiansClient({ politicians, showExamples, initialQu
 
     return results.toSorted((a, b) => {
       if (sort === 'name') return a.full_name.localeCompare(b.full_name);
-      return (b.overall_score?.overall_score ?? 0) - (a.overall_score?.overall_score ?? 0);
+      return (
+        rankingScore(b.overall_score?.overall_score ?? 0, b.overall_score?.overall_confidence ?? 0) -
+        rankingScore(a.overall_score?.overall_score ?? 0, a.overall_score?.overall_confidence ?? 0)
+      );
     });
   }, [politicians, search, party, county, minScore, sort]);
 

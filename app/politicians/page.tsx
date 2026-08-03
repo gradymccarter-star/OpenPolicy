@@ -1,6 +1,6 @@
 import PoliticiansClient from '@/components/politicians/PoliticiansClient';
 import { getSupabase, extractOverallScore } from '@/lib/db/client';
-import { getCandidacyStatus } from '@/lib/utils/helpers';
+import { getCandidacyStatus, rankingScore } from '@/lib/utils/helpers';
 import { getContactInfoForDistrict, getCommitteeChairLabel } from '@/lib/data/contact-info';
 import { getNormalizedScore } from '@/lib/data/static-data';
 import { EXAMPLE_POLITICIANS } from '@/lib/utils/constants';
@@ -52,7 +52,8 @@ async function getPoliticians() {
   })) as PoliticianWithScores[];
 
   return politicians.toSorted((a, b) =>
-    (b.overall_score?.overall_score ?? 0) - (a.overall_score?.overall_score ?? 0)
+    rankingScore(b.overall_score?.overall_score ?? 0, b.overall_score?.overall_confidence ?? 0) -
+    rankingScore(a.overall_score?.overall_score ?? 0, a.overall_score?.overall_confidence ?? 0)
   );
 }
 

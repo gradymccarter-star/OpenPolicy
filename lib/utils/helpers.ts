@@ -56,6 +56,19 @@ export function rescaleScore(raw: number): number {
   return SCORE_DISPLAY_MIN + ((clamped - SCORE_RAW_MIN) / (SCORE_RAW_MAX - SCORE_RAW_MIN)) * (SCORE_DISPLAY_MAX - SCORE_DISPLAY_MIN);
 }
 
+// Confidence-weighted score for SORT ORDER only — never for the score shown to a user,
+// which should always be the honest raw/rescaled number. A high score built on very
+// little evidence (e.g. one candidate survey) gets pulled toward the population mean
+// before being compared to well-evidenced candidates, so a single strongly-worded data
+// point can't outrank a real track record just by chance. Squaring confidence makes the
+// pull much stronger for thin evidence while barely touching well-evidenced scores.
+const POPULATION_MEAN_RAW_SCORE = 0.5; // matches score-normalization.json's mean/p50
+
+export function rankingScore(rawScore: number, confidence: number): number {
+  const weight = confidence * confidence;
+  return weight * rawScore + (1 - weight) * POPULATION_MEAN_RAW_SCORE;
+}
+
 /**
  * Get color for score
  */

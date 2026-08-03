@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { getSupabase, extractOverallScore } from '@/lib/db/client';
-import { rescaleScore, getCandidacyStatus, donorProfileUrl } from '@/lib/utils/helpers';
+import { rescaleScore, getCandidacyStatus, donorProfileUrl, rankingScore } from '@/lib/utils/helpers';
 import { getNormalizedScore, getVoterRegistration, getDistrictOdds } from '@/lib/data/static-data';
 import { getContactInfoForDistrict, getCommitteeChairLabel } from '@/lib/data/contact-info';
 import { PA_CHAMBER_PRINCIPLES } from '@/lib/utils/constants';
@@ -151,6 +151,7 @@ function toCandidateSummary(row: any): CandidateSummary {
     candidacy_status: getCandidacyStatus(row),
     display_score: hasEvidence && rawScore != null ? Math.round(rescaleScore(rawScore) * 100) : null,
     percentile: hasEvidence && rawScore != null ? getNormalizedScore(rawScore) : null,
+    confidence: hasEvidence ? (overallData?.overall_confidence ?? null) : null,
     profile_url: `/politicians/${row.id}`,
   };
 }
@@ -179,7 +180,18 @@ async function searchCandidates(input: { query?: string; party?: string[]; distr
     rows = rows.filter((r: any) => r.full_name?.toLowerCase().includes(needle));
   }
 
-  const summaries = rows.map(toCandidateSummary).sort((a, b) => (b.display_score ?? -1) - (a.display_score ?? -1) || a.full_name.localeCompare(b.full_name));
+  // Rank on raw score + confidence (not the rescaled display score) so a high score
+  // built on one data point doesn't outrank a well-evidenced but more middling record —
+  // same shrinkage used for the candidate list and home page.
+  const sortedRows = [...rows].sort((a: any, b: any) => {
+    const aData = extractOverallScore(a);
+    const bData = extractOverallScore(b);
+    const aRank = rankingScore(aData?.overall_score ?? 0, aData?.overall_confidence ?? 0);
+    const bRank = rankingScore(bData?.overall_score ?? 0, bData?.overall_confidence ?? 0);
+    return bRank - aRank || (a.full_name ?? '').localeCompare(b.full_name ?? '');
+  });
+
+  const summaries = sortedRows.map(toCandidateSummary);
   return { results: summaries.slice(0, 20) };
 }
 
